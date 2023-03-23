@@ -32,8 +32,16 @@ export const FormInput = ({
         {...registerObj}
         aria-invalid={errors ? 'true' : 'false'}
       />
-      {errors?.type === 'required' && <p role="alert">{errorsMsgs.required}</p>}
-      {errors?.type === 'pattern' && <p role="alert">{errorsMsgs.pattern}</p>}
+      {errors?.type === 'required' && (
+        <p className="input--error" role="alert">
+          {errorsMsgs.required}
+        </p>
+      )}
+      {errors?.type === 'pattern' && (
+        <p className="input--error" role="alert">
+          {errorsMsgs.pattern}
+        </p>
+      )}
       {errors?.type === 'minLength' && (
         <p className="input--error" role="alert">
           {errorsMsgs.minLength}

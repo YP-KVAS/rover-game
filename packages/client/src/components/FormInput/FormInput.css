@@ -16,3 +16,8 @@
   color: var(--color-text-on-dark);
   margin-bottom: 5px;
 }
+
+.input--error {
+  color: var(--color-text-error);
+  font-size: var(--font-xs);
+}
