@@ -13,6 +13,8 @@ import {
 } from '../../utils/validation'
 import { FormInput } from '../../components/FormInput/FormInput'
 import { Form } from '../../components/Form/Form'
+import { Button } from '../../components/Button/Button'
+
 import './Registration.css'
 
 export const Registration = () => {
@@ -68,7 +70,7 @@ export const Registration = () => {
           registerObj={{ ...register('password', passwordValidation) }}
           errors={errors.password}
           errorsMsgs={passwordErrors}></FormInput>
-        <button>Отправить</button>
+        <Button type="primary">Отправить</Button>
       </Form>
     </main>
   )
