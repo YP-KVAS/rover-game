@@ -6,7 +6,7 @@ export function Main() {
     <>
       <ul>
         {Object.values(RoutesEnum).map(route => (
-          <li>
+          <li key={route}>
             <Link to={route}>{route}</Link>
           </li>
         ))}
