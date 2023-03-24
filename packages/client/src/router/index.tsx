@@ -12,6 +12,7 @@ const in_work_component = (
 )
 
 function check_auth() {
+  // TODO: replace with real checkAuth function
   const auth = false
 
   return auth ? null : redirect(RoutesEnum.MAIN)

@@ -1,10 +1,11 @@
 import { FC } from 'react'
-import { Link } from "react-router-dom";
-import { RoutesEnum } from "../utils/const-variables/routes";
+import { Link } from 'react-router-dom'
+import { RoutesEnum } from '../utils/const-variables/routes'
+import './PageError.css'
 
 export const Page500: FC = () => {
   return (
-    <main>
+    <main className="error-page">
       <h1>500</h1>
 
       <p>
@@ -13,7 +14,9 @@ export const Page500: FC = () => {
 
       <p>Please try to refresh this page or come back in a few minutes.</p>
 
-      <Link to={RoutesEnum.MAIN}>Go to home</Link>
+      <Link to={RoutesEnum.MAIN} className="link">
+        Go to Main
+      </Link>
     </main>
   )
 }
