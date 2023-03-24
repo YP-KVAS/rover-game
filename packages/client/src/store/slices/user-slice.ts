@@ -32,12 +32,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
+    // onProfileSettingsChange
     builder
       .addCase(
         onProfileSettingsChange.fulfilled,
         (state, action: PayloadAction<User>) => {
-          state.changeSettings.isLoading = false
-          state.changeSettings.errorMessage = null
+          state.changeSettings = defaultFetchState
           state.user = action.payload
         }
       )
@@ -49,10 +49,11 @@ const userSlice = createSlice({
         state.changeSettings.isLoading = false
         state.changeSettings.errorMessage = action.payload!
       })
+
+    // onAvatarChange
     builder
       .addCase(onAvatarChange.fulfilled, (state, action) => {
-        state.changeAvatar.isLoading = false
-        state.changeAvatar.errorMessage = null
+        state.changeAvatar = defaultFetchState
         state.user = action.payload
       })
       .addCase(onAvatarChange.pending, state => {
@@ -63,10 +64,11 @@ const userSlice = createSlice({
         state.changeAvatar.isLoading = false
         state.changeAvatar.errorMessage = action.payload!
       })
+
+    // onPasswordChange
     builder
       .addCase(onPasswordChange.fulfilled, state => {
-        state.changePassword.isLoading = false
-        state.changePassword.errorMessage = null
+        state.changePassword = defaultFetchState
       })
       .addCase(onPasswordChange.pending, state => {
         state.changePassword.isLoading = true
@@ -76,6 +78,8 @@ const userSlice = createSlice({
         state.changePassword.isLoading = false
         state.changePassword.errorMessage = action.payload!
       })
+
+    // external auth-slice
     builder
       .addCase(onGetUser.fulfilled, (state, action: PayloadAction<User>) => {
         state.user = action.payload

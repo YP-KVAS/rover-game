@@ -18,13 +18,17 @@ export function request<T>(
   options: RequestInput
 ): Promise<T> {
   const { method = FetchMethods.GET, headers = {}, data } = options
+
   if (!('Content-Type' in headers) && !(data instanceof FormData)) {
     headers['Content-Type'] = 'application/json'
   }
+
   const config: RequestInit = { method, headers, credentials: 'include' }
+
   if (method !== FetchMethods.GET && data) {
     config.body = data instanceof FormData ? data : JSON.stringify(data)
   }
+
   return fetch(`${BASE_URL}${endpoint}`, config).then(checkResponse)
 }
 
@@ -33,6 +37,7 @@ function checkResponse(res: Response) {
   if (res.ok) {
     return data.then(text => JSON.parse(text)).catch(_ => data)
   }
+
   return data.then(text => {
     throw new Error(JSON.parse(text)?.reason)
   })

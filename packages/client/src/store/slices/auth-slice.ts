@@ -17,6 +17,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
+    // onGetUser
     builder
       .addCase(onGetUser.fulfilled, state => {
         state.isLoading = false
@@ -31,6 +32,8 @@ const authSlice = createSlice({
         state.isLoading = false
         state.errorMessage = action.payload!
       })
+
+    // onSignUp
     builder
       .addCase(onSignUp.fulfilled, state => {
         state.isLoading = false
@@ -45,6 +48,8 @@ const authSlice = createSlice({
         state.isLoading = false
         state.errorMessage = action.payload!
       })
+
+    // onSignIn
     builder
       .addCase(onSignIn.fulfilled, state => {
         state.isLoading = false
@@ -59,6 +64,8 @@ const authSlice = createSlice({
         state.isLoading = false
         state.errorMessage = action.payload!
       })
+
+    // onLogout
     builder
       .addCase(onLogout.fulfilled, _ => {
         return initialState
