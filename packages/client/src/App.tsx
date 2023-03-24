@@ -1,5 +1,7 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import './App.css'
+import { router } from './router'
+import { RouterProvider } from 'react-router-dom'
 
 function App() {
   useEffect(() => {
@@ -12,7 +14,11 @@ function App() {
 
     fetchServerData()
   }, [])
-  return <div className="App">Вот тут будет жить ваше приложение :)</div>
+  return (
+    <div className="App">
+      <RouterProvider router={router} />
+    </div>
+  )
 }
 
 export default App
