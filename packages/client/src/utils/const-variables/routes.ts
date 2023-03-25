@@ -6,6 +6,5 @@ export enum RoutesEnum {
   FORUM = '/forum',
   GAME = '/game',
   LEADERBOARD = '/leaderboard',
-  ERROR_404 = '/404',
   ERROR_500 = '/500',
 }

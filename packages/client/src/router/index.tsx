@@ -51,17 +51,11 @@ export const router = createBrowserRouter([
     loader: check_auth,
   },
   {
-    path: RoutesEnum.ERROR_404,
-    element: <Page404 />,
-  },
-  {
     path: RoutesEnum.ERROR_500,
     element: <Page500 />,
   },
   {
     path: '*',
-    loader: () => {
-      return redirect(RoutesEnum.ERROR_404)
-    },
+    element: <Page404 />,
   },
 ])

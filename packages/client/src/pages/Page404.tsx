@@ -1,10 +1,11 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../utils/const-variables/routes'
+import style from './PageError.module.scss'
 
 export const Page404: FC = () => {
   return (
-    <main className="error-page">
+    <main className={style.errorPage}>
       <h1>404</h1>
 
       <p>Oops! Page not found</p>
@@ -14,9 +15,9 @@ export const Page404: FC = () => {
         you have typed the correct URL.
       </p>
 
-        <Link to={RoutesEnum.MAIN} className="link">
-          Go to Main
-        </Link>
+      <Link to={RoutesEnum.MAIN} className={style.link}>
+        Go to Main
+      </Link>
     </main>
   )
 }
