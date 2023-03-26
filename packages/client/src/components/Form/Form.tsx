@@ -1,5 +1,5 @@
 import { FormEventHandler } from 'react'
-import './Form.css'
+import styles from './Form.module.css'
 
 export const Form = ({
   onSubmit,
@@ -9,7 +9,7 @@ export const Form = ({
   children: JSX.Element[]
 }) => {
   return (
-    <form onSubmit={onSubmit} className="form">
+    <form onSubmit={onSubmit} className={styles.form}>
       {children}
     </form>
   )

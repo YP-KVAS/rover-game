@@ -15,18 +15,9 @@ import { FormInput } from '../../components/FormInput/FormInput'
 import { Form } from '../../components/Form/Form'
 import { Button } from '../../components/Button/Button'
 
-import './Registration.css'
+import styles from './Registration.module.css'
 
 export const Registration = () => {
-  type RegFormData = {
-    first_name: string
-    second_name: string
-    login: string
-    email: string
-    password: string
-    phone: string
-  }
-
   const {
     register,
     formState: { errors },
@@ -38,7 +29,7 @@ export const Registration = () => {
   })
 
   return (
-    <main className="registration">
+    <main className={styles.registration}>
       <Form onSubmit={onSubmit}>
         <FormInput
           label="Имя"
@@ -57,17 +48,26 @@ export const Registration = () => {
           errorsMsgs={loginErrors}></FormInput>
         <FormInput
           label="E-mail"
+          type="email"
           registerObj={{ ...register('email', emailValidation) }}
           errors={errors.email}
           errorsMsgs={emailErrors}></FormInput>
         <FormInput
           label="Телефон"
+          type="tel"
           registerObj={{ ...register('phone', phoneValidation) }}
           errors={errors.phone}
           errorsMsgs={phoneErrors}></FormInput>
         <FormInput
           label="Пароль"
+          type="password"
           registerObj={{ ...register('password', passwordValidation) }}
+          errors={errors.password}
+          errorsMsgs={passwordErrors}></FormInput>
+        <FormInput
+          label="Подтвердить пароль"
+          type="password"
+          registerObj={{ ...register('repassword', passwordValidation) }}
           errors={errors.password}
           errorsMsgs={passwordErrors}></FormInput>
         <Button type="primary">Отправить</Button>

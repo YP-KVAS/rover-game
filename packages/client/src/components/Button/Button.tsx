@@ -1,23 +1,14 @@
-import { MouseEventHandler } from 'react'
-import './Button.css'
-
-type TButton = {
-  type: 'primary' | 'secondary' | 'accent'
-  children: string
-  clickHandler?: MouseEventHandler | undefined
-}
+import styles from './Button.module.css'
 
 export const Button = ({
   type = 'primary',
   children,
   clickHandler,
 }: TButton) => {
-  const className = `btn btn-${type}`
+  const className = `${styles.btn} ${styles['btn-' + type]}`
 
   return (
-    <button
-      onClick={clickHandler ? clickHandler : undefined}
-      className={className}>
+    <button onClick={clickHandler} className={className}>
       {children}
     </button>
   )
