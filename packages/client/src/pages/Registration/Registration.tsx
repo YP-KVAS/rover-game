@@ -68,7 +68,7 @@ export const Registration = () => {
           label="Подтвердить пароль"
           type="password"
           registerObj={{ ...register('repassword', passwordValidation) }}
-          errors={errors.password}
+          errors={errors.repassword}
           errorsMsgs={passwordErrors}></FormInput>
         <Button type="primary">Отправить</Button>
       </Form>
