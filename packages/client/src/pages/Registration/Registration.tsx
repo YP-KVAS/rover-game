@@ -17,6 +17,16 @@ import { Button } from '../../components/Button/Button'
 
 import styles from './Registration.module.css'
 
+type RegFormData = {
+  first_name: string
+  second_name: string
+  login: string
+  email: string
+  password: string
+  repassword: string
+  phone: string
+}
+
 export const Registration = () => {
   const {
     register,

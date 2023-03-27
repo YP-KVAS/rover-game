@@ -1,4 +1,23 @@
+import { FieldError } from 'react-hook-form'
 import styles from './FormInput.module.css'
+
+type TInputSettings = {
+  [key: string]: unknown
+}
+
+type TInputErrors = FieldError | undefined
+
+type TInputErrorsMsgs = {
+  [key: string]: string
+}
+
+type FormInputProps = {
+  type?: 'text' | 'email' | 'password' | 'tel' | 'text'
+  label?: string
+  registerObj: TInputSettings
+  errors: TInputErrors
+  errorsMsgs: TInputErrorsMsgs
+}
 
 export const FormInput = ({
   label,
