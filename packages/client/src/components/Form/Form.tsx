@@ -1,5 +1,5 @@
 import { FormEventHandler } from 'react'
-import styles from './Form.module.css'
+import styles from './Form.module.scss'
 
 export const Form = ({
   onSubmit,

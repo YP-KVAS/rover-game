@@ -1,9 +1,6 @@
-import { FieldError } from 'react-hook-form'
-import styles from './FormInput.module.css'
-
-type TInputSettings = {
-  [key: string]: unknown
-}
+import { FieldError, UseFormRegisterReturn } from 'react-hook-form'
+import styles from './FormInput.module.scss'
+import { useEffect, useRef } from 'react'
 
 type TInputErrors = FieldError | undefined
 
@@ -14,7 +11,7 @@ type TInputErrorsMsgs = {
 type FormInputProps = {
   type?: 'text' | 'email' | 'password' | 'tel' | 'text'
   label?: string
-  registerObj: TInputSettings
+  registerObj: UseFormRegisterReturn
   errors: TInputErrors
   errorsMsgs: TInputErrorsMsgs
 }
@@ -26,35 +23,59 @@ export const FormInput = ({
   errors,
   errorsMsgs,
 }: FormInputProps) => {
+  const { ref } = registerObj
+
+  const errorRef = useRef<HTMLParagraphElement>(null)
+  let inputRef: HTMLInputElement | null = null
+
+  function computeTop() {
+    const inputHeight = inputRef?.clientHeight || 0
+    const errorHeight = errorRef.current?.clientHeight || 0
+
+    if (inputHeight > errorHeight) {
+      return `${(inputHeight - errorHeight) / 2}px`
+    } else if (errorHeight > inputHeight) {
+      return `-${(errorHeight - inputHeight) / 2}px`
+    } else {
+      return '0px'
+    }
+  }
+
+  function setErrorsComponent() {
+    return (
+      <p className={styles['input--error']} role="alert" ref={errorRef}>
+        {errors?.type === 'required' && <>{errorsMsgs.required}</>}
+        {errors?.type === 'minLength' && <>{errorsMsgs.minLength}</>}
+        {errors?.type === 'maxLength' && <>{errorsMsgs.maxLength}</>}
+        {errors?.type === 'pattern' && <>{errorsMsgs.pattern}</>}
+      </p>
+    )
+  }
+
+  useEffect(() => {
+    setErrorsComponent()
+    if (errorRef.current) {
+      errorRef.current.style.top = computeTop()
+    }
+  }, [errors])
+
   return (
-    <div className={styles['input--container']}>
+    <>
       {label && <label className={styles['input--label']}>{label}</label>}
-      <input
-        type={type}
-        className={styles.input}
-        {...registerObj}
-        aria-invalid={errors ? 'true' : 'false'}
-      />
-      {errors?.type === 'required' && (
-        <p className={styles['input--error']} role="alert">
-          {errorsMsgs.required}
-        </p>
-      )}
-      {errors?.type === 'pattern' && (
-        <p className={styles['input--error']} role="alert">
-          {errorsMsgs.pattern}
-        </p>
-      )}
-      {errors?.type === 'minLength' && (
-        <p className={styles['input--error']} role="alert">
-          {errorsMsgs.minLength}
-        </p>
-      )}
-      {errors?.type === 'maxLength' && (
-        <p className={styles['input--error']} role="alert">
-          {errorsMsgs.minLength}
-        </p>
-      )}
-    </div>
+
+      <div className={styles['input--container']}>
+        <input
+          {...registerObj}
+          ref={element => {
+            ref(element)
+            inputRef = element
+          }}
+          type={type}
+          className={styles.input}
+          aria-invalid={errors ? 'true' : 'false'}
+        />
+        {errors && setErrorsComponent()}
+      </div>
+    </>
   )
 }

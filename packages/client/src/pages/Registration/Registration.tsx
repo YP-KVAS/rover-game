@@ -15,7 +15,7 @@ import { FormInput } from '../../components/FormInput/FormInput'
 import { Form } from '../../components/Form/Form'
 import { Button } from '../../components/Button/Button'
 
-import styles from './Registration.module.css'
+import styles from './Registration.module.scss'
 
 type RegFormData = {
   first_name: string
@@ -48,7 +48,7 @@ export const Registration = () => {
           errorsMsgs={nameErrors}></FormInput>
         <FormInput
           label="Фамилия"
-          registerObj={{ ...register('second_name', nameValidation) }}
+          registerObj={register('second_name', nameValidation)}
           errors={errors.second_name}
           errorsMsgs={nameErrors}></FormInput>
         <FormInput

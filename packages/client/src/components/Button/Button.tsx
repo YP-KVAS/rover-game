@@ -1,5 +1,5 @@
 import { MouseEventHandler } from 'react'
-import styles from './Button.module.css'
+import styles from './Button.module.scss'
 
 type ButtonProps = {
   type: 'primary' | 'secondary' | 'accent'

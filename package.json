@@ -24,6 +24,7 @@
     "lerna": "^5.4.3"
   },
   "dependencies": {
-    "babel-jest": "^29.5.0"
+    "babel-jest": "^29.5.0",
+    "sass": "^1.60.0"
   }
 }
