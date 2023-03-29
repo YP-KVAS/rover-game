@@ -1,0 +1,31 @@
+html {
+  --bg-gradient: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
+
+  --color-primary: #c850c0;
+  --color-secondary: #4158d0;
+  --color-accent: #ffcc70;
+  --color-text-on-light: #000;
+  --color-text-on-dark: #fff;
+  --color-text-error: #ffcc70;
+
+  --shadow-sm: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  --shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  --shadow-lg: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-base: 16px;
+  --font-lg: 18px;
+  --font-xl: 24px;
+  --font-2xl: 40px;
+  --font-3xl: 60px;
+
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+}
