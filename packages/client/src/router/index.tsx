@@ -2,6 +2,7 @@ import { createBrowserRouter, Link, redirect } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/Main'
+import { GamePage } from '../pages/GamePage'
 import { RoutesEnum } from '../utils/const-variables/routes'
 
 const in_work_component = (
@@ -13,7 +14,7 @@ const in_work_component = (
 
 function check_auth() {
   // TODO: replace with real checkAuth function
-  const auth = false
+  const auth = true
 
   return auth ? null : redirect(RoutesEnum.MAIN)
 }
@@ -42,7 +43,7 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesEnum.GAME,
-    element: in_work_component,
+    element: <GamePage />,
     loader: check_auth,
   },
   {

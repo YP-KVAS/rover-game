@@ -6,7 +6,10 @@ export const roverMove = (
   gameMap: Array<Array<Array<number>>>
 ) => {
   // change y-coords for up and down
-  if (rover.movingDirection === MovingDirection.UP || rover.movingDirection === MovingDirection.DOWN) {
+  if (
+    rover.movingDirection === MovingDirection.UP ||
+    rover.movingDirection === MovingDirection.DOWN
+  ) {
     const futureYCoordinate =
       rover.movingDirection === MovingDirection.UP
         ? rover.coords.y - rover.speed
@@ -19,9 +22,7 @@ export const roverMove = (
     }
 
     const rowIndexLeft = Math.floor(rover.coords.x / tileSize)
-    const rowIndexRight = Math.floor(
-      (rover.coords.x + tileSize - 1) / tileSize
-    )
+    const rowIndexRight = Math.floor((rover.coords.x + tileSize - 1) / tileSize)
     const futureColumnIndex =
       rover.movingDirection === MovingDirection.UP
         ? Math.floor(futureYCoordinate / tileSize)
@@ -108,17 +109,14 @@ const needToStopOnCrosswalk = (
         roverCoords.x <= endX &&
         roverCoords.y >= startY &&
         roverCoords.y <= endY) ||
-
       (roverCoords.x + tileSize >= startX &&
         roverCoords.x + tileSize <= endX &&
         roverCoords.y >= startY &&
         roverCoords.y <= endY) ||
-
       (roverCoords.x + tileSize >= startX &&
         roverCoords.x + tileSize <= endX &&
         roverCoords.y + tileSize >= startY &&
         roverCoords.y + tileSize <= endY) ||
-
       (roverCoords.x >= startX &&
         roverCoords.x <= endX &&
         roverCoords.y + tileSize >= startY &&
@@ -164,13 +162,13 @@ export const carMove = (
         }
       }
       // if corner or cross => change direction
-       else if (tile === 162) {
+      else if (tile === 162) {
         car.movingDirection = MovingDirection.RIGHT
       } else if (tile === 174 || tile === 223) {
         car.movingDirection = MovingDirection.LEFT
       }
       // if straight road, crosswalk or certain part corner/cross => continue to move
-       else {
+      else {
         car.coords.y -= tileSize
       }
       break
@@ -184,6 +182,20 @@ export const carMove = (
       )
       // if there is a car in the next tile, stop
       if (nextTileNotEmpty) {
+        // change direction if cross is fully busy
+        if (tile === 204) {
+          const rightX = (column + 1) * tileSize
+          const rightY = row * tileSize
+          const rightTileNotEmpty = allCarsCoords.find(
+            coords => rightX === coords.x && rightY === coords.y
+          )
+          const diagTileNotEmpty = allCarsCoords.find(
+            coords => rightX === coords.x && y === coords.y
+          )
+          if (rightTileNotEmpty && diagTileNotEmpty) {
+            car.movingDirection = MovingDirection.LEFT
+          }
+        }
         break
       }
       const nextTile = bgLayer[row + 1][column]
@@ -232,6 +244,20 @@ export const carMove = (
       )
       // if there is a car in the next tile, stop
       if (nextTileNotEmpty) {
+        // change direction if cross is fully busy
+        if (tile === 154 || tile === 221) {
+          const upperX = column * tileSize
+          const upperY = (row - 1) * tileSize
+          const upperTileNotEmpty = allCarsCoords.find(
+            coords => upperX === coords.x && upperY === coords.y
+          )
+          const diagTileNotEmpty = allCarsCoords.find(
+            coords => x === coords.x && upperY === coords.y
+          )
+          if (upperTileNotEmpty && diagTileNotEmpty) {
+            car.movingDirection = MovingDirection.DOWN
+          }
+        }
         break
       }
 
@@ -256,8 +282,8 @@ export const carMove = (
             tile === 204
               ? MovingDirection.LEFT
               : tile === 202 || tile === 153
-                ? MovingDirection.UP
-                : MovingDirection.DOWN
+              ? MovingDirection.UP
+              : MovingDirection.DOWN
         }
       }
       // if corner, cross => change direction
