@@ -1,5 +1,3 @@
-import { MovingDirection } from '../utils/types/game'
-
 // sidewalk
 const sideWalk = new Image()
 sideWalk.src = './images/sidewalk/sidewalk.jpg'
@@ -98,17 +96,4 @@ export const dynamicImages = {
   greenCar,
   yellowCar,
   redCar,
-}
-
-export const getRoverImgToDisplay = (movingDirection: MovingDirection) => {
-  switch (movingDirection) {
-    case MovingDirection.UP:
-      return roverImages.roverUp
-    case MovingDirection.DOWN:
-      return roverImages.roverDown
-    case MovingDirection.RIGHT:
-      return roverImages.roverRight
-    case MovingDirection.LEFT:
-      return roverImages.roverLeft
-  }
 }
