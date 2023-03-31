@@ -13,46 +13,60 @@ export abstract class BaseGameObject {
   drawTile(
     ctx: CanvasRenderingContext2D,
     img: HTMLImageElement,
-    column: number,
-    row: number,
+    canvasX: number,
+    canvasY: number,
     spriteX = 0,
     spriteY = 0,
-    spriteSize = img.width
+    sourceWidth = img.width,
+    sourceHeight = img.height,
+    tileWidth: number = this.tileSize,
+    tileHeight: number = this.tileSize
   ) {
     ctx.drawImage(
       img,
       spriteX,
       spriteY,
-      spriteSize,
-      spriteSize,
-      column * this.tileSize,
-      row * this.tileSize,
-      this.tileSize,
-      this.tileSize
+      sourceWidth,
+      sourceHeight,
+      canvasX,
+      canvasY,
+      tileWidth,
+      tileHeight
     )
   }
 
   drawRotatedTile(
     ctx: CanvasRenderingContext2D,
     img: HTMLImageElement,
-    column: number,
-    row: number,
+    canvasX: number,
+    canvasY: number,
     degrees: number,
     spriteX = 0,
     spriteY = 0,
-    spriteSize = img.width
+    sourceWidth = img.width,
+    sourceHeight = img.height,
+    tileWidth: number = this.tileSize,
+    tileHeight: number = this.tileSize
   ) {
     ctx.save()
-    ctx.translate(
-      column * this.tileSize + this.tileSize / 2,
-      row * this.tileSize + this.tileSize / 2
-    )
+    ctx.translate(canvasX + this.tileSize / 2, canvasY + this.tileSize / 2)
     ctx.rotate((degrees * Math.PI) / 180)
     ctx.translate(
-      -1 * (column * this.tileSize + this.tileSize / 2),
-      -1 * (row * this.tileSize + this.tileSize / 2)
+      -1 * (canvasX + this.tileSize / 2),
+      -1 * (canvasY + this.tileSize / 2)
     )
-    this.drawTile(ctx, img, column, row, spriteX, spriteY, spriteSize)
+    this.drawTile(
+      ctx,
+      img,
+      canvasX,
+      canvasY,
+      spriteX,
+      spriteY,
+      sourceWidth,
+      sourceHeight,
+      tileWidth,
+      tileHeight
+    )
     ctx.restore()
   }
 

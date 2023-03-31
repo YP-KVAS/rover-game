@@ -41,21 +41,18 @@ export abstract class GameBot extends DynamicGameCharacter {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    const row = this.coords.y / this.tileSize
-    const column = this.coords.x / this.tileSize
-
     switch (this.movingDirection) {
       case MovingDirection.UP:
-        this.drawTile(ctx, this.img, column, row, this.tileSize)
+        this.drawTile(ctx, this.img, this.coords.x, this.coords.y)
         break
       case MovingDirection.RIGHT:
-        this.drawRotatedTile(ctx, this.img, column, row, 90)
+        this.drawRotatedTile(ctx, this.img, this.coords.x, this.coords.y, 90)
         break
       case MovingDirection.DOWN:
-        this.drawRotatedTile(ctx, this.img, column, row, 180)
+        this.drawRotatedTile(ctx, this.img, this.coords.x, this.coords.y, 180)
         break
       case MovingDirection.LEFT:
-        this.drawRotatedTile(ctx, this.img, column, row, -90)
+        this.drawRotatedTile(ctx, this.img, this.coords.x, this.coords.y, -90)
         break
     }
   }

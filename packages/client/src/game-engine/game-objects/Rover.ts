@@ -36,11 +36,9 @@ export class Rover extends DynamicGameCharacter {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    const img = this.getRoverImg()
-
     // vertical offset to correctly display rover in a tile
     const offset = Math.round(
-      (img.height / IMG_WIDTH) * this.tileSize - this.tileSize
+      (this.img.height / IMG_WIDTH) * this.tileSize - this.tileSize
     )
     const additionalOffset =
       this.movingDirection === MovingDirection.RIGHT ||
@@ -48,10 +46,15 @@ export class Rover extends DynamicGameCharacter {
         ? this.tileSize / 8
         : 0
 
-    ctx.drawImage(
-      img,
+    this.drawTile(
+      ctx,
+      this.img,
       this.coords.x,
       this.coords.y - offset - additionalOffset,
+      0,
+      0,
+      this.img.width,
+      this.img.height,
       this.tileSize,
       this.tileSize + offset
     )
