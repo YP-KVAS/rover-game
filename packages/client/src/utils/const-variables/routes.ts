@@ -7,4 +7,5 @@ export enum RoutesEnum {
   GAME = '/game',
   LEADERBOARD = '/leaderboard',
   ERROR_500 = '/500',
+  START = '/start',
 }

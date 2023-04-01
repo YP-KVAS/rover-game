@@ -2,6 +2,7 @@ import { createBrowserRouter, Link, redirect } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/Main'
+import { Start } from '../pages/Start/Start'
 import { RoutesEnum } from '../utils/const-variables/routes'
 
 const in_work_component = (
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
   {
     path: RoutesEnum.FORUM,
     element: in_work_component,
+  },
+  {
+    path: RoutesEnum.START,
+    element: <Start />,
   },
   {
     path: RoutesEnum.GAME,
