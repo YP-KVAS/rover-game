@@ -2,7 +2,7 @@
   font-size: 150px;
   color: var(--color-text-on-dark);
 
-  &-type-started {
+  &_type_started {
     &::before {
       display: inline-block;
       content: '3';

@@ -2,17 +2,12 @@
   display: flex;
   min-height: 100vh;
   background: var(--bg-gradient);
-}
 
-.start--content {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  padding-bottom: 200px;
-}
-
-.start--content-timer {
-  margin-bottom: 20px;
+  &__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }

@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react'
 import styles from './Timer.module.scss'
 
 type TimerProps = {
@@ -6,24 +5,11 @@ type TimerProps = {
 }
 
 export const Timer = ({ callback }: TimerProps) => {
-  const className = `${styles.timer} ${styles['timer-type-started']}`
-  const ref = useRef<HTMLDivElement>(null)
+  const className = `${styles.timer} ${styles.timer_type_started}`
 
-  if (callback) {
-    useEffect(() => {
-      const handleClick = () => {
-        callback()
-      }
-
-      const timer = ref.current
-
-      timer &&
-        timer.addEventListener('animationend', function handler() {
-          timer.removeEventListener('animationend', handler)
-          handleClick()
-        })
-    })
+  const handler = () => {
+    callback && callback()
   }
 
-  return <div className={className} ref={ref}></div>
+  return <div className={className} onAnimationEnd={handler}></div>
 }
