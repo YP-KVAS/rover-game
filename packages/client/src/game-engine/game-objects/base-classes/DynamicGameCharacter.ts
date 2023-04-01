@@ -18,4 +18,46 @@ export abstract class DynamicGameCharacter extends BaseGameObject {
     this.movingDirection = movingDirection
     this.speed = speed
   }
+
+  getNextCoords(): Coords {
+    let nextX: number
+    let nextY: number
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+        nextX = this.coords.x
+        nextY = this.coords.y - this.speed
+        break
+      case MovingDirection.DOWN:
+        nextX = this.coords.x
+        nextY = this.coords.y + this.speed
+        break
+      case MovingDirection.RIGHT:
+        nextX = this.coords.x + this.speed
+        nextY = this.coords.y
+        break
+      case MovingDirection.LEFT:
+        nextX = this.coords.x - this.speed
+        nextY = this.coords.y
+        break
+    }
+
+    return { x: nextX, y: nextY }
+  }
+
+  goStraight() {
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+        this.coords.y -= this.speed
+        break
+      case MovingDirection.DOWN:
+        this.coords.y += this.speed
+        break
+      case MovingDirection.RIGHT:
+        this.coords.x += this.speed
+        break
+      case MovingDirection.LEFT:
+        this.coords.x -= this.speed
+        break
+    }
+  }
 }

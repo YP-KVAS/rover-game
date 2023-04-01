@@ -19,7 +19,7 @@ export abstract class GameBot extends DynamicGameCharacter {
     this.img = img
   }
 
-  collideWithRover(roverCoords: Coords) {
+  collideWithRover(roverCoords: Coords): boolean {
     return (
       (this.coords.x <= roverCoords.x &&
         this.coords.x + this.tileSize > roverCoords.x &&
