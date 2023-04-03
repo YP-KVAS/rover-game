@@ -4,6 +4,7 @@ import { FC, useContext } from 'react'
 import { ThemeContext } from '../../contexts/ThemeContext'
 import { MENU } from '../../utils/const-variables/menu'
 import { NavLink } from 'react-router-dom'
+import { ToggleCheckbox } from '../ToggleCheckbox/ToggleCheckbox'
 
 export const Header: FC = () => {
   const { themeName, changeTheme } = useContext(ThemeContext)
@@ -29,19 +30,10 @@ export const Header: FC = () => {
         <svg className={styles.svg_icon}>
           <use xlinkHref="./images/icons-sprite.svg#sun"></use>
         </svg>
-        <label>
-          <input
-            type="checkbox"
-            className={styles.toggle_input}
-            defaultChecked={themeName === 'dark'}
-            onChange={changeTheme}
-          />
-          <div className={styles.toggle_state}>
-            <div className={styles.toggle_control}>
-              <div className={styles.toggle_inner}></div>
-            </div>
-          </div>
-        </label>
+        <ToggleCheckbox
+          defaultChecked={themeName === 'dark'}
+          toggleChange={changeTheme}
+        />
         <svg className={styles.svg_icon}>
           <use xlinkHref="./images/icons-sprite.svg#moon"></use>
         </svg>
