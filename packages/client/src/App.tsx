@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
+import { RouterProvider } from 'react-router-dom'
+import { router } from './router'
 import './App.css'
 import { Theme, ThemeContext } from './contexts/ThemeContext'
 import { LS_THEME, ThemeColors, THEMES } from './utils/const-variables/theme'
-import { Header } from './components/header/Header'
-import { MainContent } from './components/main-content/MainContent'
 
 function App() {
   const getDefaultTheme = (): Theme => {
@@ -32,23 +32,11 @@ function App() {
 
   const changeTheme = (themeName: Theme) => setCurrentThemeName(themeName)
 
-  useEffect(() => {
-    const fetchServerData = async () => {
-      const url = `http://localhost:${__SERVER_PORT__}`
-      const response = await fetch(url)
-      const data = await response.json()
-      console.log(data)
-    }
-
-    fetchServerData()
-  }, [])
-
   return (
     <ThemeContext.Provider
       value={{ themeName: currentThemeName, setThemeName: changeTheme }}>
       <div className="App">
-        <Header />
-        <MainContent />
+        <RouterProvider router={router} />
       </div>
     </ThemeContext.Provider>
   )

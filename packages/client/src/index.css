@@ -1,9 +1,0 @@
-:root {
-    --background: #EBECF0;
-}
-
-body {
-    background-color: var(--background);
-    font-family: Inter, sans-serif;
-    margin: 0;
-}
