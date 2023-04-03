@@ -10,7 +10,7 @@ export const onProfileSettingsChange = createAsyncThunk<
   User,
   UserSettings,
   { rejectValue: string }
-  >('user/onProfileSettingsChange', async (data, { rejectWithValue }) => {
+>('user/onProfileSettingsChange', async (data, { rejectWithValue }) => {
   try {
     return await changeProfileSettings(data)
   } catch (err: any) {
@@ -22,7 +22,7 @@ export const onAvatarChange = createAsyncThunk<
   User,
   File,
   { rejectValue: string }
-  >('user/onAvatarChange', async (file, { rejectWithValue }) => {
+>('user/onAvatarChange', async (file, { rejectWithValue }) => {
   try {
     return await changeAvatar(file)
   } catch (err: any) {
@@ -34,7 +34,7 @@ export const onPasswordChange = createAsyncThunk<
   void,
   UserPassword,
   { rejectValue: string }
-  >('user/onPasswordChange', async (data, { rejectWithValue }) => {
+>('user/onPasswordChange', async (data, { rejectWithValue }) => {
   try {
     return await changePassword(data)
   } catch (err: any) {
