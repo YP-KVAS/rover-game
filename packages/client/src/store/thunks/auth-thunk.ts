@@ -17,7 +17,7 @@ export const onSignUp = createAsyncThunk<
   { id: number },
   UserSignUp,
   { rejectValue: string }
-  >('auth/onSignUp', async (data, { rejectWithValue }) => {
+>('auth/onSignUp', async (data, { rejectWithValue }) => {
   try {
     return await signUp(data)
   } catch (err: any) {
@@ -29,7 +29,7 @@ export const onSignIn = createAsyncThunk<
   void,
   UserSignIn,
   { rejectValue: string }
-  >('auth/onSignIn', async (data, { dispatch, rejectWithValue }) => {
+>('auth/onSignIn', async (data, { dispatch, rejectWithValue }) => {
   try {
     return await signIn(data)
   } catch (err: any) {
