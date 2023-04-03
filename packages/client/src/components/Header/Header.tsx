@@ -1,15 +1,12 @@
 import React from 'react'
 import styles from './Header.module.scss'
 import { FC, useContext } from 'react'
-import { Theme, ThemeContext } from '../../contexts/ThemeContext'
+import { ThemeContext } from '../../contexts/ThemeContext'
 import { MENU } from '../../utils/const-variables/menu'
 import { NavLink } from 'react-router-dom'
 
 export const Header: FC = () => {
-  const { themeName, setThemeName } = useContext(ThemeContext)
-
-  const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
-    setThemeName(event.target.value as Theme)
+  const { themeName, changeTheme } = useContext(ThemeContext)
 
   return (
     <header className={styles.header}>
@@ -36,8 +33,8 @@ export const Header: FC = () => {
           <input
             type="checkbox"
             className={styles.toggle_input}
-            // defaultChecked={checked}
-            // onChange={handleToggleChecked}
+            defaultChecked={themeName === 'dark'}
+            onChange={changeTheme}
           />
           <div className={styles.toggle_state}>
             <div className={styles.toggle_control}>

@@ -23,18 +23,18 @@ function App() {
     const theme = THEMES[currentThemeName]
     Object.keys(theme).forEach(key =>
       document.documentElement.style.setProperty(
-        `--${key}`,
+        `${key.replaceAll('_', '-')}`,
         theme[key as keyof ThemeColors]
       )
     )
     localStorage.setItem(LS_THEME, currentThemeName)
   }, [currentThemeName])
 
-  const changeTheme = (themeName: Theme) => setCurrentThemeName(themeName)
+  const changeTheme = () =>
+    setCurrentThemeName(prevState => (prevState === 'dark' ? 'light' : 'dark'))
 
   return (
-    <ThemeContext.Provider
-      value={{ themeName: currentThemeName, setThemeName: changeTheme }}>
+    <ThemeContext.Provider value={{ themeName: currentThemeName, changeTheme }}>
       <div className={styles.app}>
         <RouterProvider router={router} />
       </div>

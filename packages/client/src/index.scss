@@ -11,14 +11,18 @@
 }
 
 html {
-  --bg-gradient: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
-
   --color-primary: #c850c0;
   --color-secondary: #4158d0;
   --color-accent: #ffcc70;
   --color-text-on-light: #000;
   --color-text-on-dark: #fff;
   --color-text-error: #ffcc70;
+
+  --color-gradient-start: var(--color-secondary);
+  --color-gradient-middle: var(--color-primary);
+  --color-gradient-end: var(--color-accentl);
+
+  --bg-gradient: linear-gradient(43deg, var(--color-gradient-start) 0%, var(--color-gradient-middle) 46%, var(--color-gradient-end) 100%);
 
   --shadow-sm: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
