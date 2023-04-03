@@ -35,6 +35,7 @@ export function request<T>(
 function checkResponse(res: Response) {
   const data = res.text()
   if (res.ok) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return data.then(text => JSON.parse(text)).catch(_ => data)
   }
 

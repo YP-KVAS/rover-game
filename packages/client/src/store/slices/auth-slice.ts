@@ -30,7 +30,7 @@ const authSlice = createSlice({
       })
       .addCase(onGetUser.rejected, (state, action) => {
         state.isLoading = false
-        state.errorMessage = action.payload!
+        state.errorMessage = action.payload || null
       })
 
     // onSignUp
@@ -46,7 +46,7 @@ const authSlice = createSlice({
       })
       .addCase(onSignUp.rejected, (state, action) => {
         state.isLoading = false
-        state.errorMessage = action.payload!
+        state.errorMessage = action.payload || null
       })
 
     // onSignIn
@@ -62,11 +62,12 @@ const authSlice = createSlice({
       })
       .addCase(onSignIn.rejected, (state, action) => {
         state.isLoading = false
-        state.errorMessage = action.payload!
+        state.errorMessage = action.payload || null
       })
 
     // onLogout
     builder
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .addCase(onLogout.fulfilled, _ => {
         return initialState
       })
@@ -76,7 +77,7 @@ const authSlice = createSlice({
       })
       .addCase(onLogout.rejected, (state, action) => {
         state.isLoading = false
-        state.errorMessage = action.payload!
+        state.errorMessage = action.payload || null
       })
   },
 })
