@@ -1,7 +1,7 @@
+import styles from './App.module.css'
 import { useEffect, useState } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router'
-import './App.css'
 import { Theme, ThemeContext } from './contexts/ThemeContext'
 import { LS_THEME, ThemeColors, THEMES } from './utils/const-variables/theme'
 
@@ -35,7 +35,7 @@ function App() {
   return (
     <ThemeContext.Provider
       value={{ themeName: currentThemeName, setThemeName: changeTheme }}>
-      <div className="App">
+      <div className={styles.app}>
         <RouterProvider router={router} />
       </div>
     </ThemeContext.Provider>

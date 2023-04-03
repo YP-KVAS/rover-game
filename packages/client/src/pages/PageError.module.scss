@@ -1,11 +1,10 @@
 .errorPage {
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  background: var(--bg-gradient);
+  gap: 30px;
+  padding-top: 100px;
 
   & h1 {
     font-size: var(--font-3xl);
@@ -17,7 +16,14 @@
     max-width: 600px;
     font-size: var(--font-xl);
     text-align: justify;
-
     color: var(--color-text-on-dark);
+  }
+
+
+  & .link {
+    text-decoration: underline;
+    &:hover {
+      color: var(--color-accent);
+    }
   }
 }

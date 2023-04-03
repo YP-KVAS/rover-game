@@ -1,3 +1,15 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  color: black;
+
+  font-size: 100%;
+  list-style: none;
+  text-decoration: none;
+}
+
 html {
   --bg-gradient: linear-gradient(43deg, #4158d0 0%, #c850c0 46%, #ffcc70 100%);
 
@@ -23,9 +35,9 @@ html {
   --font-2xl: 40px;
   --font-3xl: 60px;
 
-  font-family: sans-serif;
+  font-family: 'Play', sans-serif;
 }
 
 body {
-  margin: 0;
+  background: var(--bg-gradient);
 }
