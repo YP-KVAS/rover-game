@@ -5,7 +5,7 @@ import style from './PageError.module.scss'
 
 export const Page404: FC = () => {
   return (
-    <main className={style.errorPage}>
+    <div className={style.errorPage}>
       <h1>404</h1>
 
       <p>Oops! Page not found</p>
@@ -18,6 +18,6 @@ export const Page404: FC = () => {
       <Link to={RoutesEnum.MAIN} className={style.link}>
         Go to Main
       </Link>
-    </main>
+    </div>
   )
 }

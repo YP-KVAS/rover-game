@@ -1,7 +1,6 @@
 .start {
   display: flex;
-  min-height: 100vh;
-  background: var(--bg-gradient);
+  height: 100%;
 
   &__content {
     display: flex;

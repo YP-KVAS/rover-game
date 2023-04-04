@@ -13,8 +13,10 @@ export const onProfileSettingsChange = createAsyncThunk<
 >('user/onProfileSettingsChange', async (data, { rejectWithValue }) => {
   try {
     return await changeProfileSettings(data)
-  } catch (err: any) {
-    return rejectWithValue(err.message || 'Unable to  change settings')
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Unable to  change settings'
+    )
   }
 })
 
@@ -25,8 +27,8 @@ export const onAvatarChange = createAsyncThunk<
 >('user/onAvatarChange', async (file, { rejectWithValue }) => {
   try {
     return await changeAvatar(file)
-  } catch (err: any) {
-    return rejectWithValue(err.message || 'Unable to  change avatar')
+  } catch (err: unknown) {
+    return rejectWithValue((err as Error).message || 'Unable to  change avatar')
   }
 })
 
@@ -37,7 +39,9 @@ export const onPasswordChange = createAsyncThunk<
 >('user/onPasswordChange', async (data, { rejectWithValue }) => {
   try {
     return await changePassword(data)
-  } catch (err: any) {
-    return rejectWithValue(err.message || 'Unable to  change password')
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Unable to  change password'
+    )
   }
 })
