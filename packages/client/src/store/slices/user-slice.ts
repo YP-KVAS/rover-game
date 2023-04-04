@@ -47,7 +47,7 @@ const userSlice = createSlice({
       })
       .addCase(onProfileSettingsChange.rejected, (state, action) => {
         state.changeSettings.isLoading = false
-        state.changeSettings.errorMessage = action.payload!
+        state.changeSettings.errorMessage = action.payload || null
       })
 
     // onAvatarChange
@@ -62,7 +62,7 @@ const userSlice = createSlice({
       })
       .addCase(onAvatarChange.rejected, (state, action) => {
         state.changeAvatar.isLoading = false
-        state.changeAvatar.errorMessage = action.payload!
+        state.changeAvatar.errorMessage = action.payload || null
       })
 
     // onPasswordChange
@@ -76,7 +76,7 @@ const userSlice = createSlice({
       })
       .addCase(onPasswordChange.rejected, (state, action) => {
         state.changePassword.isLoading = false
-        state.changePassword.errorMessage = action.payload!
+        state.changePassword.errorMessage = action.payload || null
       })
 
     // external auth-slice
@@ -84,6 +84,7 @@ const userSlice = createSlice({
       .addCase(onGetUser.fulfilled, (state, action: PayloadAction<User>) => {
         state.user = action.payload
       })
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .addCase(onLogout.fulfilled, _ => {
         return initialState
       })

@@ -1,0 +1,45 @@
+.toggle_input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  outline: none;
+  position: absolute;
+
+  &:checked ~ .toggle_state .toggle_control {
+    border-color: var(--color-accent);
+    background: var(--color-primary);
+  }
+
+  &:checked ~ .toggle_state .toggle_inner {
+    transform: translate(100%, -50%);
+    background: var(--color-accent);
+  }
+}
+
+.toggle_state {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle_control {
+  width: 60px;
+  height: 35px;
+  border: 2px solid var(--color-primary);
+  background: var(--color-accent);
+  box-sizing: border-box;
+  border-radius: 20px;
+  position: relative;
+}
+
+.toggle_inner {
+  position: absolute;
+  top: 50%;
+  transform: translate(15%, -50%);
+  width: 25px;
+  height: 25px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(.42, .97, .52, 1.49);
+}
