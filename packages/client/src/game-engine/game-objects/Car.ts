@@ -13,26 +13,7 @@ export class Car extends GameBot {
   }
 
   needToStopOnCrosswalk(tileCoords: Coords, roverCoords: Coords): boolean {
-    const endX = tileCoords.x + this.tileSize * 2
-    const endY = tileCoords.y + this.tileSize * 2
-    return (
-      (roverCoords.x >= tileCoords.x &&
-        roverCoords.x <= endX &&
-        roverCoords.y >= tileCoords.y &&
-        roverCoords.y <= endY) ||
-      (roverCoords.x + this.tileSize >= tileCoords.x &&
-        roverCoords.x + this.tileSize <= endX &&
-        roverCoords.y >= tileCoords.y &&
-        roverCoords.y <= endY) ||
-      (roverCoords.x + this.tileSize >= tileCoords.x &&
-        roverCoords.x + this.tileSize <= endX &&
-        roverCoords.y + this.tileSize >= tileCoords.y &&
-        roverCoords.y + this.tileSize <= endY) ||
-      (roverCoords.x >= tileCoords.x &&
-        roverCoords.x <= endX &&
-        roverCoords.y + this.tileSize >= tileCoords.y &&
-        roverCoords.y + this.tileSize <= endY)
-    )
+    return this.coordsAreIntersecting(tileCoords, roverCoords, 2, true)
   }
 
   getNextCrosswalkCoords(tile: number, tileCoords: Coords): Coords | null {

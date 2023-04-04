@@ -19,25 +19,114 @@ export abstract class GameBot extends DynamicGameCharacter {
     this.img = img
   }
 
-  collideWithRover(roverCoords: Coords): boolean {
+  isIntersectingTopLeft(
+    coords: Coords,
+    objCoords: Coords,
+    sizeRatio: number,
+    includeLastPoints: boolean
+  ): boolean {
     return (
-      (this.coords.x <= roverCoords.x &&
-        this.coords.x + this.tileSize > roverCoords.x &&
-        this.coords.y <= roverCoords.y &&
-        this.coords.y + this.tileSize > roverCoords.y) ||
-      (this.coords.x < roverCoords.x + this.tileSize &&
-        this.coords.x >= roverCoords.x &&
-        this.coords.y <= roverCoords.y &&
-        this.coords.y + this.tileSize > roverCoords.y) ||
-      (this.coords.x <= roverCoords.x &&
-        this.coords.x + this.tileSize > roverCoords.x &&
-        this.coords.y < roverCoords.y + this.tileSize &&
-        this.coords.y >= roverCoords.y) ||
-      (this.coords.x < roverCoords.x + this.tileSize &&
-        this.coords.x >= roverCoords.x &&
-        this.coords.y < roverCoords.y + this.tileSize &&
-        this.coords.y >= roverCoords.y)
+      coords.x <= objCoords.x &&
+      (includeLastPoints
+        ? coords.x + this.tileSize * sizeRatio >= objCoords.x
+        : coords.x + this.tileSize * sizeRatio > objCoords.x) &&
+      coords.y <= objCoords.y &&
+      (includeLastPoints
+        ? coords.y + this.tileSize * sizeRatio >= objCoords.y
+        : coords.y + this.tileSize * sizeRatio > objCoords.y)
     )
+  }
+
+  isIntersectingTopRight(
+    coords: Coords,
+    objCoords: Coords,
+    sizeRatio: number,
+    includeLastPoints: boolean
+  ): boolean {
+    return (
+      (includeLastPoints
+        ? coords.x <= objCoords.x + this.tileSize
+        : coords.x < objCoords.x + this.tileSize) &&
+      coords.x + this.tileSize * (sizeRatio - 1) >= objCoords.x &&
+      coords.y <= objCoords.y &&
+      (includeLastPoints
+        ? coords.y + this.tileSize * sizeRatio >= objCoords.y
+        : coords.y + this.tileSize * sizeRatio > objCoords.y)
+    )
+  }
+
+  isIntersectingLeftBottom(
+    coords: Coords,
+    objCoords: Coords,
+    sizeRatio: number,
+    includeLastPoints: boolean
+  ): boolean {
+    return (
+      coords.x <= objCoords.x &&
+      (includeLastPoints
+        ? coords.x + this.tileSize * sizeRatio >= objCoords.x
+        : coords.x + this.tileSize * sizeRatio > objCoords.x) &&
+      (includeLastPoints
+        ? coords.y <= objCoords.y + this.tileSize
+        : coords.y < objCoords.y + this.tileSize) &&
+      coords.y + this.tileSize * (sizeRatio - 1) >= objCoords.y
+    )
+  }
+
+  isIntersectingRightBottom(
+    coords: Coords,
+    objCoords: Coords,
+    sizeRatio: number,
+    includeLastPoints: boolean
+  ): boolean {
+    return (
+      (includeLastPoints
+        ? coords.x <= objCoords.x + this.tileSize
+        : coords.x < objCoords.x + this.tileSize) &&
+      coords.x + this.tileSize * (sizeRatio - 1) >= objCoords.x &&
+      (includeLastPoints
+        ? coords.y <= objCoords.y + this.tileSize
+        : coords.y < objCoords.y + this.tileSize) &&
+      coords.y + this.tileSize * (sizeRatio - 1) >= objCoords.y
+    )
+  }
+
+  coordsAreIntersecting(
+    coords: Coords,
+    objCoords: Coords,
+    sizeRatio = 1,
+    includeLastPoints = false
+  ): boolean {
+    return (
+      this.isIntersectingTopLeft(
+        coords,
+        objCoords,
+        sizeRatio,
+        includeLastPoints
+      ) ||
+      this.isIntersectingTopRight(
+        coords,
+        objCoords,
+        sizeRatio,
+        includeLastPoints
+      ) ||
+      this.isIntersectingLeftBottom(
+        coords,
+        objCoords,
+        sizeRatio,
+        includeLastPoints
+      ) ||
+      this.isIntersectingRightBottom(
+        coords,
+        objCoords,
+        sizeRatio,
+        includeLastPoints
+      )
+    )
+  }
+
+  collideWithRover(roverCoords: Coords): boolean {
+    return this.coordsAreIntersecting(this.coords, roverCoords)
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
