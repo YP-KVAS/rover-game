@@ -61,6 +61,10 @@ const roverDown = new Image()
 roverDown.src = './images/rover/rover-down.png'
 const roverLeft = new Image()
 roverLeft.src = './images/rover/rover-left.png'
+const roverOpenRight = new Image()
+roverOpenRight.src = './images/rover/rover-open-right.png'
+const roverOpenLeft = new Image()
+roverOpenLeft.src = './images/rover/rover-open-left.png'
 
 export const tileMapImages = {
   sideWalk,
@@ -90,6 +94,8 @@ export const roverImages = {
   roverDown,
   roverRight,
   roverLeft,
+  roverOpenLeft,
+  roverOpenRight
 }
 
 export const dynamicImages = {
