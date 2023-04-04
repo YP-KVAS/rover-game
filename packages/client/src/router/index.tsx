@@ -4,6 +4,7 @@ import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/Main'
 import { RoutesEnum } from '../utils/const-variables/routes'
 import { Layout } from '../components/Layout/Layout'
+import { Start } from '../pages/Start/Start'
 
 const in_work_component = (
   <main>
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: RoutesEnum.FORUM,
         element: in_work_component,
+      },
+      {
+        path: RoutesEnum.START,
+        element: <Start />,
       },
       {
         path: RoutesEnum.GAME,
