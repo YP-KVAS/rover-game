@@ -10,6 +10,17 @@
   text-decoration: none;
 }
 
+@font-face {
+  font-family: 'Play';
+  src: local('Play'), url("./fonts/Play/Play-Regular.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'Play';
+  font-weight: 900;
+  src: local('Play'), url("./fonts/Play/Play-Bold.ttf") format('truetype');
+}
+
 html {
   --color-primary: #c850c0;
   --color-secondary: #4158d0;
