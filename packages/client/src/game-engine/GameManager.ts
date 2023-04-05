@@ -25,6 +25,8 @@ class GameManager {
     this._changeLevelFoo(val)
   }
 
+  // TODO: Implement cargo point counter
+
   get level() {
     return this._level
   }
@@ -34,6 +36,7 @@ class GameManager {
   }
 
   roverHit() {
+    // TODO: Implement health
     console.warn('Rover Hit')
   }
 }

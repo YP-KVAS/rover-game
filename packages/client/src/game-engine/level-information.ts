@@ -90,7 +90,7 @@ export const levels: Record<number, LevelInformation> = {
         triggerId: 0,
         coords: { x: this.tileSize, y: 8 * this.tileSize },
         class: CargoTrigger,
-        img: triggerImages.cargo,
+        img: triggerImages.cargoLoad,
         enabled: true,
         logic: () => BaseTrigger.enableTrigger(1),
       }
@@ -98,7 +98,7 @@ export const levels: Record<number, LevelInformation> = {
         triggerId: 1,
         coords: { x: 5.5 * this.tileSize, y: 3 * this.tileSize },
         class: DeliveryTrigger,
-        img: triggerImages.cargo,
+        img: triggerImages.cargoUnload,
         enabled: false,
         logic: () => GameManager.setLevel(2),
       }
@@ -207,7 +207,7 @@ export const levels: Record<number, LevelInformation> = {
         triggerId: 0,
         coords: { x: 5.5 * this.tileSize, y: 8 * this.tileSize },
         class: CargoTrigger,
-        img: triggerImages.cargo,
+        img: triggerImages.cargoLoad,
         enabled: true,
         logic: () => {
           BaseTrigger.enableTrigger(1)
@@ -217,7 +217,7 @@ export const levels: Record<number, LevelInformation> = {
         triggerId: 1,
         coords: { x: 19.5 * this.tileSize, y: 12 * this.tileSize },
         class: DeliveryTrigger,
-        img: triggerImages.cargo,
+        img: triggerImages.cargoUnload,
         enabled: false,
         logic: () => GameManager.endGame(),
       }
