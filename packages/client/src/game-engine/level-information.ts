@@ -1,6 +1,6 @@
-import { dynamicImages } from './game-images'
+import { dynamicImages, triggerImages } from './game-images'
 import { Car, MovingDirection, Rover, TriggerInfo } from '../utils/types/game'
-import { CargoTrigger } from './game-objects/Triggers'
+import { CargoTrigger, DeliveryTrigger } from './game-objects/Triggers'
 
 export interface LevelInformation {
   tileSize: number
@@ -186,8 +186,16 @@ export const levels: Record<number, LevelInformation> = {
     get triggers() {
       const triggers: TriggerInfo[] = [
         {
-          coords: { x: 4 * this.tileSize, y: 8 * this.tileSize },
+          coords: { x: 5.5 * this.tileSize, y: 8 * this.tileSize },
           class: CargoTrigger,
+          img: triggerImages.cargo,
+          enabled: true,
+        },
+        {
+          coords: { x: 19.5 * this.tileSize, y: 12 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargo,
+          enabled: true,
         },
       ]
       return triggers

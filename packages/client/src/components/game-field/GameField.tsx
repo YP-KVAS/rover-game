@@ -49,6 +49,7 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
     })
     triggers.forEach(trigger => {
       trigger.check(rover.coords)
+      trigger.draw(ctx)
     })
   }
 

@@ -11,10 +11,22 @@ export class CargoTrigger extends BaseTrigger {
   }
 
   onTriggered() {
+    this.disable()
     console.warn('Get cargo')
   }
+}
 
-  draw(ctx: CanvasRenderingContext2D) {
-    return
+export class DeliveryTrigger extends BaseTrigger {
+  constructor(
+    gameMap: Array<Array<Array<number>>>,
+    tileSize: number,
+    triggerInfo: TriggerInfo
+  ) {
+    super(gameMap, tileSize, triggerInfo)
+  }
+
+  onTriggered() {
+    this.disable()
+    console.warn('cargo delivery')
   }
 }

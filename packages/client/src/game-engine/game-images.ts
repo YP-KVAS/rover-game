@@ -66,6 +66,9 @@ roverOpenRight.src = './images/rover/rover-open-right.png'
 const roverOpenLeft = new Image()
 roverOpenLeft.src = './images/rover/rover-open-left.png'
 
+const cargo = new Image()
+cargo.src = './images/triggers/cargo.png'
+
 export const tileMapImages = {
   sideWalk,
   sideWalk2,
@@ -95,11 +98,15 @@ export const roverImages = {
   roverRight,
   roverLeft,
   roverOpenLeft,
-  roverOpenRight
+  roverOpenRight,
 }
 
 export const dynamicImages = {
   greenCar,
   yellowCar,
   redCar,
+}
+
+export const triggerImages = {
+  cargo,
 }

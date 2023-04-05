@@ -26,6 +26,7 @@ export interface Rover extends MovingObject {
 }
 export interface TriggerInfo {
   coords: Coords
+  img: HTMLImageElement
   class: {
     new (
       gameMap: Array<Array<Array<number>>>,
@@ -33,4 +34,5 @@ export interface TriggerInfo {
       triggerInfo: TriggerInfo
     ): BaseTrigger
   }
+  enabled?: boolean
 }
