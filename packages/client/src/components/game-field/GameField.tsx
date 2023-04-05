@@ -16,8 +16,8 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
     rover: roverInfo,
     gameMap,
     cars: carsInfo,
-    tileSize,
     triggers: triggersInfo,
+    tileSize,
   } = levels[level]
 
   const canvasWidth = gameMap[0][0].length * tileSize
@@ -35,10 +35,11 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
   const cars = carsInfo.map(
     car => new Car(gameMap, tileSize, car.coords, car.movingDirection, car.img)
   )
+  const staticMap = new StaticMap(gameMap, tileSize)
+
   const triggers = triggersInfo.map(
     trigger => new trigger.class(gameMap, tileSize, trigger)
   )
-  const staticMap = new StaticMap(gameMap, tileSize)
 
   const drawDynamicLayer = (ctx: CanvasRenderingContext2D) => {
     rover.draw(ctx)

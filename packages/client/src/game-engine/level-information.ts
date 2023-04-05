@@ -1,6 +1,8 @@
 import { dynamicImages, triggerImages } from './game-images'
 import { Car, MovingDirection, Rover, TriggerInfo } from '../utils/types/game'
 import { CargoTrigger, DeliveryTrigger } from './game-objects/Triggers'
+import GameManager from './GameManager'
+import { BaseTrigger } from './game-objects/base-classes/BaseTrigger'
 
 export interface LevelInformation {
   tileSize: number
@@ -84,7 +86,24 @@ export const levels: Record<number, LevelInformation> = {
       ]
     },
     get triggers() {
-      return []
+      const start: TriggerInfo = {
+        triggerId: 0,
+        coords: { x: this.tileSize, y: 8 * this.tileSize },
+        class: CargoTrigger,
+        img: triggerImages.cargo,
+        enabled: true,
+        logic: () => BaseTrigger.enableTrigger(1),
+      }
+      const end: TriggerInfo = {
+        triggerId: 1,
+        coords: { x: 5.5 * this.tileSize, y: 3 * this.tileSize },
+        class: DeliveryTrigger,
+        img: triggerImages.cargo,
+        enabled: false,
+        logic: () => GameManager.setLevel(2),
+      }
+
+      return [start, end]
     },
     gameMap: [
       // background layer (crosswalk and road)
@@ -184,21 +203,26 @@ export const levels: Record<number, LevelInformation> = {
       ]
     },
     get triggers() {
-      const triggers: TriggerInfo[] = [
-        {
-          coords: { x: 5.5 * this.tileSize, y: 8 * this.tileSize },
-          class: CargoTrigger,
-          img: triggerImages.cargo,
-          enabled: true,
+      const start0: TriggerInfo = {
+        triggerId: 0,
+        coords: { x: 5.5 * this.tileSize, y: 8 * this.tileSize },
+        class: CargoTrigger,
+        img: triggerImages.cargo,
+        enabled: true,
+        logic: () => {
+          BaseTrigger.enableTrigger(1)
         },
-        {
-          coords: { x: 19.5 * this.tileSize, y: 12 * this.tileSize },
-          class: DeliveryTrigger,
-          img: triggerImages.cargo,
-          enabled: true,
-        },
-      ]
-      return triggers
+      }
+      const end0: TriggerInfo = {
+        triggerId: 1,
+        coords: { x: 19.5 * this.tileSize, y: 12 * this.tileSize },
+        class: DeliveryTrigger,
+        img: triggerImages.cargo,
+        enabled: false,
+        logic: () => GameManager.endGame(),
+      }
+
+      return [start0, end0]
     },
     gameMap: [
       // background layer (crosswalk and road)

@@ -1,5 +1,6 @@
 import { Coords, MovingDirection } from '../../utils/types/game'
 import { GameBot } from './base-classes/GameBot'
+import gameManager from '../GameManager'
 
 export class Car extends GameBot {
   constructor(
@@ -199,8 +200,7 @@ export class Car extends GameBot {
 
   move(roverCoords: Coords, allCarsCoords: Array<Coords>) {
     if (this.collideWithRover(roverCoords)) {
-      // TODO: add game over or reduce health logic
-      console.warn('Game Over')
+      gameManager.roverHit()
       return
     }
 

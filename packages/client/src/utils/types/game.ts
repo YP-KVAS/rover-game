@@ -25,6 +25,7 @@ export interface Rover extends MovingObject {
   speed: number
 }
 export interface TriggerInfo {
+  triggerId: number
   coords: Coords
   img: HTMLImageElement
   class: {
@@ -35,4 +36,6 @@ export interface TriggerInfo {
     ): BaseTrigger
   }
   enabled?: boolean
+  action?: () => unknown
+  logic?: () => unknown
 }
