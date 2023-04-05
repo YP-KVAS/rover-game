@@ -1,11 +1,13 @@
 import { dynamicImages } from './game-images'
-import { Car, MovingDirection, Rover } from '../utils/types/game'
+import { Car, MovingDirection, Rover, TriggerInfo } from '../utils/types/game'
+import { CargoTrigger } from './game-objects/Triggers'
 
 export interface LevelInformation {
   tileSize: number
   rover: Rover
   gameMap: Array<Array<Array<number>>>
   cars: Array<Car>
+  triggers: Array<TriggerInfo>
 }
 
 // 1 | 2
@@ -80,6 +82,9 @@ export const levels: Record<number, LevelInformation> = {
           movingDirection: MovingDirection.UP,
         },
       ]
+    },
+    get triggers() {
+      return []
     },
     gameMap: [
       // background layer (crosswalk and road)
@@ -177,6 +182,15 @@ export const levels: Record<number, LevelInformation> = {
           movingDirection: MovingDirection.UP,
         },
       ]
+    },
+    get triggers() {
+      const triggers: TriggerInfo[] = [
+        {
+          coords: { x: 4 * this.tileSize, y: 8 * this.tileSize },
+          class: CargoTrigger,
+        },
+      ]
+      return triggers
     },
     gameMap: [
       // background layer (crosswalk and road)

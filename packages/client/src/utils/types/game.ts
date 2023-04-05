@@ -1,3 +1,5 @@
+import { BaseTrigger } from '../../game-engine/game-objects/base-classes/BaseTrigger'
+
 export enum MovingDirection {
   UP = 'up',
   DOWN = 'down',
@@ -21,4 +23,14 @@ export interface Car extends MovingObject {
 
 export interface Rover extends MovingObject {
   speed: number
+}
+export interface TriggerInfo {
+  coords: Coords
+  class: {
+    new (
+      gameMap: Array<Array<Array<number>>>,
+      tileSize: number,
+      triggerInfo: TriggerInfo
+    ): BaseTrigger
+  }
 }
