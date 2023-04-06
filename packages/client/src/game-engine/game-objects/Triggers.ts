@@ -1,22 +1,33 @@
 import { BaseTrigger } from './base-classes/BaseTrigger'
 import { TriggerInfo } from '../../utils/types/game'
+import gameManager from '../GameManager'
 
-export class CargoTrigger extends BaseTrigger {
-  constructor(
-    gameMap: Array<Array<Array<number>>>,
-    tileSize: number,
-    triggerInfo: TriggerInfo
-  ) {
-    super(gameMap, tileSize, triggerInfo)
-  }
+class SwingTrigger extends BaseTrigger {
+  rotateDegree = 0
+  rotateSpeed = 2
+  rotateMax = 5
 
-  onTriggered() {
-    this.disable()
-    console.warn('Get cargo')
+  draw(ctx: CanvasRenderingContext2D) {
+    if (!this.enabled) return
+
+    this.drawRotatedTile(
+      ctx,
+      this.img,
+      this.coords.x,
+      this.coords.y,
+      this.rotateDegree
+    )
+    this.rotateDegree += this.rotateSpeed
+    if (
+      this.rotateDegree > this.rotateMax ||
+      this.rotateDegree < this.rotateMax * -1
+    ) {
+      this.rotateSpeed = this.rotateSpeed * -1
+    }
   }
 }
 
-export class DeliveryTrigger extends BaseTrigger {
+export class CargoTrigger extends SwingTrigger {
   constructor(
     gameMap: Array<Array<Array<number>>>,
     tileSize: number,
@@ -27,6 +38,21 @@ export class DeliveryTrigger extends BaseTrigger {
 
   onTriggered() {
     this.disable()
-    console.warn('cargo delivery')
+    gameManager.loadCargo()
+  }
+}
+
+export class DeliveryTrigger extends SwingTrigger {
+  constructor(
+    gameMap: Array<Array<Array<number>>>,
+    tileSize: number,
+    triggerInfo: TriggerInfo
+  ) {
+    super(gameMap, tileSize, triggerInfo)
+  }
+
+  onTriggered() {
+    this.disable()
+    gameManager.deliveryCargo()
   }
 }

@@ -4,6 +4,7 @@ import { BaseTrigger } from './game-objects/base-classes/BaseTrigger'
 
 class GameManager {
   private _level = 1
+  private _points = 0
   private _changeLevelFoo:
     | React.Dispatch<React.SetStateAction<number>>
     | undefined
@@ -25,14 +26,22 @@ class GameManager {
     this._changeLevelFoo(val)
   }
 
-  // TODO: Implement cargo point counter
+  loadCargo() {
+    console.warn('load')
+    this._points += 1000
+  }
+
+  deliveryCargo() {
+    console.warn('delivery')
+    this._points += 3000
+  }
 
   get level() {
     return this._level
   }
   endGame() {
     // TODO: Implement end game
-    console.warn('End game')
+    console.warn('End game with', this._points, 'points')
   }
 
   roverHit() {

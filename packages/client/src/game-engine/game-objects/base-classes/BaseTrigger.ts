@@ -4,11 +4,11 @@ import { Coords, TriggerInfo } from '../../../utils/types/game'
 export abstract class BaseTrigger extends BaseGameObject {
   static triggers: BaseTrigger[] = []
 
-  private id: number
+  protected id: number
   protected coords: Coords
   protected img: HTMLImageElement
-  private enabled?: boolean
-  private readonly logic?: () => unknown
+  protected enabled?: boolean
+  protected readonly logic?: () => unknown
   protected constructor(
     gameMap: Array<Array<Array<number>>>,
     tileSize: number,
@@ -69,8 +69,8 @@ export abstract class BaseTrigger extends BaseGameObject {
   }
 
   private _onTriggered() {
-    if (this.logic) this.logic()
     this.onTriggered()
+    if (this.logic) this.logic()
   }
 
   protected onTriggered() {

@@ -88,7 +88,7 @@ export const levels: Record<number, LevelInformation> = {
     get triggers() {
       const start: TriggerInfo = {
         triggerId: 0,
-        coords: { x: this.tileSize, y: 8 * this.tileSize },
+        coords: { x: 12.5 *this.tileSize, y: 8 * this.tileSize },
         class: CargoTrigger,
         img: triggerImages.cargoLoad,
         enabled: true,
@@ -150,7 +150,7 @@ export const levels: Record<number, LevelInformation> = {
       return {
         movingDirection: MovingDirection.RIGHT,
         coords: { x: 3 * this.tileSize, y: 8 * this.tileSize },
-        speed: 8,
+        speed: 6,
       }
     },
     get cars() {
