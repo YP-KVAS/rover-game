@@ -1,0 +1,4 @@
+{
+  "*.scss": ["npx stylelint --fix"],
+  "*.{js,jsx,ts,tsx}": ["prettier --write", "eslint --fix"]
+}
