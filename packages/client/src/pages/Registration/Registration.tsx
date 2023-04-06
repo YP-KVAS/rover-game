@@ -39,49 +39,47 @@ export const Registration = () => {
   })
 
   return (
-    <main className={styles.registration}>
-      <Form onSubmit={onSubmit}>
-        <FormInput
-          label="Имя"
-          registerObj={{ ...register('first_name', nameValidation) }}
-          errors={errors.first_name}
-          errorsMsgs={nameErrors}></FormInput>
-        <FormInput
-          label="Фамилия"
-          registerObj={register('second_name', nameValidation)}
-          errors={errors.second_name}
-          errorsMsgs={nameErrors}></FormInput>
-        <FormInput
-          label="Логин"
-          registerObj={{ ...register('login', loginValidation) }}
-          errors={errors.login}
-          errorsMsgs={loginErrors}></FormInput>
-        <FormInput
-          label="E-mail"
-          type="email"
-          registerObj={{ ...register('email', emailValidation) }}
-          errors={errors.email}
-          errorsMsgs={emailErrors}></FormInput>
-        <FormInput
-          label="Телефон"
-          type="tel"
-          registerObj={{ ...register('phone', phoneValidation) }}
-          errors={errors.phone}
-          errorsMsgs={phoneErrors}></FormInput>
-        <FormInput
-          label="Пароль"
-          type="password"
-          registerObj={{ ...register('password', passwordValidation) }}
-          errors={errors.password}
-          errorsMsgs={passwordErrors}></FormInput>
-        <FormInput
-          label="Подтвердить пароль"
-          type="password"
-          registerObj={{ ...register('repassword', passwordValidation) }}
-          errors={errors.repassword}
-          errorsMsgs={passwordErrors}></FormInput>
-        <Button type="primary">Отправить</Button>
-      </Form>
-    </main>
+    <Form onSubmit={onSubmit}>
+      <FormInput
+        label="Имя"
+        registerObj={{ ...register('first_name', nameValidation) }}
+        errors={errors.first_name}
+        errorsMsgs={nameErrors}></FormInput>
+      <FormInput
+        label="Фамилия"
+        registerObj={register('second_name', nameValidation)}
+        errors={errors.second_name}
+        errorsMsgs={nameErrors}></FormInput>
+      <FormInput
+        label="Логин"
+        registerObj={{ ...register('login', loginValidation) }}
+        errors={errors.login}
+        errorsMsgs={loginErrors}></FormInput>
+      <FormInput
+        label="E-mail"
+        type="email"
+        registerObj={{ ...register('email', emailValidation) }}
+        errors={errors.email}
+        errorsMsgs={emailErrors}></FormInput>
+      <FormInput
+        label="Телефон"
+        type="tel"
+        registerObj={{ ...register('phone', phoneValidation) }}
+        errors={errors.phone}
+        errorsMsgs={phoneErrors}></FormInput>
+      <FormInput
+        label="Пароль"
+        type="password"
+        registerObj={{ ...register('password', passwordValidation) }}
+        errors={errors.password}
+        errorsMsgs={passwordErrors}></FormInput>
+      <FormInput
+        label="Подтвердить пароль"
+        type="password"
+        registerObj={{ ...register('repassword', passwordValidation) }}
+        errors={errors.repassword}
+        errorsMsgs={passwordErrors}></FormInput>
+      <Button type="primary">Отправить</Button>
+    </Form>
   )
 }
