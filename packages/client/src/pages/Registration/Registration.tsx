@@ -13,9 +13,7 @@ import {
 } from '../../utils/validation'
 import { FormInput } from '../../components/FormInput/FormInput'
 import { Form } from '../../components/Form/Form'
-import { Button } from '../../components/Button/Button'
-
-import styles from './Registration.module.scss'
+import { Button } from '../../components/button/Button'
 
 type RegFormData = {
   first_name: string
