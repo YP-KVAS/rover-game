@@ -1,0 +1,29 @@
+.errorPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  padding-top: 100px;
+
+  & h1 {
+    font-size: var(--font-3xl);
+    color: var(--color-text-on-dark);
+  }
+
+  & p,
+  & .link {
+    max-width: 600px;
+    font-size: var(--font-xl);
+    text-align: justify;
+    color: var(--color-text-on-dark);
+  }
+
+
+  & .link {
+    text-decoration: underline;
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+}
