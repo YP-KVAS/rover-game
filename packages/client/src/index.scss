@@ -56,4 +56,6 @@ html {
 
 body {
   background: var(--bg-gradient);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }

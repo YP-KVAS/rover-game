@@ -3,7 +3,7 @@ import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/Main'
 import { RoutesEnum } from '../utils/const-variables/routes'
-import { GamePage } from '../pages/GamePage'
+import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
 
