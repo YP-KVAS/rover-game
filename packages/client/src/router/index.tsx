@@ -6,6 +6,7 @@ import { RoutesEnum } from '../utils/const-variables/routes'
 import { GamePage } from '../pages/GamePage'
 import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
+import { Registration } from '../pages/Registration/Registration'
 
 const in_work_component = (
   <main>
@@ -31,7 +32,7 @@ export const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.REGISTRATION,
-        element: in_work_component,
+        element: <Registration />,
       },
       {
         path: RoutesEnum.LOGIN,
