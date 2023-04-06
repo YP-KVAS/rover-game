@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef } from 'react'
 import styles from './GameField.module.scss'
 import { levels } from '../../game-engine/level-information'
-import { Canvas } from '../canvas/Canvas'
+import { Canvas } from '../Canvas/Canvas'
 import { MovingDirection } from '../../utils/types/game'
 import { StaticMap } from '../../game-engine/game-objects/StaticMap'
 import { Rover } from '../../game-engine/game-objects/Rover'

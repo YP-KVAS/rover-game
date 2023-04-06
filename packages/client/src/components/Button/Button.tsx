@@ -14,7 +14,7 @@ export const Button = ({
   clickHandler,
   isDisabled,
 }: ButtonProps) => {
-  const className = `${styles.btn} ${styles['btn-' + type]}`
+  const className = `${styles.btn} ${styles['btn_' + type]}`
 
   return (
     <button className={className} onClick={clickHandler} disabled={isDisabled}>
