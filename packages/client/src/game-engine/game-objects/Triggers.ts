@@ -38,7 +38,7 @@ export class CargoTrigger extends SwingTrigger {
 
   onTriggered() {
     this.disable()
-    gameManager.loadCargo()
+    gameManager.addPoints(1000)
   }
 }
 
@@ -53,6 +53,6 @@ export class DeliveryTrigger extends SwingTrigger {
 
   onTriggered() {
     this.disable()
-    gameManager.deliveryCargo()
+    gameManager.addPoints(3000)
   }
 }

@@ -39,3 +39,9 @@ export interface TriggerInfo {
   action?: () => unknown
   logic?: () => unknown
 }
+
+export interface GameStatType {
+  level: number
+  points: number
+  hitPoints: number
+}

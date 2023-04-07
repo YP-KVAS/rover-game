@@ -6,7 +6,7 @@ export const GamePage: FC = () => {
   // TODO: replace with actual game level, add game level progress, timer, etc.
   const [level, setLevel] = React.useState(1)
 
-  gameManager.setChangeLevelFoo(setLevel)
+  gameManager.useChangeLevel(setLevel)
 
   return <GameField level={level} />
 }
