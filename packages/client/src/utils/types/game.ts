@@ -26,6 +26,7 @@ export interface Rover extends MovingObject {
 }
 export interface TriggerInfo {
   triggerId: number
+  description?: string
   coords: Coords
   img: HTMLImageElement
   class: {

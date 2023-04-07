@@ -85,25 +85,63 @@ export const levels: Record<number, LevelInformation> = {
         },
       ]
     },
-    get triggers() {
-      const start: TriggerInfo = {
-        triggerId: 0,
-        coords: { x: 12.5 * this.tileSize, y: 8 * this.tileSize },
-        class: CargoTrigger,
-        img: triggerImages.cargoLoad,
-        enabled: true,
-        logic: () => BaseTrigger.enableTrigger(1),
-      }
-      const end: TriggerInfo = {
-        triggerId: 1,
-        coords: { x: 5.5 * this.tileSize, y: 3 * this.tileSize },
-        class: DeliveryTrigger,
-        img: triggerImages.cargoUnload,
-        enabled: false,
-        logic: () => GameManager.setLevel(2),
-      }
-
-      return [start, end]
+    get triggers(): TriggerInfo[] {
+      return [
+        {
+          triggerId: 0,
+          description: 'Start 1 delivery',
+          coords: { x: 12.5 * this.tileSize, y: 8 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: true,
+          logic: () => BaseTrigger.enableTrigger(1),
+        },
+        {
+          triggerId: 1,
+          description: 'End 1 delivery',
+          coords: { x: 5.5 * this.tileSize, y: 3 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(2),
+        },
+        {
+          triggerId: 2,
+          description: 'Start 2 delivery',
+          coords: { x: 15.5 * this.tileSize, y: 5 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(3),
+        },
+        {
+          triggerId: 3,
+          description: 'End 2 delivery',
+          coords: { x: 14.5 * this.tileSize, y: 11 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(4),
+        },
+        {
+          triggerId: 4,
+          description: 'Start 3 delivery',
+          coords: { x: 1.5 * this.tileSize, y: 3 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(5),
+        },
+        {
+          triggerId: 5,
+          description: 'End 3 delivery',
+          coords: { x: 13.5 * this.tileSize, y: 5 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => GameManager.setLevel(2),
+        },
+      ]
     },
     gameMap: [
       // background layer (crosswalk and road)
@@ -202,27 +240,63 @@ export const levels: Record<number, LevelInformation> = {
         },
       ]
     },
-    get triggers() {
-      const start0: TriggerInfo = {
-        triggerId: 0,
-        coords: { x: 5.5 * this.tileSize, y: 8 * this.tileSize },
-        class: CargoTrigger,
-        img: triggerImages.cargoLoad,
-        enabled: true,
-        logic: () => {
-          BaseTrigger.enableTrigger(1)
+    get triggers(): TriggerInfo[] {
+      return [
+        {
+          triggerId: 0,
+          description: 'Start 1 delivery',
+          coords: { x: 13.5 * this.tileSize, y: 8 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: true,
+          logic: () => BaseTrigger.enableTrigger(1),
         },
-      }
-      const end0: TriggerInfo = {
-        triggerId: 1,
-        coords: { x: 19.5 * this.tileSize, y: 12 * this.tileSize },
-        class: DeliveryTrigger,
-        img: triggerImages.cargoUnload,
-        enabled: false,
-        logic: () => GameManager.endGame(),
-      }
-
-      return [start0, end0]
+        {
+          triggerId: 1,
+          description: 'End 1 delivery',
+          coords: { x: 5.5 * this.tileSize, y: 5 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(2),
+        },
+        {
+          triggerId: 2,
+          description: 'Start 2 delivery',
+          coords: { x: 5.5 * this.tileSize, y: 8 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(3),
+        },
+        {
+          triggerId: 3,
+          description: 'End 2 delivery',
+          coords: { x: 21.5 * this.tileSize, y: 9 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(4),
+        },
+        {
+          triggerId: 4,
+          description: 'Start 3 delivery',
+          coords: { x: 3.5 * this.tileSize, y: 13 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(5),
+        },
+        {
+          triggerId: 5,
+          description: 'End 3 delivery',
+          coords: { x: 23.5 * this.tileSize, y: 9 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => GameManager.endGame(),
+        },
+      ]
     },
     gameMap: [
       // background layer (crosswalk and road)
