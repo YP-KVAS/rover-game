@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { UserSettings, User, UserPassword } from '../../utils/types/user'
+import { UserSettings, User, IUserPassword } from '../../utils/types/user'
 import {
   changeAvatar,
   changePassword,
@@ -34,7 +34,7 @@ export const onAvatarChange = createAsyncThunk<
 
 export const onPasswordChange = createAsyncThunk<
   void,
-  UserPassword,
+  IUserPassword,
   { rejectValue: string }
 >('user/onPasswordChange', async (data, { rejectWithValue }) => {
   try {
