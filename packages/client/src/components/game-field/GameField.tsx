@@ -89,8 +89,9 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
   }
 
   return (
-    <div className={styles.gameWrapper}>
+    <div>
       <GameStat />
+
       <section
         className={styles.section}
         onKeyDown={handleOnKeyDown}

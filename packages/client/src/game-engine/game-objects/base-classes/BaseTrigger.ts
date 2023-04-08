@@ -62,9 +62,9 @@ export abstract class BaseTrigger extends BaseGameObject {
 
   collideWithRover(roverCoords: Coords): boolean {
     const xIntersection =
-      Math.abs(roverCoords.x - this.coords.x) < this.tileSize / 2
+      Math.abs(roverCoords.x - this.coords.x) <= this.tileSize / 2
     const yIntersection =
-      Math.abs(roverCoords.y - this.coords.y) < this.tileSize / 2
+      Math.abs(roverCoords.y - this.coords.y) <= this.tileSize / 2
     return xIntersection && yIntersection
   }
 
