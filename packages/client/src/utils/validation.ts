@@ -28,12 +28,21 @@ const passwordValidation = Yup.string()
     'Пароль должен содержать обязательно хотя бы одну заглавную букву и цифру'
   )
 
-const oldPasswordValidationSchema = Yup.string().required(REQUIRED_MESSAGE)
+const oldPasswordValidation = Yup.string().required(REQUIRED_MESSAGE)
 
 export const confirmPasswordValidationSchema = Yup.object().shape({
   [FormInputNames.PASSWORD]: passwordValidation,
   [FormInputNames.REPEAT_PASSWORD]: passwordValidation.oneOf(
-    [Yup.ref('password')],
+    [Yup.ref(FormInputNames.PASSWORD)],
+    'Введенные пароли не совпадают'
+  ),
+})
+
+export const changePasswordValidationSchema = Yup.object().shape({
+  [FormInputNames.OLD_PASSWORD]: oldPasswordValidation,
+  [FormInputNames.NEW_PASSWORD]: passwordValidation,
+  [FormInputNames.REPEAT_PASSWORD]: passwordValidation.oneOf(
+    [Yup.ref(FormInputNames.NEW_PASSWORD)],
     'Введенные пароли не совпадают'
   ),
 })

@@ -21,7 +21,7 @@ export interface User extends UserSettings {
   [FormInputNames.AVATAR]: string | null
 }
 
-export interface UserPassword extends Record<string, unknown> {
+export interface IUserPassword extends Record<string, unknown> {
   [FormInputNames.OLD_PASSWORD]: string
   [FormInputNames.NEW_PASSWORD]: string
 }

@@ -2,6 +2,7 @@ import { FormInputNames, InputType } from '../types/forms'
 import { Tab } from '../../components/Tabs/Tabs'
 import { UserData } from '../../components/UserData/UserData'
 import { UserAvatar } from '../../components/UserAvatar/UserAvatar'
+import { UserPassword } from '../../components/UserPassword/UserPassword'
 
 interface FormInput {
   label: string
@@ -69,6 +70,27 @@ export const USER_SETTINGS_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
+export const USER_CHANGE_PASSWORD_FORM_INPUTS: Array<FormInput> = [
+  {
+    label: 'Старый пароль',
+    type: 'password',
+    placeholder: 'Пароль',
+    name: FormInputNames.OLD_PASSWORD,
+  },
+  {
+    label: 'Новый пароль',
+    type: 'password',
+    placeholder: 'Пароль',
+    name: FormInputNames.NEW_PASSWORD,
+  },
+  {
+    label: 'Подтвердите пароль',
+    type: 'password',
+    placeholder: 'Пароль',
+    name: FormInputNames.REPEAT_PASSWORD,
+  },
+]
+
 export const USER_SETTINGS_TABS: Array<Tab> = [
   {
     label: 'Учётные данные',
@@ -77,5 +99,9 @@ export const USER_SETTINGS_TABS: Array<Tab> = [
   {
     label: 'Фото профиля',
     component: UserAvatar,
+  },
+  {
+    label: 'Настройки',
+    component: UserPassword,
   },
 ]

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import styles from '../../common-styles/UserSettings.module.scss'
 import formStyles from '../../common-styles/Form.module.scss'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
-import { User } from '../../utils/types/user'
+import { User, UserSettings } from '../../utils/types/user'
 import {
   selectChangeSettingsState,
   selectCurrentUser,
@@ -21,7 +21,13 @@ import { clearChangeSettingsError } from '../../store/slices/user-slice'
 
 export const UserData: FC = () => {
   const dispatch = useAppDispatch()
+
   const currentUser: User | null = useAppSelector(selectCurrentUser)
+  let userData: UserSettings | null = null
+  if (currentUser) {
+    const { id = null, avatar = null, ...rest } = currentUser
+    userData = rest
+  }
   const { isLoading, errorMessage } = useAppSelector(selectChangeSettingsState)
 
   const [editDisabled, setEditDisabled] = useState(true)
@@ -31,18 +37,20 @@ export const UserData: FC = () => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<User>({
+  } = useForm<UserSettings>({
     resolver: yupResolver(changeUserProfileDataValidationSchema),
-    values: currentUser || undefined,
+    values: userData || undefined,
   })
 
   const handleFormSubmit = handleSubmit(data => {
-    if (JSON.stringify(data) !== JSON.stringify(currentUser)) {
-      dispatch(onProfileSettingsChange({ ...data })).then(data => {
+    if (JSON.stringify(data) !== JSON.stringify(userData)) {
+      dispatch(onProfileSettingsChange(data)).then(data => {
         if (data.type.endsWith('fulfilled')) {
           setEditDisabled(true)
         }
       })
+    } else {
+      setEditDisabled(true)
     }
   })
 
