@@ -1,6 +1,6 @@
 import { FetchMethods, request } from './base-request'
 import { USER_API_URL, UserApiPaths } from '../const-variables/api'
-import { User, UserPassword, UserSettings } from '../types/user'
+import { User, IUserPassword, UserSettings } from '../types/user'
 
 export async function changeProfileSettings(data: UserSettings): Promise<User> {
   return await request(`${USER_API_URL}${UserApiPaths.CHANGE_SETTINGS}`, {
@@ -18,7 +18,7 @@ export async function changeAvatar(avatar: File): Promise<User> {
   })
 }
 
-export async function changePassword(data: UserPassword): Promise<void> {
+export async function changePassword(data: IUserPassword): Promise<void> {
   return await request(`${USER_API_URL}${UserApiPaths.CHANGE_PASSWORD}`, {
     method: FetchMethods.PUT,
     data,
