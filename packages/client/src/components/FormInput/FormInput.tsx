@@ -8,6 +8,8 @@ type FormInputProps = {
   type?: InputType
   label?: string
   placeholder?: string
+  disabled?: boolean
+  defaultValue?: string
   registerObj: UseFormRegisterReturn
   errorMsg?: string
 }
@@ -15,7 +17,9 @@ type FormInputProps = {
 export const FormInput = ({
   label,
   type = 'text',
+  disabled = false,
   placeholder,
+  defaultValue = '',
   registerObj,
   errorMsg,
 }: FormInputProps) => {
@@ -36,6 +40,8 @@ export const FormInput = ({
           ref={inputRef}
           type={type}
           placeholder={placeholder}
+          disabled={disabled}
+          defaultValue={defaultValue}
           className={styles.input}
           aria-invalid={errorMsg ? 'true' : 'false'}
         />

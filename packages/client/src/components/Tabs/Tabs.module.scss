@@ -1,0 +1,23 @@
+.tabs {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.tabs_list {
+  width: 200px;
+  font-size: var(--font-xl);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.tab_title {
+  cursor: pointer;
+  color: var(--color-text-on-dark);
+
+  &:hover, &.active {
+    color: var(--color-accent);
+    transition: 0.4s;
+  }
+}

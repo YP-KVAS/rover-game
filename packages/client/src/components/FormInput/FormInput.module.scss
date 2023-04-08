@@ -4,6 +4,10 @@
   border-radius: 10px;
   padding: 10px;
   box-shadow: var(--shadow);
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
 .input_container {

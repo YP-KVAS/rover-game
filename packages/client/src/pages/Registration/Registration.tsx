@@ -1,4 +1,5 @@
 import styles from './Registration.module.scss'
+import formStyles from '../../common-styles/form.module.scss'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FormInput } from '../../components/FormInput/FormInput'
@@ -57,7 +58,7 @@ export const Registration = () => {
           />
         ))}
       </>
-      <div className={styles.form_actions}>
+      <div className={formStyles.form_actions}>
         <Button type="primary" htmlType="submit">
           Зарегистрироваться
         </Button>
@@ -66,7 +67,9 @@ export const Registration = () => {
         </Link>
       </div>
       <>
-        {errorMessage && <p className={styles.error_message}>{errorMessage}</p>}
+        {errorMessage && (
+          <p className={formStyles.form_error_message}>{errorMessage}</p>
+        )}
       </>
     </Form>
   )

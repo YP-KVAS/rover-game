@@ -1,4 +1,6 @@
 import { FormInputNames, InputType } from '../types/forms'
+import { Tab } from '../../components/Tabs/Tabs'
+import { UserData } from '../../components/UserData/UserData'
 
 interface FormInput {
   label: string
@@ -7,7 +9,7 @@ interface FormInput {
   name: FormInputNames
 }
 
-export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
+const USER_FORM_DATA: Array<FormInput> = [
   {
     label: 'Имя',
     placeholder: 'Иван',
@@ -38,6 +40,10 @@ export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
     type: 'tel',
     name: FormInputNames.PHONE,
   },
+]
+
+export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
+  ...USER_FORM_DATA,
   {
     label: 'Пароль',
     type: 'password',
@@ -49,5 +55,22 @@ export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
     type: 'password',
     placeholder: 'Пароль',
     name: FormInputNames.REPEAT_PASSWORD,
+  },
+]
+
+export const USER_SETTINGS_FORM_INPUTS: Array<FormInput> = [
+  ...USER_FORM_DATA,
+  {
+    label: 'Никнейм',
+    type: 'text',
+    placeholder: 'Ivan',
+    name: FormInputNames.DISPLAY_NAME,
+  },
+]
+
+export const USER_SETTINGS_TABS: Array<Tab> = [
+  {
+    label: 'Учётные данные',
+    component: UserData,
   },
 ]
