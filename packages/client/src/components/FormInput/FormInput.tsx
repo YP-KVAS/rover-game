@@ -12,6 +12,7 @@ type FormInputProps = {
   defaultValue?: string
   registerObj: UseFormRegisterReturn
   errorMsg?: string
+  accept?: string
 }
 
 export const FormInput = ({
@@ -22,6 +23,7 @@ export const FormInput = ({
   defaultValue = '',
   registerObj,
   errorMsg,
+  accept,
 }: FormInputProps) => {
   const { ref } = registerObj
   const inputRef = useRef(null)
@@ -42,6 +44,7 @@ export const FormInput = ({
           placeholder={placeholder}
           disabled={disabled}
           defaultValue={defaultValue}
+          accept={accept}
           className={styles.input}
           aria-invalid={errorMsg ? 'true' : 'false'}
         />

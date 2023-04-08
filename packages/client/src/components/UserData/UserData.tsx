@@ -1,13 +1,12 @@
 import { FC, useEffect, useState } from 'react'
-import styles from './UserData.module.scss'
-import formStyles from '../../common-styles/form.module.scss'
+import styles from '../../common-styles/UserSettings.module.scss'
+import formStyles from '../../common-styles/Form.module.scss'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { User } from '../../utils/types/user'
 import {
   selectChangeSettingsState,
   selectCurrentUser,
 } from '../../store/selectors/user-selector'
-import { onGetUser } from '../../store/thunks/auth-thunk'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { changeUserProfileDataValidationSchema } from '../../utils/validation'
@@ -18,17 +17,12 @@ import { EditableTitle } from '../EditableTitle/EditableTitle'
 import { USER_SETTINGS_FORM_INPUTS } from '../../utils/const-variables/forms'
 import { FormInput } from '../FormInput/FormInput'
 import { Button } from '../Button/Button'
+import { clearChangeSettingsError } from '../../store/slices/user-slice'
 
 export const UserData: FC = () => {
   const dispatch = useAppDispatch()
   const currentUser: User | null = useAppSelector(selectCurrentUser)
   const { isLoading, errorMessage } = useAppSelector(selectChangeSettingsState)
-
-  useEffect(() => {
-    if (!currentUser) {
-      dispatch(onGetUser())
-    }
-  }, [dispatch, currentUser])
 
   const [editDisabled, setEditDisabled] = useState(true)
   const enableEdit = () => setEditDisabled(false)
@@ -42,14 +36,30 @@ export const UserData: FC = () => {
     values: currentUser || undefined,
   })
 
-  const handleFormSubmit = handleSubmit(async data => {
+  const handleFormSubmit = handleSubmit(data => {
     if (JSON.stringify(data) !== JSON.stringify(currentUser)) {
-      await dispatch(onProfileSettingsChange({ ...data }))
+      dispatch(onProfileSettingsChange({ ...data })).then(data => {
+        if (data.type.endsWith('fulfilled')) {
+          setEditDisabled(true)
+        }
+      })
     }
-    setEditDisabled(true)
   })
 
-  const handleFormReset = () => setEditDisabled(true)
+  const handleFormReset = () => {
+    setEditDisabled(true)
+    if (errorMessage) {
+      dispatch(clearChangeSettingsError())
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (errorMessage) {
+        dispatch(clearChangeSettingsError())
+      }
+    }
+  }, [])
 
   return isLoading ? (
     <Loader />

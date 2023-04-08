@@ -1,6 +1,7 @@
 import { FormInputNames, InputType } from '../types/forms'
 import { Tab } from '../../components/Tabs/Tabs'
 import { UserData } from '../../components/UserData/UserData'
+import { UserAvatar } from '../../components/UserAvatar/UserAvatar'
 
 interface FormInput {
   label: string
@@ -72,5 +73,9 @@ export const USER_SETTINGS_TABS: Array<Tab> = [
   {
     label: 'Учётные данные',
     component: UserData,
+  },
+  {
+    label: 'Фото профиля',
+    component: UserAvatar,
   },
 ]

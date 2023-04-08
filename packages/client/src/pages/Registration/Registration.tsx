@@ -1,5 +1,5 @@
 import styles from './Registration.module.scss'
-import formStyles from '../../common-styles/form.module.scss'
+import formStyles from '../../common-styles/Form.module.scss'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FormInput } from '../../components/FormInput/FormInput'
@@ -15,6 +15,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { Loader } from '../../components/Loader/Loader'
 import { selectAuthState } from '../../store/selectors/auth-selector'
+import { useEffect } from 'react'
+import { clearAuthError } from '../../store/slices/auth-slice'
 
 type RegFormData = UserSignUp & { [FormInputNames.REPEAT_PASSWORD]: string }
 
@@ -40,6 +42,14 @@ export const Registration = () => {
       }
     })
   })
+
+  useEffect(() => {
+    return () => {
+      if (errorMessage) {
+        dispatch(clearAuthError())
+      }
+    }
+  }, [])
 
   return isLoading ? (
     <Loader />
