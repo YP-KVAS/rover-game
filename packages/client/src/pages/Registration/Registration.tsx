@@ -1,83 +1,57 @@
+import styles from './Registration.module.scss'
 import { useForm } from 'react-hook-form'
-import {
-  nameValidation,
-  loginValidation,
-  emailValidation,
-  phoneValidation,
-  passwordValidation,
-  nameErrors,
-  loginErrors,
-  emailErrors,
-  phoneErrors,
-  passwordErrors,
-} from '../../utils/validation'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { FormInput } from '../../components/FormInput/FormInput'
 import { Form } from '../../components/Form/Form'
 import { Button } from '../../components/button/Button'
+import { FormInputNames } from '../../utils/types/forms'
+import { userRegisterValidationSchema } from '../../utils/validation'
+import { useAppDispatch } from '../../hooks/useStore'
+import { onSignUp } from '../../store/thunks/auth-thunk'
+import { UserSignUp } from '../../utils/types/user'
+import { REGISTRATION_FORM_INPUTS } from '../../utils/const-variables/forms'
+import { Link } from 'react-router-dom'
+import { RoutesEnum } from '../../utils/const-variables/routes'
 
-type RegFormData = {
-  first_name: string
-  second_name: string
-  login: string
-  email: string
-  password: string
-  repassword: string
-  phone: string
-}
+type RegFormData = UserSignUp & { [FormInputNames.REPEAT_PASSWORD]: string }
 
 export const Registration = () => {
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<RegFormData>()
+  } = useForm<RegFormData>({
+    resolver: yupResolver(userRegisterValidationSchema),
+  })
+
+  const dispatch = useAppDispatch()
 
   const onSubmit = handleSubmit(data => {
-    console.log(data)
+    const { [FormInputNames.REPEAT_PASSWORD]: rePassword, ...userData } = data
+    dispatch(onSignUp(userData))
   })
 
   return (
     <Form onSubmit={onSubmit}>
-      <FormInput
-        label="Имя"
-        registerObj={{ ...register('first_name', nameValidation) }}
-        errors={errors.first_name}
-        errorsMsgs={nameErrors}></FormInput>
-      <FormInput
-        label="Фамилия"
-        registerObj={register('second_name', nameValidation)}
-        errors={errors.second_name}
-        errorsMsgs={nameErrors}></FormInput>
-      <FormInput
-        label="Логин"
-        registerObj={{ ...register('login', loginValidation) }}
-        errors={errors.login}
-        errorsMsgs={loginErrors}></FormInput>
-      <FormInput
-        label="E-mail"
-        type="email"
-        registerObj={{ ...register('email', emailValidation) }}
-        errors={errors.email}
-        errorsMsgs={emailErrors}></FormInput>
-      <FormInput
-        label="Телефон"
-        type="tel"
-        registerObj={{ ...register('phone', phoneValidation) }}
-        errors={errors.phone}
-        errorsMsgs={phoneErrors}></FormInput>
-      <FormInput
-        label="Пароль"
-        type="password"
-        registerObj={{ ...register('password', passwordValidation) }}
-        errors={errors.password}
-        errorsMsgs={passwordErrors}></FormInput>
-      <FormInput
-        label="Подтвердить пароль"
-        type="password"
-        registerObj={{ ...register('repassword', passwordValidation) }}
-        errors={errors.repassword}
-        errorsMsgs={passwordErrors}></FormInput>
-      <Button type="primary">Отправить</Button>
+      <h2 className={styles.title}>Регистрация</h2>
+      <>
+        {REGISTRATION_FORM_INPUTS.map(input => (
+          <FormInput
+            key={input.name}
+            label={input.label}
+            type={input.type}
+            placeholder={input.placeholder}
+            registerObj={{ ...register(input.name) }}
+            errorMsg={errors[input.name]?.message}
+          />
+        ))}
+      </>
+      <div className={styles.form_actions}>
+        <Button type="primary">Зарегистрироваться</Button>
+        <Link to={RoutesEnum.LOGIN} className={styles.link}>
+          Уже зарегистрированы? Войти
+        </Link>
+      </div>
     </Form>
   )
 }
