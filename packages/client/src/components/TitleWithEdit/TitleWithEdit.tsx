@@ -1,12 +1,12 @@
 import { FC } from 'react'
-import styles from './EditableTitle.module.scss'
+import styles from './TitleWithEdit.module.scss'
 
-interface EditableTitleProps {
+interface TitleWithEditProps {
   title: string
   enableEditHandler: () => void
 }
 
-export const EditableTitle: FC<EditableTitleProps> = ({
+export const TitleWithEdit: FC<TitleWithEditProps> = ({
   title,
   enableEditHandler,
 }) => {

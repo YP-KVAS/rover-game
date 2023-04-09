@@ -35,7 +35,7 @@ export const Tabs: FC<TabsProps> = ({ tabs, activeIndex = 0 }) => {
           </li>
         ))}
       </ul>
-      <div>
+      <div className={styles.outlet}>
         <Outlet />
       </div>
     </div>

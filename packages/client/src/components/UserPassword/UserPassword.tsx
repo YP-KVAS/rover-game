@@ -1,12 +1,8 @@
 import { FC, useEffect, useState } from 'react'
 import styles from './UserPassword.module.scss'
-import formStyles from '../../common-styles/Form.module.scss'
-import userStyles from '../../common-styles/UserSettings.module.scss'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { selectChangePasswordState } from '../../store/selectors/user-selector'
 import { Loader } from '../Loader/Loader'
-import { EditableTitle } from '../EditableTitle/EditableTitle'
-import { Form } from '../Form/Form'
 import { useForm } from 'react-hook-form'
 import { IUserPassword } from '../../utils/types/user'
 import { FormInputNames } from '../../utils/types/forms'
@@ -16,10 +12,10 @@ import { onPasswordChange } from '../../store/thunks/user-thunk'
 import { clearChangePasswordError } from '../../store/slices/user-slice'
 import { USER_CHANGE_PASSWORD_FORM_INPUTS } from '../../utils/const-variables/forms'
 import { FormInput } from '../FormInput/FormInput'
-import { Button } from '../Button/Button'
 import { onLogout } from '../../store/thunks/auth-thunk'
 import { useNavigate } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
+import { FormWithEdit } from '../FormWithEdit/FormWithEdit'
 
 export const UserPassword: FC = () => {
   const dispatch = useAppDispatch()
@@ -71,9 +67,14 @@ export const UserPassword: FC = () => {
   return isLoading ? (
     <Loader />
   ) : (
-    <div className={userStyles.user_settings}>
-      <EditableTitle title={'Изменить пароль'} enableEditHandler={enableEdit} />
-      <Form onSubmit={handleFormSubmit} onReset={handleFormReset}>
+    <div>
+      <FormWithEdit
+        title="Изменить пароль"
+        editDisabled={editDisabled}
+        enableEdit={enableEdit}
+        handleFormSubmit={handleFormSubmit}
+        handleFormReset={handleFormReset}
+        errorMessage={errorMessage}>
         <>
           {USER_CHANGE_PASSWORD_FORM_INPUTS.map(input => (
             <FormInput
@@ -87,22 +88,7 @@ export const UserPassword: FC = () => {
             />
           ))}
         </>
-        <>
-          {!editDisabled && (
-            <div className={formStyles.form_actions}>
-              <Button htmlType="submit" type="primary">
-                Сохранить изменения
-              </Button>
-              <Button htmlType="reset" type="secondary">
-                Отменить
-              </Button>
-            </div>
-          )}
-          {errorMessage && (
-            <p className={formStyles.form_error_message}>{errorMessage}</p>
-          )}
-        </>
-      </Form>
+      </FormWithEdit>
       <div className={styles.logout} onClick={handleLogout}>
         <svg className={styles.svg_icon}>
           <use xlinkHref="./images/icons-sprite.svg#exit"></use>
