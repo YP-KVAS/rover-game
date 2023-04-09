@@ -1,0 +1,27 @@
+@import "src/index";
+
+.section {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    position: relative;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+:fullscreen {
+    .section {
+        align-items: center;
+        transform: scale(1.2);
+
+        @include media-screen-large {
+            transform: scale(1);
+        }
+
+        @include media-screen-medium {
+            transform: scale(0.8);
+        }
+    }
+}

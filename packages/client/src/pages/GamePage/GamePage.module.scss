@@ -1,0 +1,11 @@
+@import "src/index";
+
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+
+  @include media-screen-medium {
+    transform: scale(0.8);
+  }
+}
