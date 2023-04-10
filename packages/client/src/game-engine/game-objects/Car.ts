@@ -14,8 +14,20 @@ export class Car extends GameBot {
     super(gameMap, tileSize, coords, movingDirection, speed, img)
   }
 
-  needToStopOnCrosswalk(tileCoords: Coords, roverCoords: Coords): boolean {
-    return this.coordsAreIntersecting(tileCoords, roverCoords, 2, true)
+  needToStopOnCrosswalk(roverCoords: Coords): boolean {
+    let needToStop = false
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+      case MovingDirection.DOWN:
+        needToStop = Math.abs(this.coords.y - roverCoords.y) >= this.tileSize
+        break
+      case MovingDirection.RIGHT:
+      case MovingDirection.LEFT:
+        needToStop = Math.abs(this.coords.x - roverCoords.x) >= this.tileSize
+        break
+    }
+
+    return needToStop
   }
 
   getCrosswalkCoords(tileCoords: Coords): Coords | null {
@@ -28,26 +40,30 @@ export class Car extends GameBot {
     let startY: number | null = null
 
     // check if next tile is crosswalk
-    switch (tile) {
-      case 131:
-      case 144:
-        startX = tileCoords.x
-        startY = tileCoords.y
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+        if (tile === 133) {
+          startX = tileCoords.x - this.tileSize
+          startY = tileCoords.y - this.tileSize
+        }
         break
-      case 132:
-      case 141:
-        startX = tileCoords.x - this.tileSize
-        startY = tileCoords.y
+      case MovingDirection.DOWN:
+        if (tile === 131) {
+          startX = tileCoords.x
+          startY = tileCoords.y
+        }
         break
-      case 133:
-      case 142:
-        startX = tileCoords.x - this.tileSize
-        startY = tileCoords.y - this.tileSize
+      case MovingDirection.RIGHT:
+        if (tile === 143) {
+          startX = tileCoords.x
+          startY = tileCoords.y - this.tileSize
+        }
         break
-      case 134:
-      case 143:
-        startX = tileCoords.x
-        startY = tileCoords.y - this.tileSize
+      case MovingDirection.LEFT:
+        if (tile === 141) {
+          startX = tileCoords.x - this.tileSize
+          startY = tileCoords.y
+        }
         break
     }
 
@@ -283,7 +299,8 @@ export class Car extends GameBot {
       const nextCrosswalkCoords = this.getCrosswalkCoords(nextTileCoords)
       if (
         nextCrosswalkCoords &&
-        this.needToStopOnCrosswalk(nextCrosswalkCoords, roverCoords)
+        this.coordsAreIntersecting(nextCrosswalkCoords, roverCoords, 2, true) &&
+        this.needToStopOnCrosswalk(roverCoords)
       ) {
         return
       }
@@ -306,7 +323,8 @@ export class Car extends GameBot {
       const crosswalkCoords = this.getCrosswalkCoords(tileCoords)
       if (
         crosswalkCoords &&
-        this.needToStopOnCrosswalk(crosswalkCoords, roverCoords)
+        this.coordsAreIntersecting(crosswalkCoords, roverCoords, 2, true) &&
+        this.needToStopOnCrosswalk(roverCoords)
       ) {
         return
       }
