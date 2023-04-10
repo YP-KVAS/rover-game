@@ -6,9 +6,17 @@ export interface LeaderboardRequest extends Record<string, unknown> {
 
 export interface UserData extends Record<string, unknown> {
   id: number
+  login: string
+  avatar: string | null
   score: number
 }
 
 export interface LeaderboardItem extends Record<string, unknown> {
   data: UserData
+}
+
+export interface addUserToLeaderboardRequest extends Record<string, unknown> {
+  data: UserData
+  ratingFieldName: string
+  teamName: string
 }
