@@ -16,12 +16,21 @@ export class StaticMap extends BaseGameObject {
           const canvasX = column * this.tileSize
           const canvasY = row * this.tileSize
           switch (tile) {
-            // sidewalk
+            // background
             case 0:
               this.drawTile(ctx, tileMapImages.sideWalk, canvasX, canvasY)
               break
             case 1:
               this.drawTile(ctx, tileMapImages.sideWalk2, canvasX, canvasY)
+              break
+            case 2:
+              this.drawTile(ctx, tileMapImages.ground, canvasX, canvasY)
+              break
+            case 3:
+              this.drawTile(ctx, tileMapImages.grass, canvasX, canvasY)
+              break
+            case 4:
+              this.drawTile(ctx, tileMapImages.grass2, canvasX, canvasY)
               break
             // road straight
             case 111:
