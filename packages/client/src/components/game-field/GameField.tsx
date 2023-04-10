@@ -58,7 +58,7 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
       car.draw(ctx)
     })
     triggers.forEach(trigger => {
-      trigger.check(rover.coords)
+      trigger.check(rover)
       trigger.draw(ctx)
     })
   }
