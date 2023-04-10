@@ -187,7 +187,7 @@ export class Car extends GameBot {
   changeDirectionIfCrossBusy(
     tile: number,
     otherCarsCoords: Array<Coords>,
-    nextCoords: Coords
+    nextTileCoords: Coords
   ) {
     switch (this.movingDirection) {
       case MovingDirection.DOWN:
@@ -197,7 +197,7 @@ export class Car extends GameBot {
             coords => rightX === coords.x && this.coords.y === coords.y
           )
           const diagTileNotEmpty = otherCarsCoords.find(
-            coords => rightX === coords.x && nextCoords.y === coords.y
+            coords => rightX === coords.x && nextTileCoords.y === coords.y
           )
           if (rightTileNotEmpty && diagTileNotEmpty) {
             this.movingDirection = MovingDirection.LEFT
@@ -207,11 +207,11 @@ export class Car extends GameBot {
       case MovingDirection.RIGHT:
         if (tile === 154 || tile === 221) {
           const upperY = this.coords.y - this.tileSize
-          const upperTileNotEmpty = otherCarsCoords.find(
+          const upperTileNotEmpty = !!otherCarsCoords.find(
             coords => this.coords.x === coords.x && upperY === coords.y
           )
-          const diagTileNotEmpty = otherCarsCoords.find(
-            coords => nextCoords.x === coords.x && upperY === coords.y
+          const diagTileNotEmpty = !!otherCarsCoords.find(
+            coords => nextTileCoords.x === coords.x && upperY === coords.y
           )
           if (upperTileNotEmpty && diagTileNotEmpty) {
             this.movingDirection = MovingDirection.DOWN
@@ -288,14 +288,15 @@ export class Car extends GameBot {
         return
       }
 
+      const nextTileCoords = this.getNextCoords(this.tileSize)
+
       // if there is a car ahead, stop or change direction on busy cross
       if (nextCoordsNotEmpty) {
-        this.changeDirectionIfCrossBusy(tile, allCarsCoords, nextCoords)
+        this.changeDirectionIfCrossBusy(tile, allCarsCoords, nextTileCoords)
         return
       }
 
       // if next tile is crosswalk with rover, stop
-      const nextTileCoords = this.getNextCoords(this.tileSize)
       const nextCrosswalkCoords = this.getCrosswalkCoords(nextTileCoords)
       if (
         nextCrosswalkCoords &&
