@@ -18,7 +18,7 @@ export class Car extends GameBot {
     return this.coordsAreIntersecting(tileCoords, roverCoords, 2, true)
   }
 
-  getNextCrosswalkCoords(tileCoords: Coords): Coords | null {
+  getCrosswalkCoords(tileCoords: Coords): Coords | null {
     const tile =
       this.gameMap[0][tileCoords.y / this.tileSize][
         tileCoords.x / this.tileSize
@@ -205,6 +205,28 @@ export class Car extends GameBot {
     }
   }
 
+  getCurrentTileCoords(): Coords {
+    let row: number
+    let column: number
+    if (
+      this.movingDirection === MovingDirection.UP ||
+      this.movingDirection === MovingDirection.DOWN
+    ) {
+      row = Math.floor(this.coords.y / this.tileSize)
+      column =
+        this.movingDirection === MovingDirection.UP
+          ? Math.floor(this.coords.x / this.tileSize)
+          : Math.ceil(this.coords.x / this.tileSize)
+    } else {
+      row =
+        this.movingDirection === MovingDirection.LEFT
+          ? Math.floor(this.coords.y / this.tileSize)
+          : Math.ceil(this.coords.y / this.tileSize)
+      column = Math.floor(this.coords.x / this.tileSize)
+    }
+    return { x: column * this.tileSize, y: row * this.tileSize }
+  }
+
   move(roverCoords: Coords, allCarsCoords: Array<Coords>) {
     if (this.collideWithRover(roverCoords)) {
       gameManager.roverHit()
@@ -258,7 +280,7 @@ export class Car extends GameBot {
 
       // if next tile is crosswalk with rover, stop
       const nextTileCoords = this.getNextCoords(this.tileSize)
-      const nextCrosswalkCoords = this.getNextCrosswalkCoords(nextTileCoords)
+      const nextCrosswalkCoords = this.getCrosswalkCoords(nextTileCoords)
       if (
         nextCrosswalkCoords &&
         this.needToStopOnCrosswalk(nextCrosswalkCoords, roverCoords)
@@ -276,6 +298,16 @@ export class Car extends GameBot {
     else {
       // if there is a car ahead, stop
       if (nextCoordsNotEmpty) {
+        return
+      }
+
+      // if current tile is crosswalk with rover, stop
+      const tileCoords = this.getCurrentTileCoords()
+      const crosswalkCoords = this.getCrosswalkCoords(tileCoords)
+      if (
+        crosswalkCoords &&
+        this.needToStopOnCrosswalk(crosswalkCoords, roverCoords)
+      ) {
         return
       }
     }
