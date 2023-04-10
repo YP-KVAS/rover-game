@@ -8,16 +8,22 @@ export class Car extends GameBot {
     tileSize: number,
     coords: Coords,
     movingDirection: MovingDirection,
+    speed: number,
     img: HTMLImageElement
   ) {
-    super(gameMap, tileSize, coords, movingDirection, tileSize, img)
+    super(gameMap, tileSize, coords, movingDirection, speed, img)
   }
 
   needToStopOnCrosswalk(tileCoords: Coords, roverCoords: Coords): boolean {
     return this.coordsAreIntersecting(tileCoords, roverCoords, 2, true)
   }
 
-  getNextCrosswalkCoords(tile: number, tileCoords: Coords): Coords | null {
+  getNextCrosswalkCoords(tileCoords: Coords): Coords | null {
+    const tile =
+      this.gameMap[0][tileCoords.y / this.tileSize][
+        tileCoords.x / this.tileSize
+      ]
+
     let startX: number | null = null
     let startY: number | null = null
 
@@ -44,6 +50,7 @@ export class Car extends GameBot {
         startY = tileCoords.y - this.tileSize
         break
     }
+
     return startX && startY ? { x: startX, y: startY } : null
   }
 
@@ -204,60 +211,73 @@ export class Car extends GameBot {
       return
     }
 
-    // allow car to go out of the field
-    // car should disappear and appear after 5 sec
-    if (
-      this.movingDirection === MovingDirection.RIGHT &&
-      this.coords.x / this.tileSize === this.gameMap[0][0].length - 1
-    ) {
-      this.coords.x += this.tileSize
-      window.setTimeout(() => {
-        this.coords.y -= this.tileSize
-        this.movingDirection = MovingDirection.LEFT
-      }, 5_000)
-      return
-    }
-
-    // if there is a car in the next tile, stop
+    // check if there is a car ahead
     const nextCoords = this.getNextCoords()
-    const nextTileNotEmpty = allCarsCoords.find(
-      coords => nextCoords.x === coords.x && nextCoords.y === coords.y
+    const nextCoordsNotEmpty = !!allCarsCoords.find(
+      coords =>
+        Math.abs(nextCoords.x - coords.x) < this.tileSize &&
+        Math.abs(nextCoords.y - coords.y) < this.tileSize &&
+        !(this.coords.x === coords.x && this.coords.y === coords.y)
     )
-    const tile =
-      this.gameMap[0][this.coords.y / this.tileSize][
-        this.coords.x / this.tileSize
-      ]
-    if (nextTileNotEmpty) {
-      // change direction if cross is fully busy
-      this.changeDirectionIfCrossBusy(tile, allCarsCoords, nextCoords)
-      return
-    }
 
-    // if next tile is crosswalk with rover, stop
-    const nextRow = nextCoords.y / this.tileSize
-    const nextColumn = nextCoords.x / this.tileSize
-    const nextTile = this.gameMap[0][nextRow][nextColumn]
-    const nextCrosswalkCoords = this.getNextCrosswalkCoords(
-      nextTile,
-      nextCoords
-    )
+    // Tile border
     if (
-      nextCrosswalkCoords &&
-      this.needToStopOnCrosswalk(nextCrosswalkCoords, roverCoords)
+      Number.isInteger(this.coords.x / this.tileSize) &&
+      Number.isInteger(this.coords.y / this.tileSize)
     ) {
-      return
-    }
+      // allow car to go out of the field
+      // car should disappear and appear after 5 sec
+      if (
+        this.movingDirection === MovingDirection.RIGHT &&
+        this.coords.x / this.tileSize === this.gameMap[0][0].length - 1
+      ) {
+        this.coords.x += this.tileSize
+        window.setTimeout(() => {
+          this.coords.y -= this.tileSize
+          this.movingDirection = MovingDirection.LEFT
+        }, 5_000)
+        return
+      }
 
-    // if current tile is cross, go straight or change direction randomly
-    if (this.isAllowedToChangeDirection(tile)) {
-      this.changeMovingDirectionOrGoStraight(tile)
-      return
-    }
+      const tile =
+        this.gameMap[0][this.coords.y / this.tileSize][
+          this.coords.x / this.tileSize
+        ]
 
-    // if tile is corner, certain part of cross => change direction
-    const directionChanged = this.changeDirectionIfCrossOrCorner(tile)
-    if (directionChanged) {
-      return
+      // if tile is corner, certain part of cross => change direction
+      const directionChanged = this.changeDirectionIfCrossOrCorner(tile)
+      if (directionChanged) {
+        return
+      }
+
+      // if there is a car ahead, stop or change direction on busy cross
+      if (nextCoordsNotEmpty) {
+        this.changeDirectionIfCrossBusy(tile, allCarsCoords, nextCoords)
+        return
+      }
+
+      // if next tile is crosswalk with rover, stop
+      const nextTileCoords = this.getNextCoords(this.tileSize)
+      const nextCrosswalkCoords = this.getNextCrosswalkCoords(nextTileCoords)
+      if (
+        nextCrosswalkCoords &&
+        this.needToStopOnCrosswalk(nextCrosswalkCoords, roverCoords)
+      ) {
+        return
+      }
+
+      // if current tile is cross, go straight or change direction randomly
+      if (this.isAllowedToChangeDirection(tile)) {
+        this.changeMovingDirectionOrGoStraight(tile)
+        return
+      }
+    }
+    // Tile middle
+    else {
+      // if there is a car ahead, stop
+      if (nextCoordsNotEmpty) {
+        return
+      }
     }
 
     this.goStraight()

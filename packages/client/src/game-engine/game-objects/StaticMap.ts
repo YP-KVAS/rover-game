@@ -327,7 +327,7 @@ export class StaticMap extends BaseGameObject {
               break
           }
           // ctx.strokeStyle = 'blue'
-          // ctx.strokeRect(column * this.tileSize, row * this.tileSize)
+          // ctx.strokeRect(column * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize)
         }
       }
     }

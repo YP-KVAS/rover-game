@@ -6,7 +6,7 @@ import { MovingDirection } from '../../utils/types/game'
 import { StaticMap } from '../../game-engine/game-objects/StaticMap'
 import { Rover } from '../../game-engine/game-objects/Rover'
 import { Car } from '../../game-engine/game-objects/Car'
-import { GameStat } from "./GameStat";
+import { GameStat } from './GameStat'
 
 interface GameFieldProps {
   level: number
@@ -34,7 +34,15 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
     roverInfo.speed
   )
   const cars = carsInfo.map(
-    car => new Car(gameMap, tileSize, car.coords, car.movingDirection, car.img)
+    car =>
+      new Car(
+        gameMap,
+        tileSize,
+        car.coords,
+        car.movingDirection,
+        car.speed,
+        car.img
+      )
   )
   const staticMap = new StaticMap(gameMap, tileSize)
 
