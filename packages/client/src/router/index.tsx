@@ -7,6 +7,7 @@ import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
 import { Registration } from '../pages/Registration/Registration'
+import { Leaderboard } from '../pages/Leaderboard/Leaderboard'
 
 const in_work_component = (
   <main>
@@ -59,8 +60,8 @@ export const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.LEADERBOARD,
-        element: in_work_component,
-        loader: check_auth,
+        element: <Leaderboard />,
+        //loader: check_auth,
       },
       {
         path: RoutesEnum.ERROR_500,

@@ -1,0 +1,25 @@
+.leaderboard {
+  height: 100%;
+  width: 100%;
+
+  * {
+    color: var(--color-text-on-dark);
+  }
+
+  & h2 {
+    text-align: center;
+    font-size: var(--font-2xl);
+  }
+
+ & p {
+   text-align: center;
+ }
+
+ & .container {
+   align-items: center;
+   display: flex;
+   gap: 15px;
+   max-height: 100%;
+   padding: 15px;
+ }
+}

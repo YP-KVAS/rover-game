@@ -1,0 +1,22 @@
+.leaderboardTable {
+  background: var(--color-secondary);
+  border: 2px solid var(--color-text-on-dark);
+  border-radius: 15px;
+  font-size: var(--font-xl);
+  max-height: 600px;
+  overflow-y: scroll;
+  width: 75%;
+
+  & li {
+    align-items: center;
+    border-bottom: 2px solid white;
+    display: flex;
+    gap: 15px;
+    margin: 25px;
+    padding: 5px
+ }
+
+ & li p:last-of-type {
+    margin-left: auto;
+ }
+}
