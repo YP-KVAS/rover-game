@@ -84,10 +84,7 @@ export class Rover extends DynamicGameCharacter {
       this.tileSize,
       this.tileSize + offset
     )
-  }
 
-  move(movingDirection: MovingDirection): void {
-    // disable movement if not allowed
     if (this._freezeMov) {
       if (
         performance.now() - this._freezeMov.start >=
@@ -96,6 +93,12 @@ export class Rover extends DynamicGameCharacter {
         this._freezeMov = null
         this.img = this.getRoverImg()
       }
+    }
+  }
+
+  move(movingDirection: MovingDirection): void {
+    // disable movement if not allowed
+    if (this._freezeMov) {
       return
     }
 
