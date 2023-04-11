@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button } from '../../components/Button/Button'
-import { Timer } from '../../components/timer/Timer'
+import { Timer } from '../../components/Timer/Timer'
 import styles from './Start.module.scss'
 
 export const Start = () => {

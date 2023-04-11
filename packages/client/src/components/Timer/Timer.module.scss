@@ -12,15 +12,19 @@
         0% {
           content: '3';
         }
+
         25% {
           content: '2';
         }
+
         50% {
           content: '1';
         }
+
         75% {
           content: '0';
         }
+
         100% {
           content: 'Start';
         }
@@ -31,6 +35,7 @@
         80% {
           transform: none;
         }
+
         50% {
           transform: scale(1.25);
         }
