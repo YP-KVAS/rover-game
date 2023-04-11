@@ -43,7 +43,7 @@ export const FormInput = ({
 
   function setErrorsComponent() {
     return (
-      <p className={styles['input--error']} role="alert" ref={errorRef}>
+      <p className={styles.input_error} role="alert" ref={errorRef}>
         {errors?.type === 'required' && <>{errorsMsgs.required}</>}
         {errors?.type === 'minLength' && <>{errorsMsgs.minLength}</>}
         {errors?.type === 'maxLength' && <>{errorsMsgs.maxLength}</>}
@@ -61,9 +61,9 @@ export const FormInput = ({
 
   return (
     <>
-      {label && <label className={styles['input--label']}>{label}</label>}
+      {label && <label className={styles.input_label}>{label}</label>}
 
-      <div className={styles['input--container']}>
+      <div className={styles.input_container}>
         <input
           {...registerObj}
           ref={element => {

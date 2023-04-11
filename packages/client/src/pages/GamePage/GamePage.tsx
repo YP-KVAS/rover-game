@@ -1,7 +1,7 @@
 import { FC, RefObject, useRef } from 'react'
 import styles from './GamePage.module.scss'
 import { GameField } from '../../components/GameField/GameField'
-import { Button } from '../../components/button/Button'
+import { Button } from '../../components/Button/Button'
 
 export const GamePage: FC = () => {
   const gamePageRef: RefObject<HTMLDivElement> = useRef(null)
