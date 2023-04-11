@@ -15,7 +15,7 @@ export const Canvas: FC<CanvasProps> = ({
   width,
   height,
   isStatic,
-  delay = 30,
+  delay = 10,
 }) => {
   const canvasRef = useRef(null)
 

@@ -4,7 +4,7 @@ import gameManager from '../GameManager'
 
 class SwingTrigger extends BaseTrigger {
   rotateDegree = 0
-  rotateSpeed = 2
+  rotateSpeed = 0.5
   rotateMax = 5
 
   draw(ctx: CanvasRenderingContext2D) {
