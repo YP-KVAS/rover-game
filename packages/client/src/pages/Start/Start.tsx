@@ -1,21 +1,22 @@
+import styles from './Start.module.scss'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { RoutesEnum } from '../../utils/const-variables/routes'
 import { Button } from '../../components/Button/Button'
 import { Timer } from '../../components/Timer/Timer'
-import styles from './Start.module.scss'
 
 export const Start = () => {
   const [isStarted, setStartAnimation] = useState(false)
   const [isCalled, setCallbackCalling] = useState(false)
-
+  const navigate = useNavigate()
   const startHandler = () => {
     setStartAnimation(true)
   }
 
   const timerCallback = () => {
     if (!isCalled) {
-      //TODO: переходим на экран игры /game
       setCallbackCalling(true)
-      console.log('Переходим на экран игры')
+      navigate(RoutesEnum.GAME)
     }
   }
 

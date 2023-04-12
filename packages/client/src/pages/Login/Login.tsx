@@ -1,33 +1,28 @@
-import styles from './Registration.module.scss'
+import styles from './Login.module.scss'
 import formStyles from '../../common-styles/Form.module.scss'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { Button } from '../../components/Button/Button'
 import { FormInput } from '../../components/FormInput/FormInput'
 import { Form } from '../../components/Form/Form'
-import { Button } from '../../components/Button/Button'
-import { FormInputNames } from '../../utils/types/forms'
-import { userRegisterValidationSchema } from '../../utils/validation'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
-import { onSignUp } from '../../store/thunks/auth-thunk'
-import { UserSignUp } from '../../utils/types/user'
-import { REGISTRATION_FORM_INPUTS } from '../../utils/const-variables/forms'
+import { onGetUser, onSignIn } from '../../store/thunks/auth-thunk'
 import { Link, useNavigate } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
-import { Loader } from '../../components/Loader/Loader'
+import { LOGIN_FORM_INPUTS } from '../../utils/const-variables/forms'
+import { UserSignIn } from '../../utils/types/user'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { signinValidationSchema } from '../../utils/validation'
 import { selectAuthState } from '../../store/selectors/auth-selector'
-import { useEffect } from 'react'
-import { clearAuthError } from '../../store/slices/auth-slice'
+import { Loader } from '../../components/Loader/Loader'
 import { Title } from '../../components/Title/Title'
 
-type RegFormData = UserSignUp & { [FormInputNames.REPEAT_PASSWORD]: string }
-
-export const Registration = () => {
+export const Login = () => {
   const {
+    handleSubmit,
     register,
     formState: { errors },
-    handleSubmit,
-  } = useForm<RegFormData>({
-    resolver: yupResolver(userRegisterValidationSchema),
+  } = useForm<UserSignIn>({
+    resolver: yupResolver(signinValidationSchema)
   })
 
   const dispatch = useAppDispatch()
@@ -35,30 +30,24 @@ export const Registration = () => {
   const { isLoading, errorMessage } = useAppSelector(selectAuthState)
 
   const onSubmit = handleSubmit(data => {
-    const { [FormInputNames.REPEAT_PASSWORD]: rePassword, ...userData } = data
-
-    dispatch(onSignUp(userData)).then(data => {
-      if (data.type.endsWith('fulfilled')) {
-        navigate(RoutesEnum.MAIN)
+    dispatch(onSignIn(data)).then(
+      data => {
+        if (data.type.endsWith('fulfilled')) {
+          dispatch(onGetUser()).then(() => {
+            navigate(RoutesEnum.START)
+          })
+        }
       }
-    })
+    )
   })
-
-  useEffect(() => {
-    return () => {
-      if (errorMessage) {
-        dispatch(clearAuthError())
-      }
-    }
-  }, [])
 
   return isLoading ? (
     <Loader />
   ) : (
     <Form onSubmit={onSubmit}>
-      <Title text="Регистрация"/>
+      <Title text="Авторизация"/>
       <>
-        {REGISTRATION_FORM_INPUTS.map(input => (
+        {LOGIN_FORM_INPUTS.map(input => (
           <FormInput
             key={input.name}
             label={input.label}
@@ -71,10 +60,10 @@ export const Registration = () => {
       </>
       <div className={formStyles.form_actions}>
         <Button type="primary" htmlType="submit">
-          Зарегистрироваться
+          Войти
         </Button>
-        <Link to={RoutesEnum.LOGIN} className={styles.link}>
-          Уже зарегистрированы? Войти
+        <Link to={RoutesEnum.REGISTRATION} className={styles.link}>
+          Еще нет аккаунта? Зарегистрироваться
         </Link>
       </div>
       <>
