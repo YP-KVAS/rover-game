@@ -29,7 +29,7 @@ class SwingTrigger extends BaseTrigger {
 
 export class CargoTrigger extends SwingTrigger {
   constructor(
-    gameMap: Array<Array<Array<number>>>,
+    gameMap: number[][][],
     tileSize: number,
     triggerInfo: TriggerInfo
   ) {
@@ -44,7 +44,7 @@ export class CargoTrigger extends SwingTrigger {
 
 export class DeliveryTrigger extends SwingTrigger {
   constructor(
-    gameMap: Array<Array<Array<number>>>,
+    gameMap: number[][][],
     tileSize: number,
     triggerInfo: TriggerInfo
   ) {

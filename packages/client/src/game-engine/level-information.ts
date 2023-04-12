@@ -7,9 +7,9 @@ import { BaseTrigger } from './game-objects/base-classes/BaseTrigger'
 export interface LevelInformation {
   tileSize: number
   rover: Rover
-  gameMap: Array<Array<Array<number>>>
-  cars: Array<Car>
-  triggers: Array<TriggerInfo>
+  gameMap: number[][][]
+  cars: Car[]
+  triggers: TriggerInfo[]
 }
 
 // 1 | 2
