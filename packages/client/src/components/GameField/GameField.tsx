@@ -6,11 +6,11 @@ import { MovingDirection } from '../../utils/types/game'
 import { StaticMap } from '../../game-engine/game-objects/StaticMap'
 import { Rover } from '../../game-engine/game-objects/Rover'
 import { Car } from '../../game-engine/game-objects/Car'
-import { GameStat } from "./GameStat";
+import { GameStat } from './GameStat'
 
 interface GameFieldProps {
   level: number
-  gameFieldRef: RefObject<HTMLElement>
+  gameFieldRef: RefObject<HTMLDivElement>
 }
 
 export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
@@ -88,30 +88,31 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
   }
 
   return (
-    <div>
-      <GameStat />
+    <div ref={gameFieldRef} className={styles.wrapper}>
+      <div>
+        <GameStat />
 
-      <section
-        className={styles.section}
-        onKeyDown={handleOnKeyDown}
-        ref={gameFieldRef}
-        tabIndex={0}
-        style={{ minWidth: canvasWidth, minHeight: canvasHeight }}>
-        <Canvas
-          draw={ctx => staticMap.draw(ctx)}
-          zIndex={1}
-          width={canvasWidth}
-          height={canvasHeight}
-          isStatic={true}
-        />
-        <Canvas
-          draw={ctx => drawDynamicLayer(ctx)}
-          zIndex={2}
-          width={canvasWidth}
-          height={canvasHeight}
-          isStatic={false}
-        />
-      </section>
+        <section
+          className={styles.section}
+          onKeyDown={handleOnKeyDown}
+          tabIndex={0}
+          style={{ minWidth: canvasWidth, minHeight: canvasHeight }}>
+          <Canvas
+            draw={ctx => staticMap.draw(ctx)}
+            zIndex={1}
+            width={canvasWidth}
+            height={canvasHeight}
+            isStatic={true}
+          />
+          <Canvas
+            draw={ctx => drawDynamicLayer(ctx)}
+            zIndex={2}
+            width={canvasWidth}
+            height={canvasHeight}
+            isStatic={false}
+          />
+        </section>
+      </div>
     </div>
   )
 }
