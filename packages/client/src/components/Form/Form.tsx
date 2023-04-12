@@ -1,15 +1,15 @@
-import { FormEventHandler } from 'react'
+import { FC, FormEventHandler } from 'react'
 import styles from './Form.module.scss'
 
-export const Form = ({
-  onSubmit,
-  children,
-}: {
+interface FormProps {
   onSubmit: FormEventHandler
+  onReset?: FormEventHandler
   children: JSX.Element[]
-}) => {
+}
+
+export const Form: FC<FormProps> = ({ onSubmit, onReset, children }) => {
   return (
-    <form onSubmit={onSubmit} className={styles.form}>
+    <form onSubmit={onSubmit} onReset={onReset} className={styles.form}>
       {children}
     </form>
   )

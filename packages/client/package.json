@@ -11,6 +11,7 @@
     "test": "jest ./"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.0.1",
     "@reduxjs/toolkit": "^1.9.3",
     "babel-jest": "^29.5.0",
     "dotenv": "^16.0.2",
@@ -18,10 +19,11 @@
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.0.5",
     "react-hook-form": "^7.43.7",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.9.0",
-    "sass": "^1.60.0"
+    "sass": "^1.60.0",
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@testing-library/react": "^13.3.0",
