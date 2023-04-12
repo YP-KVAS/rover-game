@@ -30,7 +30,17 @@ const initialState: InitialState = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    clearChangeSettingsError: state => {
+      state.changeSettings.errorMessage = null
+    },
+    clearChangeAvatarError: state => {
+      state.changeAvatar.errorMessage = null
+    },
+    clearChangePasswordError: state => {
+      state.changePassword.errorMessage = null
+    },
+  },
   extraReducers: builder => {
     // onProfileSettingsChange
     builder
@@ -92,3 +102,8 @@ const userSlice = createSlice({
 })
 
 export const userReducer = userSlice.reducer
+export const {
+  clearChangeSettingsError,
+  clearChangeAvatarError,
+  clearChangePasswordError,
+} = userSlice.actions
