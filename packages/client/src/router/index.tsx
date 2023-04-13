@@ -6,10 +6,10 @@ import { Main } from '../pages/Main'
 import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
-import { Registration } from '../pages/Registration/Registration'
+import { Registration } from '../pages/Registration'
 import { UserSettings } from '../pages/UserSettings'
 import { store } from '../store/store'
-import { Login } from '../pages/Login/Login'
+import { Login } from '../pages/Login'
 
 const in_work_component = (
   <main>
