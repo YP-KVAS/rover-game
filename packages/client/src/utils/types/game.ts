@@ -12,18 +12,16 @@ export interface Coords {
   y: number
 }
 
-interface MovingObject {
+export interface Rover {
   coords: Coords
   movingDirection: MovingDirection
+  speed: number
 }
 
-export interface Car extends MovingObject {
+export interface Car extends Rover {
   img: HTMLImageElement
 }
 
-export interface Rover extends MovingObject {
-  speed: number
-}
 export interface TriggerInfo {
   triggerId: number
   description?: string

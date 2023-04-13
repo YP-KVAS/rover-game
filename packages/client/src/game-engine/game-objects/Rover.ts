@@ -3,8 +3,14 @@ import { roverImages } from '../game-images'
 import { Coords, MovingDirection } from '../../utils/types/game'
 import { IMG_WIDTH } from '../../utils/const-variables/game'
 
+interface FreezeMov {
+  start: number
+  duration: number
+}
+
 export class Rover extends DynamicGameCharacter {
   protected img: HTMLImageElement
+  private _freezeMov: FreezeMov | null = null
 
   constructor(
     gameMap: Array<Array<Array<number>>>,
@@ -35,6 +41,26 @@ export class Rover extends DynamicGameCharacter {
     this.img = this.getRoverImg()
   }
 
+  openRover(freezeSec = 1000) {
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+        this.movingDirection = MovingDirection.RIGHT
+        this.img = roverImages.roverOpenRight
+        break
+      case MovingDirection.DOWN:
+        this.movingDirection = MovingDirection.LEFT
+        this.img = roverImages.roverOpenLeft
+        break
+      case MovingDirection.RIGHT:
+        this.img = roverImages.roverOpenRight
+        break
+      case MovingDirection.LEFT:
+        this.img = roverImages.roverOpenLeft
+        break
+    }
+    this._freezeMov = { start: performance.now(), duration: freezeSec }
+  }
+
   draw(ctx: CanvasRenderingContext2D): void {
     // vertical offset to correctly display rover in a tile
     const offset = Math.round(
@@ -58,9 +84,25 @@ export class Rover extends DynamicGameCharacter {
       this.tileSize,
       this.tileSize + offset
     )
+
+    if (this._freezeMov) {
+      if (
+        performance.now() - this._freezeMov.start >=
+        this._freezeMov.duration
+      ) {
+        this._freezeMov = null
+        this.img = this.getRoverImg()
+      }
+    }
   }
 
   move(movingDirection: MovingDirection): void {
+    // disable movement if not allowed
+    if (this._freezeMov) {
+      return
+    }
+
+    // switch direction
     if (this.movingDirection !== movingDirection) {
       this.changeMovingDirection(movingDirection)
       return
