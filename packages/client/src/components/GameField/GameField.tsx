@@ -96,11 +96,12 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
   }
 
   return (
-    <div ref={gameFieldRef} className={styles.wrapper}>
+    <div className={styles.wrapper}>
       <div>
         <GameStat />
 
         <section
+          ref={gameFieldRef}
           className={styles.section}
           onKeyDown={handleOnKeyDown}
           tabIndex={0}
