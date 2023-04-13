@@ -44,6 +44,21 @@ const USER_FORM_DATA: Array<FormInput> = [
   },
 ]
 
+export const LOGIN_FORM_INPUTS: Array<FormInput> = [
+  {
+    label: 'Логин',
+    placeholder: 'Логин',
+    type: 'text',
+    name: FormInputNames.LOGIN,
+  },
+  {
+    label: 'Пароль',
+    placeholder: 'Пароль',
+    type: 'password',
+    name: FormInputNames.PASSWORD,
+  },
+]
+
 export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
   ...USER_FORM_DATA,
   {

@@ -1,22 +1,22 @@
-import styles from './Registration.module.scss'
-import formStyles from '../../common-styles/Form.module.scss'
+import formStyles from '../common-styles/Form.module.scss'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { FormInput } from '../../components/FormInput/FormInput'
-import { Form } from '../../components/Form/Form'
-import { Button } from '../../components/Button/Button'
-import { FormInputNames } from '../../utils/types/forms'
-import { userRegisterValidationSchema } from '../../utils/validation'
-import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
-import { onSignUp } from '../../store/thunks/auth-thunk'
-import { UserSignUp } from '../../utils/types/user'
-import { REGISTRATION_FORM_INPUTS } from '../../utils/const-variables/forms'
+import { FormInput } from '../components/FormInput/FormInput'
+import { Form } from '../components/Form/Form'
+import { Button } from '../components/Button/Button'
+import { FormInputNames } from '../utils/types/forms'
+import { userRegisterValidationSchema } from '../utils/validation'
+import { useAppDispatch, useAppSelector } from '../hooks/useStore'
+import { onSignUp } from '../store/thunks/auth-thunk'
+import { UserSignUp } from '../utils/types/user'
+import { REGISTRATION_FORM_INPUTS } from '../utils/const-variables/forms'
 import { Link, useNavigate } from 'react-router-dom'
-import { RoutesEnum } from '../../utils/const-variables/routes'
-import { Loader } from '../../components/Loader/Loader'
-import { selectAuthState } from '../../store/selectors/auth-selector'
+import { RoutesEnum } from '../utils/const-variables/routes'
+import { Loader } from '../components/Loader/Loader'
+import { selectAuthState } from '../store/selectors/auth-selector'
 import { useEffect } from 'react'
-import { clearAuthError } from '../../store/slices/auth-slice'
+import { clearAuthError } from '../store/slices/auth-slice'
+import { Title } from '../components/Title/Title'
 
 type RegFormData = UserSignUp & { [FormInputNames.REPEAT_PASSWORD]: string }
 
@@ -55,7 +55,7 @@ export const Registration = () => {
     <Loader />
   ) : (
     <Form onSubmit={onSubmit}>
-      <h2 className={styles.title}>Регистрация</h2>
+      <Title text="Регистрация" />
       <>
         {REGISTRATION_FORM_INPUTS.map(input => (
           <FormInput
@@ -72,7 +72,7 @@ export const Registration = () => {
         <Button type="primary" htmlType="submit">
           Зарегистрироваться
         </Button>
-        <Link to={RoutesEnum.LOGIN} className={styles.link}>
+        <Link to={RoutesEnum.LOGIN} className={formStyles.link}>
           Уже зарегистрированы? Войти
         </Link>
       </div>
