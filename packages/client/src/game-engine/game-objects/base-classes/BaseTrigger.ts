@@ -1,5 +1,6 @@
 import { BaseGameObject } from './BaseGameObject'
 import { Coords, TriggerInfo } from '../../../utils/types/game'
+import { Rover } from '../Rover'
 
 export abstract class BaseTrigger extends BaseGameObject {
   static triggers: BaseTrigger[] = []
@@ -52,10 +53,11 @@ export abstract class BaseTrigger extends BaseGameObject {
     }
   }
 
-  check(roverCoords: Coords) {
+  check(rover: Rover) {
     if (!this.enabled) return
 
-    if (this.collideWithRover(roverCoords)) {
+    if (this.collideWithRover(rover.coords)) {
+      rover.openRover()
       this._onTriggered()
     }
   }

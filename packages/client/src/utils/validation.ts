@@ -84,3 +84,8 @@ export const changeUserProfileDataValidationSchema = userValidationSchema.shape(
       .max(15, 'Длина никнейма должна быть от 3 до 15 символов'),
   }
 )
+
+export const signinValidationSchema = Yup.object().shape({
+  [FormInputNames.LOGIN]: loginValidation,
+  [FormInputNames.PASSWORD]: passwordValidation,
+})

@@ -34,7 +34,15 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
     roverInfo.speed
   )
   const cars = carsInfo.map(
-    car => new Car(gameMap, tileSize, car.coords, car.movingDirection, car.img)
+    car =>
+      new Car(
+        gameMap,
+        tileSize,
+        car.coords,
+        car.movingDirection,
+        car.speed,
+        car.img
+      )
   )
   const staticMap = new StaticMap(gameMap, tileSize)
 
@@ -50,7 +58,7 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
       car.draw(ctx)
     })
     triggers.forEach(trigger => {
-      trigger.check(rover.coords)
+      trigger.check(rover)
       trigger.draw(ctx)
     })
   }
@@ -88,11 +96,12 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
   }
 
   return (
-    <div ref={gameFieldRef} className={styles.wrapper}>
+    <div className={styles.wrapper}>
       <div>
         <GameStat />
 
         <section
+          ref={gameFieldRef}
           className={styles.section}
           onKeyDown={handleOnKeyDown}
           tabIndex={0}

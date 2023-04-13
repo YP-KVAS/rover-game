@@ -6,9 +6,10 @@ import { RoutesEnum } from '../utils/const-variables/routes'
 import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
-import { Registration } from '../pages/Registration/Registration'
+import { Registration } from '../pages/Registration'
 import { UserSettings } from '../pages/UserSettings'
 import { store } from '../store/store'
+import { Login } from '../pages/Login'
 
 const in_work_component = (
   <main>
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.LOGIN,
-        element: in_work_component,
+        element: <Login />,
       },
       {
         path: RoutesEnum.USER_SETTINGS,
