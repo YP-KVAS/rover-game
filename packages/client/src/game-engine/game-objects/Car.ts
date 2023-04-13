@@ -18,12 +18,16 @@ export class Car extends GameBot {
     let needToStop = false
     switch (this.movingDirection) {
       case MovingDirection.UP:
+        needToStop = this.coords.y - roverCoords.y >= this.tileSize
+        break
       case MovingDirection.DOWN:
-        needToStop = Math.abs(this.coords.y - roverCoords.y) >= this.tileSize
+        needToStop = roverCoords.y - this.coords.y >= this.tileSize
         break
       case MovingDirection.RIGHT:
+        needToStop = roverCoords.x - this.coords.x >= this.tileSize
+        break
       case MovingDirection.LEFT:
-        needToStop = Math.abs(this.coords.x - roverCoords.x) >= this.tileSize
+        needToStop = this.coords.x - roverCoords.x >= this.tileSize
         break
     }
 
@@ -267,9 +271,9 @@ export class Car extends GameBot {
       // car should disappear and appear after 5 sec
       if (
         this.movingDirection === MovingDirection.RIGHT &&
-        this.coords.x / this.tileSize === this.gameMap[0][0].length - 1
+        this.coords.x / this.tileSize === this.gameMap[0][0].length
       ) {
-        this.coords.x += this.tileSize
+        this.coords.x += this.speed
         window.setTimeout(() => {
           this.coords.y -= this.tileSize
           this.movingDirection = MovingDirection.LEFT
