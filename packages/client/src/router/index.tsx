@@ -1,7 +1,7 @@
 import { createBrowserRouter, Link, redirect } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
-import { Main } from '../pages/Main'
+import { Main } from '../pages/MainPage/Main'
 import { RoutesEnum } from '../utils/const-variables/routes'
 import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
