@@ -1,25 +1,27 @@
+import { FormInputNames } from './forms'
+
 export interface UserSignIn extends Record<string, unknown> {
-  login: string
-  password: string
+  [FormInputNames.LOGIN]: string
+  [FormInputNames.PASSWORD]: string
 }
 
 export interface UserSignUp extends UserSignIn {
-  first_name: string
-  second_name: string
-  email: string
-  phone: string
+  [FormInputNames.FIRST_NAME]: string
+  [FormInputNames.SECOND_NAME]: string
+  [FormInputNames.EMAIL]: string
+  [FormInputNames.PHONE]: string
 }
 
 export interface UserSettings extends Omit<UserSignUp, 'password'> {
-  display_name: string
+  [FormInputNames.DISPLAY_NAME]: string
 }
 
 export interface User extends UserSettings {
   id: number
-  avatar: string | null
+  [FormInputNames.AVATAR]: string | null
 }
 
-export interface UserPassword extends Record<string, unknown> {
-  oldPassword: string
-  newPassword: string
+export interface IUserPassword extends Record<string, unknown> {
+  [FormInputNames.OLD_PASSWORD]: string
+  [FormInputNames.NEW_PASSWORD]: string
 }

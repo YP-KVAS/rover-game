@@ -1,0 +1,16 @@
+.title {
+  font-size: var(--font-xl);
+  color: var(--color-text-on-dark);
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+.link {
+  color: var(--color-text-on-dark);
+  text-align: center;
+
+  &:hover {
+    color: var(--color-accent);
+    transition: 0.4s;
+  }
+}

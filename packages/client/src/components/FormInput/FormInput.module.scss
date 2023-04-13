@@ -1,0 +1,23 @@
+.input {
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: var(--shadow);
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.input_container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.input_label {
+  color: var(--color-text-on-dark);
+  margin-bottom: 5px;
+}

@@ -3,9 +3,12 @@ import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/Main'
 import { RoutesEnum } from '../utils/const-variables/routes'
-import { GamePage } from '../pages/GamePage'
+import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
+import { Registration } from '../pages/Registration/Registration'
+import { UserSettings } from '../pages/UserSettings'
+import { store } from '../store/store'
 
 const in_work_component = (
   <main>
@@ -15,8 +18,7 @@ const in_work_component = (
 )
 
 function check_auth() {
-  // TODO: replace with real checkAuth function
-  const auth = false
+  const auth = store.getState().auth.isLoggedIn
 
   return auth ? null : redirect(RoutesEnum.MAIN)
 }
@@ -31,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.REGISTRATION,
-        element: in_work_component,
+        element: <Registration />,
       },
       {
         path: RoutesEnum.LOGIN,
@@ -39,7 +41,7 @@ export const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.USER_SETTINGS,
-        element: in_work_component,
+        element: <UserSettings />,
         loader: check_auth,
       },
       {

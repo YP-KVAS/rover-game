@@ -4,7 +4,7 @@ import gameManager from '../GameManager'
 
 export class Car extends GameBot {
   constructor(
-    gameMap: Array<Array<Array<number>>>,
+    gameMap: number[][][],
     tileSize: number,
     coords: Coords,
     movingDirection: MovingDirection,

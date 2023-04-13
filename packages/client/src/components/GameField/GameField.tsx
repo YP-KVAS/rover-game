@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, RefObject, useEffect } from 'react'
 import styles from './GameField.module.scss'
 import { levels } from '../../game-engine/level-information'
-import { Canvas } from '../canvas/Canvas'
+import { Canvas } from '../Canvas/Canvas'
 import { MovingDirection } from '../../utils/types/game'
 import { StaticMap } from '../../game-engine/game-objects/StaticMap'
 import { Rover } from '../../game-engine/game-objects/Rover'
@@ -10,9 +10,10 @@ import { GameStat } from './GameStat'
 
 interface GameFieldProps {
   level: number
+  gameFieldRef: RefObject<HTMLDivElement>
 }
 
-export const GameField: FC<GameFieldProps> = ({ level }) => {
+export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
   const {
     rover: roverInfo,
     gameMap,
@@ -23,7 +24,6 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
 
   const canvasWidth = gameMap[0][0].length * tileSize
   const canvasHeight = gameMap[0].length * tileSize
-  const gameSectionRef = useRef(null)
 
   const rover = new Rover(
     gameMap,
@@ -65,8 +65,7 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
 
   useEffect(() => {
     // focus to start listening keyboard events
-    const section = gameSectionRef.current as unknown as HTMLElement
-    section.focus()
+    gameFieldRef.current?.focus()
   }, [])
 
   const handleOnKeyDown = (event: React.KeyboardEvent) => {
@@ -97,30 +96,31 @@ export const GameField: FC<GameFieldProps> = ({ level }) => {
   }
 
   return (
-    <div>
-      <GameStat />
+    <div ref={gameFieldRef} className={styles.wrapper}>
+      <div>
+        <GameStat />
 
-      <section
-        className={styles.section}
-        onKeyDown={handleOnKeyDown}
-        ref={gameSectionRef}
-        tabIndex={0}
-        style={{ minWidth: canvasWidth }}>
-        <Canvas
-          draw={ctx => staticMap.draw(ctx)}
-          zIndex={1}
-          width={canvasWidth}
-          height={canvasHeight}
-          isStatic={true}
-        />
-        <Canvas
-          draw={ctx => drawDynamicLayer(ctx)}
-          zIndex={2}
-          width={canvasWidth}
-          height={canvasHeight}
-          isStatic={false}
-        />
-      </section>
+        <section
+          className={styles.section}
+          onKeyDown={handleOnKeyDown}
+          tabIndex={0}
+          style={{ minWidth: canvasWidth, minHeight: canvasHeight }}>
+          <Canvas
+            draw={ctx => staticMap.draw(ctx)}
+            zIndex={1}
+            width={canvasWidth}
+            height={canvasHeight}
+            isStatic={true}
+          />
+          <Canvas
+            draw={ctx => drawDynamicLayer(ctx)}
+            zIndex={2}
+            width={canvasWidth}
+            height={canvasHeight}
+            isStatic={false}
+          />
+        </section>
+      </div>
     </div>
   )
 }

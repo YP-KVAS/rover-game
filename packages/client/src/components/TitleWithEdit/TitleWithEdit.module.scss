@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 25px;
+}
+
+.title {
+  color: var(--color-secondary);
+  font-size: var(--font-lg);
+}
+
+.header_edit {
+  display: flex;
+  cursor: pointer;
+}
+
+.header_edit_text {
+  color: var(--color-text-on-dark)
+}
+
+.svg_icon {
+  fill: var(--color-text-on-dark);
+  width: 30px;
+  height: 30px;
+}

@@ -30,10 +30,10 @@ export const Canvas: FC<CanvasProps> = ({
 
     const render = (time: number) => {
       const timeDiff = time - lastTime
-      if (timeDiff >= delay) {
+      if (timeDiff >= delay && context) {
         lastTime = time
-        context!.clearRect(0, 0, canvas.width, canvas.height)
-        draw(context!)
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        draw(context)
         if (isStatic) {
           window.cancelAnimationFrame(animationFrameId)
           return

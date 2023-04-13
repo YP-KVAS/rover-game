@@ -10,12 +10,9 @@ class GameManager {
   private _hitPoints = initialHitPoints
   private _immunity = false
 
-  private _changeLevelFoo:
-    | React.Dispatch<React.SetStateAction<number>>
-    | undefined
-  private _changeStatFoo:
-    | React.Dispatch<React.SetStateAction<GameStatType>>
-    | undefined
+  private _changeLevelFoo?: React.Dispatch<React.SetStateAction<number>>
+
+  private _changeStatFoo?: React.Dispatch<React.SetStateAction<GameStatType>>
 
   useChangeLevel(foo: React.Dispatch<React.SetStateAction<number>>) {
     this._changeLevelFoo = foo

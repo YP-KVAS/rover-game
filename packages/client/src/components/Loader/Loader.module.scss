@@ -1,0 +1,21 @@
+.loader {
+  border: 10px solid var(--color-accent);
+  border-top: 10px solid var(--color-secondary);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  top: 40%;
+  left: calc(50% - 40px);
+  animation: spin 1s linear infinite;
+  position: absolute;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
