@@ -14,7 +14,7 @@ export const LeaderboardTable = () => {
   useEffect(() => {
     const request: LeaderboardRequest = {
       ratingFieldName: "score",
-      cursor: 20,
+      cursor: 0,
       limit: 100
     }
     dispatch(onGetAllLeaderboards(request))
@@ -23,21 +23,19 @@ export const LeaderboardTable = () => {
   if(leaderboardItems.length === 0) {
     return (
       <div className={styles.leaderboardTable}>
-        <p>No data</p>
+        <p>Нет данных</p>
       </div>
     )
   }
 
   const items = leaderboardItems.map((value, index) => {
     const key = index+1
-    const image = (value.data.avatar != null)
-      ? <img height='45px' alt='photo' src={BASE_URL+RESOURCES_API_URL+value.data.avatar}/>
-      : <img height='45px' alt='photo' src='./images/user/empty-avatar.webp'/>
+    const image = <img height='45px' alt='photo' src={value.data.avatar ? `${BASE_URL}${RESOURCES_API_URL}${value.data.avatar}` : './images/user/empty-avatar.webp'}/>
 
-    const name = value.data.login ?? value.data.userLogin ?? value.data.username ?? value.data.name ?? value.data.id ?? 'No Name'
+    const name = value.data.login ?? value.data.userLogin ?? value.data.username ?? value.data.name ?? value.data.id ?? 'Неизвестный игрок'
     const score = value.data.score
 
-    return <li key={key}>{key} {image} {name} <p>{score}</p></li>
+    return <li key={key}>{key} {image} {name} <p>{score.toLocaleString()}</p></li>
   })
 
   return (

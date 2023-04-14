@@ -5,7 +5,7 @@ import style from './Leaderboard.module.scss'
 export const Leaderboard = () => {
   return (
     <div className={style.leaderboard}>
-      <h2>Leaderboard</h2>
+      <h2>Лучшие результаты</h2>
       <div className={style.container}>
         <LeaderboardTable />
         <LeaderboardUserScore />
