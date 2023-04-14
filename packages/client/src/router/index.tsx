@@ -21,7 +21,7 @@ const in_work_component = (
 function check_auth() {
   const auth = store.getState().auth.isLoggedIn
 
-  return auth ? null : redirect(RoutesEnum.MAIN)
+  return auth ? null : redirect(RoutesEnum.LOGIN)
 }
 
 export const router = createBrowserRouter([
