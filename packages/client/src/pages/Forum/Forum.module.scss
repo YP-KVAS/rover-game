@@ -1,0 +1,33 @@
+.message {
+  color: var(--color-accent)
+}
+
+.categories_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 600px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background-color: var(--color-secondary);
+  padding: 35px;
+  border-radius: 20px;
+
+  * {
+    color: var(--color-text-on-dark);
+    font-size: var(--font-xl);
+  }
+}
+
+.categories_header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.categories_list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
