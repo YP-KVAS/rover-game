@@ -75,7 +75,9 @@ class GameManager {
   }
   endGame() {
     console.warn('End game with', this._points, 'points')
-    this._changeGameOverStateFoo(true)
+    if(this._changeGameOverStateFoo) {
+      this._changeGameOverStateFoo(true)
+    }
   }
 
   roverHit(hit = 1) {
