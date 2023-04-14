@@ -10,6 +10,8 @@ import { Registration } from '../pages/Registration'
 import { UserSettings } from '../pages/UserSettings'
 import { store } from '../store/store'
 import { Login } from '../pages/Login'
+import { Forum } from '../pages/Forum/Forum'
+import { ForumCategory } from '../pages/Forum/ForumCategory'
 
 const in_work_component = (
   <main>
@@ -47,7 +49,11 @@ export const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.FORUM,
-        element: in_work_component,
+        element: <Forum />,
+      },
+      {
+        path: RoutesEnum.FORUM_CATEGORY,
+        element: <ForumCategory />,
       },
       {
         path: RoutesEnum.START,
