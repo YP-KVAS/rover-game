@@ -71,19 +71,19 @@
 
 @keyframes change_image {
   0% {
-    --img: url('client/public/images/rover/rover-right.png');
+    --img: url('/images/rover/rover-right.png');
   }
   25% {
-    --img: url('client/public/images/rover/rover-down.png');
+    --img: url('/images/rover/rover-down.png');
   }
   50% {
-    --img: url('client/public/images/rover/rover-left.png');
+    --img: url('/images/rover/rover-left.png');
   }
   75% {
-    --img: url('client/public/images/rover/rover-up.png');
+    --img: url('/images/rover/rover-up.png');
   }
   100% {
-    --img: url('client/public/images/rover/rover-right.png');
+    --img: url('/images/rover/rover-right.png');
   }
 }
 

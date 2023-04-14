@@ -1,5 +1,5 @@
 import styles from './MainPage.module.scss'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 
 export function Main() {
@@ -82,19 +82,19 @@ export function Main() {
           <p>Следите за временем, а не то вас уволят на свалку!</p>
 
           <div>
-            <NavLink to={RoutesEnum.GAME} className={styles.link}>
+            <Link to={RoutesEnum.START} className={styles.link}>
               Играть
-            </NavLink>
+            </Link>
+
             <Link to={RoutesEnum.LOGIN} className={styles.link}>
               Вход
             </Link>
           </div>
 
-
           <p className={styles.disclaimer}>
             (Страховка не предусматривает выплат в случае сбивания машиной,
-            повреждений от домов и иныx предметов искусственного или натурального
-            происхождения)
+            повреждений от домов и иныx предметов искусственного или
+            натурального происхождения)
           </p>
         </div>
       </div>
