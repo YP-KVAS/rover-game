@@ -41,7 +41,7 @@ export class Rover extends DynamicGameCharacter {
     this.img = this.getRoverImg()
   }
 
-  openRover(freezeSec = 1000) {
+  openRover(freezeMs = 1000) {
     switch (this.movingDirection) {
       case MovingDirection.UP:
         this.movingDirection = MovingDirection.RIGHT
@@ -58,7 +58,7 @@ export class Rover extends DynamicGameCharacter {
         this.img = roverImages.roverOpenLeft
         break
     }
-    this._freezeMov = { start: performance.now(), duration: freezeSec }
+    this._freezeMov = { start: performance.now(), duration: freezeMs }
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
