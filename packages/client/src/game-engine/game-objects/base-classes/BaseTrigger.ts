@@ -58,7 +58,7 @@ export abstract class BaseTrigger extends BaseGameObject {
 
     if (this.collideWithRover(rover.coords)) {
       rover.openRover()
-      this._onTriggered()
+      this._onTriggered(rover)
     }
   }
 
@@ -70,12 +70,12 @@ export abstract class BaseTrigger extends BaseGameObject {
     return xIntersection && yIntersection
   }
 
-  private _onTriggered() {
-    this.onTriggered()
+  private _onTriggered(rover: Rover) {
+    this.onTriggered(rover)
     if (this.logic) this.logic()
   }
 
-  protected onTriggered() {
+  protected onTriggered(rover: Rover) {
     return
   }
   draw(ctx: CanvasRenderingContext2D) {
