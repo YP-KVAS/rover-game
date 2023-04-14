@@ -11,11 +11,15 @@ class GameManager {
   private _immunity = false
 
   private _changeLevelFoo?: React.Dispatch<React.SetStateAction<number>>
-
+  private _changeGameOverStateFoo?: React.Dispatch<React.SetStateAction<boolean>>
   private _changeStatFoo?: React.Dispatch<React.SetStateAction<GameStatType>>
 
   useChangeLevel(foo: React.Dispatch<React.SetStateAction<number>>) {
     this._changeLevelFoo = foo
+  }
+
+  useChangeGameOverState(foo: React.Dispatch<React.SetStateAction<boolean>>) {
+    this._changeGameOverStateFoo = foo
   }
 
   useStat(foo: React.Dispatch<React.SetStateAction<GameStatType>>) {
@@ -70,8 +74,8 @@ class GameManager {
     return this._points
   }
   endGame() {
-    // TODO: Implement end game
     console.warn('End game with', this._points, 'points')
+    this._changeGameOverStateFoo(true)
   }
 
   roverHit(hit = 1) {

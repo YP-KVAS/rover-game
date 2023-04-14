@@ -12,7 +12,7 @@ export const MENU: Array<MenuItem> = [
   },
   {
     label: 'Rover Game',
-    route: RoutesEnum.GAME,
+    route: RoutesEnum.START,
   },
   {
     label: 'Форум',
