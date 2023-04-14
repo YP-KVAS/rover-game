@@ -25,4 +25,15 @@
  & img {
    border-radius: 50%;
  }
+
+ &::-webkit-scrollbar {
+   width: 20px;
+ }
+
+ &::-webkit-scrollbar-thumb {
+   border: 6px solid rgba(0,0,0,0);
+   background-clip: padding-box;
+   border-radius: 100px;
+   background-c: var(--color-primary);
+ }
 }
