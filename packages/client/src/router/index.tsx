@@ -1,8 +1,8 @@
-import { RoutesEnum } from '../utils/const-variables/routes'
 import { createBrowserRouter, Link, redirect } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
-import { Main } from '../pages/Main'
+import { Main } from '../pages/MainPage/Main'
+import { RoutesEnum } from '../utils/const-variables/routes'
 import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
@@ -21,7 +21,7 @@ const in_work_component = (
 function check_auth() {
   const auth = store.getState().auth.isLoggedIn
 
-  return auth ? null : redirect(RoutesEnum.MAIN)
+  return auth ? null : redirect(RoutesEnum.LOGIN)
 }
 
 export const router = createBrowserRouter([
