@@ -1,0 +1,35 @@
+@import 'src/index';
+
+.link {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  justify-content: space-between;
+  border: 2px solid;
+  padding: 10px;
+
+  &:hover {
+    color: var(--color-accent);
+    background-color: var(--color-primary);
+    transition: 0.2s;
+  }
+}
+
+.add_topic {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 30px;
+
+  @include media-screen-medium {
+    font-size: var(--font-sm);
+  }
+}
+
+.form {
+  flex: 1;
+}
+
+.name {
+  word-break: break-word;
+}

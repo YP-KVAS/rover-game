@@ -10,8 +10,9 @@ import { Registration } from '../pages/Registration'
 import { Leaderboard } from '../pages/Leaderboard/Leaderboard'
 import { UserSettings } from '../pages/UserSettings'
 import { Login } from '../pages/Login'
-import { Forum } from '../pages/Forum/Forum'
-import { ForumCategory } from '../pages/Forum/ForumCategory'
+import { ForumCategories } from '../pages/Forum/ForumCategories'
+import { ForumTopics } from '../pages/Forum/ForumTopics'
+import { ForumLayout } from '../pages/Forum/ForumLayout'
 
 const in_work_component = (
   <main>
@@ -42,11 +43,17 @@ export const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.FORUM,
-        element: <Forum />,
-      },
-      {
-        path: RoutesEnum.FORUM_CATEGORY,
-        element: <ForumCategory />,
+        element: <ForumLayout />,
+        children: [
+          {
+            path: RoutesEnum.FORUM,
+            element: <ForumCategories />,
+          },
+          {
+            path: RoutesEnum.FORUM_CATEGORY,
+            element: <ForumTopics />,
+          },
+        ],
       },
       {
         path: RoutesEnum.START,

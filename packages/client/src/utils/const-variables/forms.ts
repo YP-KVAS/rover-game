@@ -9,6 +9,7 @@ interface FormInput {
   placeholder: string
   type: InputType
   name: FormInputNames
+  rows?: number
 }
 
 const USER_FORM_DATA: Array<FormInput> = [
@@ -118,5 +119,21 @@ export const USER_SETTINGS_TABS: Array<Tab> = [
   {
     label: 'Настройки',
     component: UserPassword,
+  },
+]
+
+export const ADD_FORUM_TOPIC_FORM_INPUTS: Array<FormInput> = [
+  {
+    label: 'Название темы',
+    type: 'text',
+    placeholder: 'Топик',
+    name: FormInputNames.FORUM_TITLE,
+  },
+  {
+    label: 'Комментарий',
+    type: 'text',
+    placeholder: 'Первый комментарий',
+    name: FormInputNames.FORUM_MESSAGE,
+    rows: 5,
   },
 ]
