@@ -1,4 +1,4 @@
-import styles from './ForumCategory.module.scss'
+import styles from './Forum.module.scss'
 import { FC } from 'react'
 import { IForumCategory } from '../../utils/types/forum'
 import { Link } from 'react-router-dom'
@@ -10,8 +10,8 @@ export const ForumCategory: FC<IForumCategory> = ({
   topic_count,
 }) => {
   return (
-    <Link className={styles.category} to={`${RoutesEnum.FORUM}/${id}`}>
-      <span>{name}</span>
+    <Link className={styles.link} to={`${RoutesEnum.FORUM}/${id}`}>
+      <span className={styles.name}>{name}</span>
       <span>{topic_count || 0}</span>
     </Link>
   )

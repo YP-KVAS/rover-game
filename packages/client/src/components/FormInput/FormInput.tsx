@@ -13,6 +13,7 @@ type FormInputProps = {
   registerObj: UseFormRegisterReturn
   errorMsg?: string
   accept?: string
+  rows?: number
 }
 
 export const FormInput = ({
@@ -24,6 +25,7 @@ export const FormInput = ({
   registerObj,
   errorMsg,
   accept,
+  rows = 1,
 }: FormInputProps) => {
   const { ref } = registerObj
   const inputRef = useRef(null)
@@ -32,12 +34,14 @@ export const FormInput = ({
     ref(inputRef.current)
   }, [ref])
 
+  const Input = rows > 1 ? 'textarea' : 'input'
+
   return (
     <>
       {label && <label className={styles.input_label}>{label}</label>}
 
       <div className={styles.input_container}>
-        <input
+        <Input
           {...registerObj}
           ref={inputRef}
           type={type}
@@ -47,6 +51,7 @@ export const FormInput = ({
           accept={accept}
           className={styles.input}
           aria-invalid={errorMsg ? 'true' : 'false'}
+          rows={rows}
         />
         {errorMsg && <InputError message={errorMsg} inputRef={inputRef} />}
       </div>

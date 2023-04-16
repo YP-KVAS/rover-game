@@ -89,3 +89,15 @@ export const signinValidationSchema = Yup.object().shape({
   [FormInputNames.LOGIN]: loginValidation,
   [FormInputNames.PASSWORD]: passwordValidation,
 })
+
+// Forum validation
+const topicTitleValidation = Yup.string()
+  .required(REQUIRED_MESSAGE)
+  .max(120, 'Длина названия темы должна быть не более 120 символов')
+
+const topicCommentValidation = Yup.string().required(REQUIRED_MESSAGE)
+
+export const addForumTopicValidationSchema = Yup.object().shape({
+  [FormInputNames.FORUM_TITLE]: topicTitleValidation,
+  [FormInputNames.FORUM_MESSAGE]: topicCommentValidation,
+})
