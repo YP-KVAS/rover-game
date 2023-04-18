@@ -3,8 +3,10 @@ import styles from './GamePage.module.scss'
 import { GameField } from '../../components/GameField/GameField'
 import { Button } from '../../components/Button/Button'
 import gameManager from '../../game-engine/GameManager'
+import RequireAuth from '../../hocs/requireAuth'
+import { EnumPages } from '../../utils/const-variables/pages'
 
-export const GamePage: FC = () => {
+const GamePage: FC = () => {
   const gamePageRef: RefObject<HTMLDivElement> = useRef(null)
   const gameFieldRef: RefObject<HTMLDivElement> = useRef(null)
 
@@ -31,3 +33,7 @@ export const GamePage: FC = () => {
     </div>
   )
 }
+
+const GamePageWithAuth: FC = RequireAuth(GamePage, EnumPages.GAME_PAGE)
+
+export { GamePageWithAuth as GamePage }

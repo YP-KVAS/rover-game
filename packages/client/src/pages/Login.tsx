@@ -4,8 +4,8 @@ import { Button } from '../components/Button/Button'
 import { FormInput } from '../components/FormInput/FormInput'
 import { Form } from '../components/Form/Form'
 import { useAppDispatch, useAppSelector } from '../hooks/useStore'
-import { onGetUser, onSignIn } from '../store/thunks/auth-thunk'
-import { Link, useNavigate } from 'react-router-dom'
+import { onSignIn } from '../store/thunks/auth-thunk'
+import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../utils/const-variables/routes'
 import { LOGIN_FORM_INPUTS } from '../utils/const-variables/forms'
 import { UserSignIn } from '../utils/types/user'
@@ -14,10 +14,12 @@ import { signinValidationSchema } from '../utils/validation'
 import { selectAuthState } from '../store/selectors/auth-selector'
 import { Loader } from '../components/Loader/Loader'
 import { Title } from '../components/Title/Title'
-import { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { clearAuthError } from '../store/slices/auth-slice'
+import RequireAuth from '../hocs/requireAuth'
+import { EnumPages } from '../utils/const-variables/pages'
 
-export const Login = () => {
+const Login: FC = () => {
   const {
     handleSubmit,
     register,
@@ -25,19 +27,11 @@ export const Login = () => {
   } = useForm<UserSignIn>({
     resolver: yupResolver(signinValidationSchema),
   })
-
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
   const { isLoading, errorMessage } = useAppSelector(selectAuthState)
 
   const onSubmit = handleSubmit(data => {
-    dispatch(onSignIn(data)).then(data => {
-      if (data.type.endsWith('fulfilled')) {
-        dispatch(onGetUser()).then(() => {
-          navigate(RoutesEnum.START)
-        })
-      }
-    })
+    dispatch(onSignIn(data))
   })
 
   useEffect(() => {
@@ -81,3 +75,7 @@ export const Login = () => {
     </Form>
   )
 }
+
+const LoginWithAuth: FC = RequireAuth(Login, EnumPages.LOGIN)
+
+export { LoginWithAuth as Login }

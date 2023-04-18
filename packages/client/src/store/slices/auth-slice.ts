@@ -32,9 +32,9 @@ const authSlice = createSlice({
         state.isLoading = true
         state.errorMessage = null
       })
-      .addCase(onGetUser.rejected, (state, action) => {
+      .addCase(onGetUser.rejected, state => {
+        state.isLoggedIn = false
         state.isLoading = false
-        state.errorMessage = action.payload || null
       })
 
     // onSignUp

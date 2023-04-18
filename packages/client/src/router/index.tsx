@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link, redirect } from 'react-router-dom'
+import { createBrowserRouter, Link } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/MainPage/Main'
@@ -8,7 +8,6 @@ import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
 import { Registration } from '../pages/Registration'
 import { UserSettings } from '../pages/UserSettings'
-import { store } from '../store/store'
 import { Login } from '../pages/Login'
 
 const in_work_component = (
@@ -17,12 +16,6 @@ const in_work_component = (
     <Link to={RoutesEnum.MAIN}>Return</Link>
   </main>
 )
-
-function check_auth() {
-  const auth = store.getState().auth.isLoggedIn
-
-  return auth ? null : redirect(RoutesEnum.LOGIN)
-}
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +36,6 @@ export const router = createBrowserRouter([
       {
         path: RoutesEnum.USER_SETTINGS,
         element: <UserSettings />,
-        loader: check_auth,
       },
       {
         path: RoutesEnum.FORUM,
@@ -56,13 +48,10 @@ export const router = createBrowserRouter([
       {
         path: RoutesEnum.GAME,
         element: <GamePage />,
-        // TODO: add auth check
-        //loader: check_auth,
       },
       {
         path: RoutesEnum.LEADERBOARD,
         element: in_work_component,
-        loader: check_auth,
       },
       {
         path: RoutesEnum.ERROR_500,
