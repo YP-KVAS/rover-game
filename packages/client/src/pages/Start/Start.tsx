@@ -1,11 +1,13 @@
 import styles from './Start.module.scss'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { Button } from '../../components/Button/Button'
 import { Timer } from '../../components/Timer/Timer'
+import RequireAuth from '../../hocs/requireAuth'
+import { EnumPages } from '../../utils/const-variables/pages'
 
-export const Start = () => {
+const Start: FC = () => {
   const [isStarted, setStartAnimation] = useState(false)
   const [isCalled, setCallbackCalling] = useState(false)
   const navigate = useNavigate()
@@ -34,3 +36,7 @@ export const Start = () => {
     </div>
   )
 }
+
+const StartPageWithAuth = RequireAuth(Start, EnumPages.START_PAGE)
+
+export { StartPageWithAuth as Start }

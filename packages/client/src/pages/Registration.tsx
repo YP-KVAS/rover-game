@@ -10,17 +10,19 @@ import { useAppDispatch, useAppSelector } from '../hooks/useStore'
 import { onSignUp } from '../store/thunks/auth-thunk'
 import { UserSignUp } from '../utils/types/user'
 import { REGISTRATION_FORM_INPUTS } from '../utils/const-variables/forms'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../utils/const-variables/routes'
 import { Loader } from '../components/Loader/Loader'
 import { selectAuthState } from '../store/selectors/auth-selector'
 import { useEffect } from 'react'
 import { clearAuthError } from '../store/slices/auth-slice'
 import { Title } from '../components/Title/Title'
+import RequireAuth from '../hocs/requireAuth'
+import { EnumPages } from '../utils/const-variables/pages'
 
 type RegFormData = UserSignUp & { [FormInputNames.REPEAT_PASSWORD]: string }
 
-export const Registration = () => {
+const Registration = () => {
   const {
     register,
     formState: { errors },
@@ -30,17 +32,12 @@ export const Registration = () => {
   })
 
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
   const { isLoading, errorMessage } = useAppSelector(selectAuthState)
 
   const onSubmit = handleSubmit(data => {
     const { [FormInputNames.REPEAT_PASSWORD]: rePassword, ...userData } = data
 
-    dispatch(onSignUp(userData)).then(data => {
-      if (data.type.endsWith('fulfilled')) {
-        navigate(RoutesEnum.MAIN)
-      }
-    })
+    dispatch(onSignUp(userData))
   })
 
   useEffect(() => {
@@ -84,3 +81,7 @@ export const Registration = () => {
     </Form>
   )
 }
+
+const RegistrationWithAuth = RequireAuth(Registration, EnumPages.REGISTRATION)
+
+export { RegistrationWithAuth as Registration }

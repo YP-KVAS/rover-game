@@ -1,20 +1,13 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { Tabs } from '../components/Tabs/Tabs'
 import { USER_SETTINGS_TABS } from '../utils/const-variables/forms'
-import { useAppDispatch, useAppSelector } from '../hooks/useStore'
-import { User } from '../utils/types/user'
-import { selectCurrentUser } from '../store/selectors/user-selector'
-import { onGetUser } from '../store/thunks/auth-thunk'
+import RequireAuth from '../hocs/requireAuth'
+import { EnumPages } from '../utils/const-variables/pages'
 
-export const UserSettings: FC = () => {
-  const dispatch = useAppDispatch()
-  const currentUser: User | null = useAppSelector(selectCurrentUser)
-
-  useEffect(() => {
-    if (!currentUser) {
-      dispatch(onGetUser())
-    }
-  }, [dispatch, currentUser])
-
+const UserSettings: FC = () => {
   return <Tabs tabs={USER_SETTINGS_TABS} />
 }
+
+const UserSettingsWithAuth = RequireAuth(UserSettings, EnumPages.USER_SETTINGS)
+
+export { UserSettingsWithAuth as UserSettings }

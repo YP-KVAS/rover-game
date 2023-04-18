@@ -13,13 +13,10 @@ import { clearChangePasswordError } from '../../store/slices/user-slice'
 import { USER_CHANGE_PASSWORD_FORM_INPUTS } from '../../utils/const-variables/forms'
 import { FormInput } from '../FormInput/FormInput'
 import { onLogout } from '../../store/thunks/auth-thunk'
-import { useNavigate } from 'react-router-dom'
-import { RoutesEnum } from '../../utils/const-variables/routes'
 import { FormWithEdit } from '../FormWithEdit/FormWithEdit'
 
 export const UserPassword: FC = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
   const { isLoading, errorMessage } = useAppSelector(selectChangePasswordState)
 
   const [editDisabled, setEditDisabled] = useState(true)
@@ -53,7 +50,6 @@ export const UserPassword: FC = () => {
 
   const handleLogout = () => {
     dispatch(onLogout())
-    navigate(RoutesEnum.MAIN)
   }
 
   useEffect(() => {
