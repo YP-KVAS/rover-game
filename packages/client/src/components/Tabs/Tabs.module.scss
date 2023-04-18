@@ -16,7 +16,8 @@
   cursor: pointer;
   color: var(--color-text-on-dark);
 
-  &:hover, &.active {
+  &:hover,
+  &.active {
     color: var(--color-accent);
     transition: 0.4s;
   }
