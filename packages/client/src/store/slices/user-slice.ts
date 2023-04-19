@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { User } from '../../utils/types/user'
 import {
   onAvatarChange,
+  onGetUserById,
   onPasswordChange,
   onProfileSettingsChange,
 } from '../thunks/user-thunk'
@@ -13,6 +14,7 @@ interface InitialState {
   changeSettings: FetchState
   changeAvatar: FetchState
   changePassword: FetchState
+  allUsers: Record<number, User | null>
 }
 
 const defaultFetchState = {
@@ -25,6 +27,7 @@ const initialState: InitialState = {
   changeSettings: defaultFetchState,
   changeAvatar: defaultFetchState,
   changePassword: defaultFetchState,
+  allUsers: {},
 }
 
 const userSlice = createSlice({
@@ -87,6 +90,15 @@ const userSlice = createSlice({
       .addCase(onPasswordChange.rejected, (state, action) => {
         state.changePassword.isLoading = false
         state.changePassword.errorMessage = action.payload || null
+      })
+
+    // onGetUserById
+    builder
+      .addCase(onGetUserById.fulfilled, (state, action) => {
+        state.allUsers[action.meta.arg] = action.payload
+      })
+      .addCase(onGetUserById.rejected, (state, action) => {
+        state.allUsers[action.meta.arg] = null
       })
 
     // external auth-slice

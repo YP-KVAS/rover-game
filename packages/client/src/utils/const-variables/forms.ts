@@ -4,7 +4,7 @@ import { UserData } from '../../components/UserData/UserData'
 import { UserAvatar } from '../../components/UserAvatar/UserAvatar'
 import { UserPassword } from '../../components/UserPassword/UserPassword'
 
-interface FormInput {
+export interface FormInput {
   label: string
   placeholder: string
   type: InputType
@@ -137,3 +137,11 @@ export const ADD_FORUM_TOPIC_FORM_INPUTS: Array<FormInput> = [
     rows: 5,
   },
 ]
+
+export const ADD_FORUM_MESSAGE_FORM_INPUT: FormInput = {
+  label: 'Комментарий',
+  type: 'text',
+  placeholder: 'Комментарий',
+  name: FormInputNames.FORUM_MESSAGE,
+  rows: 3,
+}

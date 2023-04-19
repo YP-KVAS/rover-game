@@ -13,6 +13,7 @@ import { Login } from '../pages/Login'
 import { ForumCategories } from '../pages/Forum/ForumCategories'
 import { ForumTopics } from '../pages/Forum/ForumTopics'
 import { ForumLayout } from '../pages/Forum/ForumLayout'
+import { ForumComments } from '../pages/Forum/ForumComments'
 
 const in_work_component = (
   <main>
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
           {
             path: RoutesEnum.FORUM_CATEGORY,
             element: <ForumTopics />,
+          },
+          {
+            path: RoutesEnum.FORUM_TOPIC,
+            element: <ForumComments />,
           },
         ],
       },

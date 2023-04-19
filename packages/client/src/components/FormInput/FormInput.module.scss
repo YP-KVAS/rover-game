@@ -5,6 +5,7 @@
   padding: 10px;
   box-shadow: var(--shadow);
   resize: vertical;
+  color: var(--color-text-on-light) !important;
 
   &:disabled {
     cursor: not-allowed;

@@ -12,6 +12,7 @@ export enum AuthApiPaths {
 }
 
 export enum UserApiPaths {
+  GET_USER = '/',
   CHANGE_SETTINGS = '/profile',
   CHANGE_AVATAR = '/profile/avatar',
   CHANGE_PASSWORD = '/password',

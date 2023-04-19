@@ -1,10 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
+  addForumComment,
   addForumTopic,
   getForumCategories,
+  getForumComments,
   getForumTopics,
 } from '../../utils/rest-api/forum-api'
-import { IForumCategory, IForumTopic, NewTopic } from '../../utils/types/forum'
+import {
+  AddForumComment,
+  IForumCategory,
+  IForumComment,
+  IForumTopic,
+  NewTopic,
+} from '../../utils/types/forum'
 
 export const onGetForumCategories = createAsyncThunk<
   Array<IForumCategory>,
@@ -44,6 +52,34 @@ export const onAddForumTopic = createAsyncThunk<
   } catch (err: unknown) {
     return rejectWithValue(
       (err as Error).message || 'При добавлении новой темы возникла ошибка'
+    )
+  }
+})
+
+export const onGetForumComments = createAsyncThunk<
+  Array<IForumComment>,
+  number | null,
+  { rejectValue: string }
+>('forum/onGetForumComments', async (parentCommentId, { rejectWithValue }) => {
+  try {
+    return await getForumComments(parentCommentId)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Не удалось загрузить комментарии'
+    )
+  }
+})
+
+export const onAddForumComment = createAsyncThunk<
+  IForumComment,
+  AddForumComment,
+  { rejectValue: string }
+>('forum/onAddForumComment', async (comment, { rejectWithValue }) => {
+  try {
+    return await addForumComment(comment)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Ошибка при добавлении нового комментария'
     )
   }
 })
