@@ -5,8 +5,10 @@ import { Outlet } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { selectForumCategories } from '../../store/selectors/forum-selector'
 import { onGetForumCategories } from '../../store/thunks/forum-thunk'
+import RequireAuth from '../../hocs/requireAuth'
+import { EnumPages } from '../../utils/const-variables/pages'
 
-export const ForumLayout: FC = () => {
+const ForumLayout: FC = () => {
   const dispatch = useAppDispatch()
   const { categoryItems } = useAppSelector(selectForumCategories)
 
@@ -23,3 +25,7 @@ export const ForumLayout: FC = () => {
     </div>
   )
 }
+
+const ForumWithAuth: FC = RequireAuth(ForumLayout, EnumPages.FORUM)
+
+export { ForumWithAuth as ForumLayout }

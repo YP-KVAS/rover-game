@@ -8,9 +8,11 @@ import {
 import {
   onAddForumComment,
   onAddForumTopic,
+  onDeleteForumTopic,
   onGetForumCategories,
   onGetForumComments,
   onGetForumTopics,
+  onUpdateForumTopic,
 } from '../thunks/forum-thunk'
 
 interface CategoryState extends FetchState {
@@ -30,11 +32,15 @@ interface AddCommentState extends FetchState {
   lastAddedParentCommentId: number | null
 }
 
+interface ChangeTopicState extends FetchState {
+  lastAddedTopicId: number | null
+}
+
 interface InitialState {
   categories: CategoryState
   topicInfo: {
     topics: Record<number, TopicState>
-    addTopicState: FetchState
+    topicState: ChangeTopicState
   }
   commentInfo: {
     comments: Record<number, CommentState>
@@ -50,9 +56,10 @@ const initialState: InitialState = {
   },
   topicInfo: {
     topics: {},
-    addTopicState: {
+    topicState: {
       isLoading: false,
       errorMessage: null,
+      lastAddedTopicId: null,
     },
   },
   commentInfo: {
@@ -76,6 +83,10 @@ const forumSlice = createSlice({
     clearLastAddedCommentError: state => {
       state.commentInfo.lastAddedCommentState.lastAddedParentCommentId = null
       state.commentInfo.lastAddedCommentState.errorMessage = null
+    },
+    clearLastAddedTopicError: state => {
+      state.topicInfo.topicState.errorMessage = null
+      state.topicInfo.topicState.lastAddedTopicId = null
     },
   },
   extraReducers: builder => {
@@ -129,17 +140,56 @@ const forumSlice = createSlice({
 
     // onAddForumTopic
     builder
-      .addCase(onAddForumTopic.fulfilled, state => {
-        state.topicInfo.addTopicState.isLoading = false
-        state.topicInfo.addTopicState.errorMessage = null
+      .addCase(onAddForumTopic.fulfilled, (state, action) => {
+        state.topicInfo.topicState.isLoading = false
+        state.topicInfo.topicState.errorMessage = null
+        state.topicInfo.topicState.lastAddedTopicId = action.payload.id
       })
       .addCase(onAddForumTopic.pending, state => {
-        state.topicInfo.addTopicState.isLoading = true
-        state.topicInfo.addTopicState.errorMessage = null
+        state.topicInfo.topicState.isLoading = true
+        state.topicInfo.topicState.errorMessage = null
+        state.topicInfo.topicState.lastAddedTopicId = null
       })
       .addCase(onAddForumTopic.rejected, (state, action) => {
-        state.topicInfo.addTopicState.isLoading = false
-        state.topicInfo.addTopicState.errorMessage = action.payload || null
+        state.topicInfo.topicState.isLoading = false
+        state.topicInfo.topicState.errorMessage = action.payload || null
+        state.topicInfo.topicState.lastAddedTopicId = null
+      })
+
+    // onUpdateForumTopic
+    builder
+      .addCase(onUpdateForumTopic.fulfilled, (state, action) => {
+        state.topicInfo.topicState.isLoading = false
+        state.topicInfo.topicState.errorMessage = null
+        state.topicInfo.topicState.lastAddedTopicId = action.payload.id
+      })
+      .addCase(onUpdateForumTopic.pending, state => {
+        state.topicInfo.topicState.isLoading = true
+        state.topicInfo.topicState.errorMessage = null
+        state.topicInfo.topicState.lastAddedTopicId = null
+      })
+      .addCase(onUpdateForumTopic.rejected, (state, action) => {
+        state.topicInfo.topicState.isLoading = false
+        state.topicInfo.topicState.errorMessage = action.payload || null
+        state.topicInfo.topicState.lastAddedTopicId = null
+      })
+
+    // onDeleteForumTopic
+    builder
+      .addCase(onDeleteForumTopic.fulfilled, state => {
+        state.topicInfo.topicState.isLoading = false
+        state.topicInfo.topicState.errorMessage = null
+        state.topicInfo.topicState.lastAddedTopicId = null
+      })
+      .addCase(onDeleteForumTopic.pending, state => {
+        state.topicInfo.topicState.isLoading = true
+        state.topicInfo.topicState.errorMessage = null
+        state.topicInfo.topicState.lastAddedTopicId = null
+      })
+      .addCase(onDeleteForumTopic.rejected, (state, action) => {
+        state.topicInfo.topicState.isLoading = false
+        state.topicInfo.topicState.errorMessage = action.payload || null
+        state.topicInfo.topicState.lastAddedTopicId = null
       })
 
     // onGetForumComments
@@ -197,5 +247,8 @@ const forumSlice = createSlice({
 })
 
 export const forumReducer = forumSlice.reducer
-export const { clearForumComments, clearLastAddedCommentError } =
-  forumSlice.actions
+export const {
+  clearForumComments,
+  clearLastAddedCommentError,
+  clearLastAddedTopicError,
+} = forumSlice.actions

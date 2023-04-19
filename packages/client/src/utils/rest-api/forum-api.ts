@@ -30,7 +30,9 @@ export function getForumTopics(
   })
 }
 
-export function addForumTopic(data: NewTopic): Promise<IForumTopic> {
+export function addForumTopic(
+  data: NewTopic & { userId: number }
+): Promise<IForumTopic> {
   return new Promise(resolve => {
     setTimeout(() => {
       const id: number = Date.now()
@@ -43,12 +45,42 @@ export function addForumTopic(data: NewTopic): Promise<IForumTopic> {
         category_id: categoryId,
         date: new Date().toISOString(),
         topic_name: data[FormInputNames.FORUM_TITLE],
+        user_id: data.userId,
       }
 
       FORUM_TOPICS[categoryId] = [...FORUM_TOPICS[categoryId], topic]
 
       return resolve(topic)
     }, TIMEOUT)
+  })
+}
+
+export function updateForumTopic(newName: string): Promise<IForumTopic> {
+  return new Promise(resolve => {
+    const paths = window.location.pathname.split('/')
+    const categoryId = paths[2]
+    const topicId = paths[3]
+    const topicToUpdate = FORUM_TOPICS[+categoryId].find(
+      topic => topic.id === +topicId
+    )
+    FORUM_TOPICS[+categoryId] = FORUM_TOPICS[+categoryId].map(topic =>
+      topic.id === +topicId ? { ...topic, topic_name: newName } : topic
+    )
+    if (topicToUpdate) {
+      setTimeout(() => resolve(topicToUpdate), TIMEOUT)
+    }
+  })
+}
+
+export function deleteForumTopic(): Promise<void> {
+  return new Promise(resolve => {
+    const paths = window.location.pathname.split('/')
+    const categoryId = paths[2]
+    const topicId = paths[3]
+    FORUM_TOPICS[+categoryId] = FORUM_TOPICS[+categoryId].filter(
+      topic => topic.id !== +topicId
+    )
+    setTimeout(() => resolve(), TIMEOUT)
   })
 }
 
