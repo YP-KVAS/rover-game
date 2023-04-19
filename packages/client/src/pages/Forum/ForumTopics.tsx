@@ -3,8 +3,8 @@ import { FC, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import {
-  selectTopicState,
   selectCategoryNameById,
+  selectForumAddTopicState,
   selectForumTopicsByCategoryId,
 } from '../../store/selectors/forum-selector'
 import { Loader } from '../../components/Loader/Loader'
@@ -13,6 +13,7 @@ import { onGetForumTopics } from '../../store/thunks/forum-thunk'
 import { AddForumTopic } from '../../components/Forum/AddForumItems/AddForumTopic'
 import { Page404 } from '../Page404'
 import { RoutesEnum } from '../../utils/const-variables/routes'
+import { Title } from '../../components/Title/Title'
 
 export const ForumTopics: FC = () => {
   const { categoryId = -1 } = useParams()
@@ -30,7 +31,9 @@ export const ForumTopics: FC = () => {
   const topics = useAppSelector(state =>
     selectForumTopicsByCategoryId(state, +categoryId)
   )
-  const { isLoading: addTopicLoading } = useAppSelector(selectTopicState)
+  const { isLoading: addTopicLoading } = useAppSelector(
+    selectForumAddTopicState
+  )
 
   return topics?.isLoading && !topics?.topicItems ? (
     <Loader />
@@ -47,6 +50,7 @@ export const ForumTopics: FC = () => {
         </strong>
       ) : (
         <>
+          <Title text="Выбор темы" />
           <Link className={styles.link} to={RoutesEnum.FORUM}>
             Вернуться к выбору категории
           </Link>

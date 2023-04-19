@@ -2,10 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
   addForumComment,
   addForumTopic,
+  deleteForumComment,
   deleteForumTopic,
   getForumCategories,
   getForumComments,
   getForumTopics,
+  updateForumComment,
   updateForumTopic,
 } from '../../utils/rest-api/forum-api'
 import {
@@ -14,6 +16,7 @@ import {
   IForumComment,
   IForumTopic,
   NewTopic,
+  UpdateForumComment,
 } from '../../utils/types/forum'
 
 export const onGetForumCategories = createAsyncThunk<
@@ -108,6 +111,34 @@ export const onAddForumComment = createAsyncThunk<
   } catch (err: unknown) {
     return rejectWithValue(
       (err as Error).message || 'Ошибка при добавлении нового комментария'
+    )
+  }
+})
+
+export const onUpdateForumComment = createAsyncThunk<
+  IForumComment,
+  UpdateForumComment,
+  { rejectValue: string }
+>('forum/onUpdateForumComment', async (comment, { rejectWithValue }) => {
+  try {
+    return await updateForumComment(comment)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Ошибка при изменении комментария'
+    )
+  }
+})
+
+export const onDeleteForumComment = createAsyncThunk<
+  void,
+  number,
+  { rejectValue: string }
+>('forum/onDeleteForumComment', async (id, { rejectWithValue }) => {
+  try {
+    return await deleteForumComment(id)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'При удалении комментария возникла ошибка'
     )
   }
 })

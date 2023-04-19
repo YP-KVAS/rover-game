@@ -4,7 +4,7 @@ import { IForumTopic } from '../../utils/types/forum'
 import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { useAppSelector } from '../../hooks/useStore'
-import { selectLastAddedTopicState } from '../../store/selectors/forum-selector'
+import { selectForumLastTouchedTopicId } from '../../store/selectors/forum-selector'
 
 export const ForumTopic: FC<IForumTopic> = ({
   id,
@@ -13,13 +13,13 @@ export const ForumTopic: FC<IForumTopic> = ({
   category_id,
 }) => {
   const ref = useRef<HTMLAnchorElement | null>(null)
-  const { lastAddedTopicId } = useAppSelector(selectLastAddedTopicState)
+  const lastTouchedTopicId = useAppSelector(selectForumLastTouchedTopicId)
 
   useEffect(() => {
-    if (id === lastAddedTopicId) {
+    if (id === lastTouchedTopicId) {
       ref.current?.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [id, lastAddedTopicId])
+  }, [id, lastTouchedTopicId])
 
   return (
     <Link

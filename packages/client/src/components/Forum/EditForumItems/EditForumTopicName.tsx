@@ -11,9 +11,9 @@ import {
 } from '../../../store/thunks/forum-thunk'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
 import { useParams } from 'react-router-dom'
-import { selectTopicState } from '../../../store/selectors/forum-selector'
-import { clearLastAddedTopicError } from '../../../store/slices/forum-slice'
+import { clearUpdateTopicState } from '../../../store/slices/forum-slice'
 import { Loader } from '../../Loader/Loader'
+import { selectForumUpdateTopicState } from '../../../store/selectors/forum-selector'
 
 interface EditForumTopicNameProps {
   handleFormReset: () => void
@@ -26,7 +26,9 @@ export const EditForumTopicName: FC<EditForumTopicNameProps> = ({
 }) => {
   const dispatch = useAppDispatch()
   const { categoryId = -1 } = useParams()
-  const { isLoading, errorMessage } = useAppSelector(selectTopicState)
+  const { isLoading, errorMessage } = useAppSelector(
+    selectForumUpdateTopicState
+  )
 
   const { handleSubmit, register } = useForm<{
     [FormInputNames.FORUM_TITLE]: string
@@ -36,9 +38,9 @@ export const EditForumTopicName: FC<EditForumTopicNameProps> = ({
 
   useEffect(() => {
     return () => {
-      dispatch(clearLastAddedTopicError())
+      dispatch(clearUpdateTopicState())
     }
-  }, [])
+  }, [dispatch])
 
   const handleFormSubmit = handleSubmit(data => {
     dispatch(onUpdateForumTopic({ ...data })).then(res => {

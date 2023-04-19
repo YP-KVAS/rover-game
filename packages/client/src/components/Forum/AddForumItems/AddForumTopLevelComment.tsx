@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
-import { selectLastAddedCommentState } from '../../../store/selectors/forum-selector'
 import { useForm } from 'react-hook-form'
 import { FormInputNames } from '../../../utils/types/forms'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -13,14 +12,13 @@ import { selectCurrentUserId } from '../../../store/selectors/user-selector'
 import { FormInput } from '../../FormInput/FormInput'
 import { AddForumItemWithState } from './AddForumItemWithState'
 import { ADD_FORUM_MESSAGE_FORM_INPUT } from '../../../utils/const-variables/forms'
-import { clearLastAddedCommentError } from '../../../store/slices/forum-slice'
+import { selectForumAddTopLevelCommentState } from '../../../store/selectors/forum-selector'
+import { clearAddTopLevelCommentErrorState } from '../../../store/slices/forum-slice'
 
 export const AddForumTopLevelComment: FC = () => {
   const dispatch = useAppDispatch()
   const userId = useAppSelector(selectCurrentUserId)
-  const { errorMessage, lastAddedParentCommentId } = useAppSelector(
-    selectLastAddedCommentState
-  )
+  const { errorMessage } = useAppSelector(selectForumAddTopLevelCommentState)
 
   const {
     handleSubmit,
@@ -52,13 +50,13 @@ export const AddForumTopLevelComment: FC = () => {
 
   const handleFormReset = () => {
     reset()
-    dispatch(clearLastAddedCommentError())
+    dispatch(clearAddTopLevelCommentErrorState())
   }
 
   return (
     <AddForumItemWithState
       buttonLabel="Написать комментарий"
-      errorMessage={lastAddedParentCommentId === null ? errorMessage : null}
+      errorMessage={errorMessage}
       handleFormSubmit={handleFormSubmit}
       handleFormReset={handleFormReset}>
       <FormInput

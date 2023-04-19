@@ -20,6 +20,11 @@ export interface AddForumComment {
   user_id: number
 }
 
+export interface UpdateForumComment {
+  id: number
+  message: string
+}
+
 export interface IForumComment extends AddForumComment {
   id: number
   date: string

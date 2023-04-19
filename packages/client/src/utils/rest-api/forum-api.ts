@@ -4,6 +4,7 @@ import {
   IForumComment,
   IForumTopic,
   NewTopic,
+  UpdateForumComment,
 } from '../types/forum'
 import {
   FORUM_CATEGORIES,
@@ -121,5 +122,30 @@ export function addForumComment(
       FORUM_COMMENTS[0] = [...FORUM_COMMENTS[0], newComment]
     }
     setTimeout(() => resolve(newComment), TIMEOUT)
+  })
+}
+
+export function updateForumComment(
+  comment: UpdateForumComment
+): Promise<IForumComment> {
+  return new Promise((resolve, reject) => {
+    const commentToUpdate = FORUM_COMMENTS[0].find(c => c.id === +comment.id)
+    FORUM_COMMENTS[0] = FORUM_COMMENTS[0].map(c =>
+      c.id === +comment.id ? { ...c, message: comment.message } : c
+    )
+    if (commentToUpdate) {
+      setTimeout(() => resolve(commentToUpdate), TIMEOUT)
+    } else {
+      reject('Unknown')
+    }
+  })
+}
+
+export function deleteForumComment(id: number): Promise<void> {
+  return new Promise(resolve => {
+    FORUM_COMMENTS[0] = FORUM_COMMENTS[0].map(c =>
+      c.id === id ? { ...c, message: null } : c
+    )
+    setTimeout(() => resolve(), TIMEOUT)
   })
 }
