@@ -10,16 +10,26 @@ import { onGetUserById } from '../../store/thunks/user-thunk'
 import { BASE_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
 import { FormInputNames } from '../../utils/types/forms'
 import { AddForumComment } from './AddForumItems/AddForumComment'
-import { onGetForumComments } from '../../store/thunks/forum-thunk'
 import {
+  onDeleteForumComment,
+  onGetForumComments,
+} from '../../store/thunks/forum-thunk'
+import {
+  selectForumAddGetCommentsStateByParentId,
   selectForumCommentsByParentId,
-  selectLastAddedCommentState,
+  selectForumDeleteCommentsStateById,
+  selectForumLastTouchedCommentId,
 } from '../../store/selectors/forum-selector'
 import { Loader } from '../Loader/Loader'
-import { clearLastAddedCommentError } from '../../store/slices/forum-slice'
+import {
+  clearAddCommentErrorState,
+  clearUpdateCommentErrorState,
+} from '../../store/slices/forum-slice'
+import { EditForumComment } from './EditForumItems/EditForumComment'
 
 export const ForumComment: FC<IForumComment> = ({
   id,
+  parent_comment_id,
   user_id,
   date,
   message,
@@ -28,8 +38,14 @@ export const ForumComment: FC<IForumComment> = ({
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => selectUserById(state, user_id))
   const currentUser = useAppSelector(selectCurrentUser)
-  const { errorMessage, lastAddedCommentId, lastAddedParentCommentId } =
-    useAppSelector(selectLastAddedCommentState)
+  const addCommentState = useAppSelector(state =>
+    selectForumAddGetCommentsStateByParentId(state, id || 0)
+  )
+  const deleteCommentState = useAppSelector(state =>
+    selectForumDeleteCommentsStateById(state, id)
+  )
+  const lastAddedCommentId = useAppSelector(selectForumLastTouchedCommentId)
+
   const commentRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -44,16 +60,40 @@ export const ForumComment: FC<IForumComment> = ({
     }
   }, [id, lastAddedCommentId])
 
-  const [textAreaEnabled, setTextAreaEnabled] = useState(false)
+  const [addCommentEnabled, setAddCommentEnabled] = useState(false)
+  const [editCommentEnabled, setEditCommentEnabled] = useState(false)
   const [repliesDisplayed, setRepliesDisplayed] = useState(false)
+
   const hideCommentInput = () => {
-    dispatch(clearLastAddedCommentError())
-    setTextAreaEnabled(false)
+    setAddCommentEnabled(false)
+    dispatch(clearAddCommentErrorState(id))
+  }
+  const hideCommentEditInput = () => {
+    setEditCommentEnabled(false)
+    dispatch(clearUpdateCommentErrorState(id))
   }
 
-  const handleCommentReply = () => setTextAreaEnabled(true)
-  const handleCommentEdit = () => setTextAreaEnabled(true)
-  const handleCommentDelete = () => null
+  const handleCommentReplyClick = () => {
+    if (editCommentEnabled) {
+      hideCommentEditInput()
+    }
+    setAddCommentEnabled(true)
+  }
+
+  const handleCommentEditClick = () => {
+    if (addCommentEnabled) {
+      hideCommentInput()
+    }
+    setEditCommentEnabled(true)
+  }
+
+  const handleCommentDelete = () => {
+    dispatch(onDeleteForumComment(id)).then(res => {
+      if (res.type.endsWith('fulfilled')) {
+        dispatch(onGetForumComments(parent_comment_id))
+      }
+    })
+  }
 
   const loadReplies = () => {
     dispatch(onGetForumComments(id)).then(res => {
@@ -93,28 +133,44 @@ export const ForumComment: FC<IForumComment> = ({
       )}
       <div className={styles.actions}>
         {message && (
-          <svg className={styles.svg_icon} onClick={handleCommentReply}>
-            <use xlinkHref="./images/icons-sprite.svg#reply"></use>
-          </svg>
+          <>
+            <svg className={styles.svg_icon} onClick={handleCommentReplyClick}>
+              <use xlinkHref="./images/icons-sprite.svg#reply"></use>
+            </svg>
+            {user?.id === currentUser?.id && (
+              <>
+                <svg
+                  className={styles.svg_icon}
+                  onClick={handleCommentEditClick}>
+                  <use xlinkHref="./images/icons-sprite.svg#edit"></use>
+                </svg>
+                <svg className={styles.svg_icon} onClick={handleCommentDelete}>
+                  <use xlinkHref="./images/icons-sprite.svg#delete"></use>
+                </svg>
+              </>
+            )}
+          </>
         )}
-        {user?.id === currentUser?.id && (
-          <svg className={styles.svg_icon} onClick={handleCommentEdit}>
-            <use xlinkHref="./images/icons-sprite.svg#edit"></use>
-          </svg>
-        )}
-        {user?.id === currentUser?.id && (
-          <svg className={styles.svg_icon} onClick={handleCommentDelete}>
-            <use xlinkHref="./images/icons-sprite.svg#delete"></use>
-          </svg>
+        {deleteCommentState?.isLoading && <Loader />}
+        {deleteCommentState?.errorMessage && (
+          <p className={styles.form_error}>{deleteCommentState.errorMessage}</p>
         )}
       </div>
-      {textAreaEnabled && (
+      {editCommentEnabled && (
+        <EditForumComment
+          commentId={id}
+          parentCommentId={parent_comment_id}
+          message={message || ''}
+          handleFormReset={hideCommentEditInput}
+        />
+      )}
+      {addCommentEnabled && (
         <div className={styles.new_comment}>
           <AddForumComment
             handleFormReset={hideCommentInput}
             onCommentAdded={loadReplies}
             parent_comment_id={id}
-            errorMessage={id === lastAddedParentCommentId ? errorMessage : null}
+            errorMessage={addCommentState?.errorMessage || null}
           />
         </div>
       )}

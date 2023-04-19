@@ -1,6 +1,5 @@
 import styles from './Forum.module.scss'
 import { FC, useEffect } from 'react'
-import { Title } from '../../components/Title/Title'
 import { Outlet } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { selectForumCategories } from '../../store/selectors/forum-selector'
@@ -20,7 +19,6 @@ const ForumLayout: FC = () => {
 
   return (
     <div className={styles.forum}>
-      <Title text="Форум" />
       <Outlet />
     </div>
   )

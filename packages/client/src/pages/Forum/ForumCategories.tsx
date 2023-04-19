@@ -4,6 +4,7 @@ import { useAppSelector } from '../../hooks/useStore'
 import { selectForumCategories } from '../../store/selectors/forum-selector'
 import { Loader } from '../../components/Loader/Loader'
 import { ForumCategory } from '../../components/Forum/ForumCategory'
+import { Title } from '../../components/Title/Title'
 
 export const ForumCategories: FC = () => {
   const { isLoading, errorMessage, categoryItems } = useAppSelector(
@@ -20,19 +21,22 @@ export const ForumCategories: FC = () => {
       Форум совсем скоро будет доступен.
     </strong>
   ) : (
-    <div className={styles.wrapper}>
-      <div className={styles.header}>
-        <h3>Категория</h3>
-        <h3>Топики</h3>
+    <div>
+      <Title text="Выбор категории" />
+      <div className={styles.wrapper}>
+        <div className={styles.header}>
+          <h3>Категория</h3>
+          <h3>Топики</h3>
+        </div>
+        <hr />
+        <ul className={styles.list}>
+          {categoryItems.map(category => (
+            <li key={category.id}>
+              <ForumCategory {...category} />
+            </li>
+          ))}
+        </ul>
       </div>
-      <hr />
-      <ul className={styles.list}>
-        {categoryItems.map(category => (
-          <li key={category.id}>
-            <ForumCategory {...category} />
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

@@ -8,21 +8,22 @@ import {
 } from '../../store/thunks/forum-thunk'
 import {
   selectForumCommentsByParentId,
+  selectForumDeleteTopicState,
   selectForumTopicById,
-  selectTopicState,
 } from '../../store/selectors/forum-selector'
 import { Loader } from '../../components/Loader/Loader'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ForumComment } from '../../components/Forum/ForumComment'
 import {
   clearForumComments,
-  clearLastAddedTopicError,
+  clearTopicInfoState,
 } from '../../store/slices/forum-slice'
 import { AddForumTopLevelComment } from '../../components/Forum/AddForumItems/AddForumTopLevelComment'
 import { Page404 } from '../Page404'
 import { selectCurrentUserId } from '../../store/selectors/user-selector'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { EditForumTopicName } from '../../components/Forum/EditForumItems/EditForumTopicName'
+import { Title } from '../../components/Title/Title'
 
 export const ForumComments: FC = () => {
   const dispatch = useAppDispatch()
@@ -40,7 +41,9 @@ export const ForumComments: FC = () => {
     selectForumTopicById(state, +categoryId, +topicId)
   )
   const userId = useAppSelector(selectCurrentUserId)
-  const { errorMessage: deleteErrorMessage } = useAppSelector(selectTopicState)
+  const { errorMessage: deleteErrorMessage } = useAppSelector(
+    selectForumDeleteTopicState
+  )
 
   useEffect(() => {
     if (!topic) {
@@ -50,9 +53,9 @@ export const ForumComments: FC = () => {
 
     return () => {
       dispatch(clearForumComments())
-      dispatch(clearLastAddedTopicError())
+      dispatch(clearTopicInfoState())
     }
-  }, [dispatch])
+  }, [dispatch, topic?.id])
 
   const handleTopicDelete = () => {
     dispatch(onDeleteForumTopic()).then(res => {
@@ -76,6 +79,7 @@ export const ForumComments: FC = () => {
     <Page404 />
   ) : (
     <div className={styles.area}>
+      <Title text="Просмотр комментариев" />
       <Link
         className={styles.link}
         to={RoutesEnum.FORUM_CATEGORY.replace(
