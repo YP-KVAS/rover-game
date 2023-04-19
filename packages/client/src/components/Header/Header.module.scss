@@ -22,7 +22,8 @@
 .link {
   color: var(--color-text-on-dark);
 
-  &:hover, &.active {
+  &:hover,
+  &.active {
     color: var(--color-secondary);
     transition: 0.4s;
   }

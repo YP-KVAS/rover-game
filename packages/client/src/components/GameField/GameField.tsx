@@ -54,7 +54,7 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
     rover.draw(ctx)
     const carsCoords = cars.map(car => car.coords)
     cars.forEach(car => {
-      car.move(rover.coords, carsCoords)
+      car.move(rover, carsCoords)
       car.draw(ctx)
     })
     triggers.forEach(trigger => {

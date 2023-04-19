@@ -1,5 +1,6 @@
 import { DynamicGameCharacter } from './DynamicGameCharacter'
 import { Coords, MovingDirection } from '../../../utils/types/game'
+import { Rover } from '../Rover'
 
 export abstract class GameBot extends DynamicGameCharacter {
   protected img: HTMLImageElement
@@ -146,5 +147,5 @@ export abstract class GameBot extends DynamicGameCharacter {
     }
   }
 
-  abstract move(roverCoords: Coords, otherBotsCoords: Array<Coords>): void
+  abstract move(rover: Rover, otherBotsCoords: Array<Coords>): void
 }

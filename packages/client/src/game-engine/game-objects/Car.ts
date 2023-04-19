@@ -1,6 +1,7 @@
 import { Coords, MovingDirection } from '../../utils/types/game'
 import { GameBot } from './base-classes/GameBot'
 import gameManager from '../GameManager'
+import { Rover } from './Rover'
 
 export class Car extends GameBot {
   constructor(
@@ -247,9 +248,10 @@ export class Car extends GameBot {
     return { x: column * this.tileSize, y: row * this.tileSize }
   }
 
-  move(roverCoords: Coords, allCarsCoords: Array<Coords>) {
-    if (this.collideWithRover(roverCoords)) {
+  move(rover: Rover, allCarsCoords: Array<Coords>) {
+    if (this.collideWithRover(rover.coords)) {
       gameManager.roverHit()
+      rover.hitting()
       return
     }
 
@@ -304,8 +306,13 @@ export class Car extends GameBot {
       const nextCrosswalkCoords = this.getCrosswalkCoords(nextTileCoords)
       if (
         nextCrosswalkCoords &&
-        this.coordsAreIntersecting(nextCrosswalkCoords, roverCoords, 2, true) &&
-        this.needToStopOnCrosswalk(roverCoords)
+        this.coordsAreIntersecting(
+          nextCrosswalkCoords,
+          rover.coords,
+          2,
+          true
+        ) &&
+        this.needToStopOnCrosswalk(rover.coords)
       ) {
         return
       }
@@ -328,8 +335,8 @@ export class Car extends GameBot {
       const crosswalkCoords = this.getCrosswalkCoords(tileCoords)
       if (
         crosswalkCoords &&
-        this.coordsAreIntersecting(crosswalkCoords, roverCoords, 2, true) &&
-        this.needToStopOnCrosswalk(roverCoords)
+        this.coordsAreIntersecting(crosswalkCoords, rover.coords, 2, true) &&
+        this.needToStopOnCrosswalk(rover.coords)
       ) {
         return
       }

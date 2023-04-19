@@ -11,7 +11,7 @@
   padding: 5px;
   color: var(--color-text-on-light);
 
-  &:after {
+  &::after {
     position: absolute;
     content: '';
     width: 0;

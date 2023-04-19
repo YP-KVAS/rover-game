@@ -1,4 +1,4 @@
-.errorPage {
+.error_page {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,9 +19,9 @@
     color: var(--color-text-on-dark);
   }
 
-
   & .link {
     text-decoration: underline;
+
     &:hover {
       color: var(--color-accent);
     }

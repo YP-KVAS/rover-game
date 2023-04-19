@@ -5,7 +5,7 @@ import style from './PageError.module.scss'
 
 export const Page500: FC = () => {
   return (
-    <div className={style.errorPage}>
+    <div className={style.error_page}>
       <h1>500</h1>
 
       <p>
