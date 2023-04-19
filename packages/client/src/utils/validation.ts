@@ -97,11 +97,13 @@ const topicTitleValidation = Yup.string()
 
 const topicCommentValidation = Yup.string().required(REQUIRED_MESSAGE)
 
-export const addForumTopicValidationSchema = Yup.object().shape({
+export const addForumTitleValidationSchema = Yup.object().shape({
   [FormInputNames.FORUM_TITLE]: topicTitleValidation,
-  [FormInputNames.FORUM_MESSAGE]: topicCommentValidation,
 })
 
 export const addForumMessageValidationSchema = Yup.object().shape({
   [FormInputNames.FORUM_MESSAGE]: topicCommentValidation,
 })
+
+export const addForumTopicValidationSchema =
+  addForumTitleValidationSchema.concat(addForumMessageValidationSchema)

@@ -1,24 +1,37 @@
 import styles from './Forum.module.scss'
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import {
+  onDeleteForumTopic,
   onGetForumComments,
   onGetForumTopics,
 } from '../../store/thunks/forum-thunk'
 import {
   selectForumCommentsByParentId,
   selectForumTopicById,
+  selectTopicState,
 } from '../../store/selectors/forum-selector'
 import { Loader } from '../../components/Loader/Loader'
-import { useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ForumComment } from '../../components/Forum/ForumComment'
-import { clearForumComments } from '../../store/slices/forum-slice'
+import {
+  clearForumComments,
+  clearLastAddedTopicError,
+} from '../../store/slices/forum-slice'
 import { AddForumTopLevelComment } from '../../components/Forum/AddForumItems/AddForumTopLevelComment'
 import { Page404 } from '../Page404'
+import { selectCurrentUserId } from '../../store/selectors/user-selector'
+import { RoutesEnum } from '../../utils/const-variables/routes'
+import { EditForumTopicName } from '../../components/Forum/EditForumItems/EditForumTopicName'
 
 export const ForumComments: FC = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { categoryId = -1, topicId = -1 } = useParams()
+
+  const [topicEditEnabled, setTopicEditEnabled] = useState(false)
+  const enableTopicEdit = () => setTopicEditEnabled(true)
+  const hideTopicEdit = () => setTopicEditEnabled(false)
 
   const { isLoading, errorMessage, commentItems } = useAppSelector(
     state => selectForumCommentsByParentId(state, 0) || {}
@@ -26,6 +39,8 @@ export const ForumComments: FC = () => {
   const topic = useAppSelector(state =>
     selectForumTopicById(state, +categoryId, +topicId)
   )
+  const userId = useAppSelector(selectCurrentUserId)
+  const { errorMessage: deleteErrorMessage } = useAppSelector(selectTopicState)
 
   useEffect(() => {
     if (!topic) {
@@ -35,8 +50,23 @@ export const ForumComments: FC = () => {
 
     return () => {
       dispatch(clearForumComments())
+      dispatch(clearLastAddedTopicError())
     }
   }, [dispatch])
+
+  const handleTopicDelete = () => {
+    dispatch(onDeleteForumTopic()).then(res => {
+      if (res.type.endsWith('fulfilled')) {
+        dispatch(onGetForumTopics(+categoryId))
+        navigate(
+          RoutesEnum.FORUM_CATEGORY.replace(
+            ':categoryId',
+            categoryId.toString()
+          )
+        )
+      }
+    })
+  }
 
   return isLoading && !commentItems ? (
     <Loader />
@@ -46,10 +76,39 @@ export const ForumComments: FC = () => {
     <Page404 />
   ) : (
     <div className={styles.area}>
+      <Link
+        className={styles.link}
+        to={RoutesEnum.FORUM_CATEGORY.replace(
+          ':categoryId',
+          categoryId.toString()
+        )}>
+        Вернуться к выбору темы
+      </Link>
       <div className={styles.wrapper}>
         <div className={styles.header}>
-          <h3>Комментарии к теме "{topic.topic_name || 'Без названия'}"</h3>
+          <h3 style={{ wordBreak: 'break-word' }}>
+            Комментарии к теме "{topic.topic_name || 'Без названия'}"
+          </h3>
+          {topic.user_id === userId && (
+            <div className={styles.svg_icons}>
+              <svg className={styles.svg_icon} onClick={enableTopicEdit}>
+                <use xlinkHref="./images/icons-sprite.svg#edit"></use>
+              </svg>
+              <svg className={styles.svg_icon} onClick={handleTopicDelete}>
+                <use xlinkHref="./images/icons-sprite.svg#delete"></use>
+              </svg>
+            </div>
+          )}
         </div>
+        {topicEditEnabled && (
+          <EditForumTopicName
+            handleFormReset={hideTopicEdit}
+            currentTopicName={topic.topic_name}
+          />
+        )}
+        {deleteErrorMessage && (
+          <span className={styles.delete_error}>{deleteErrorMessage}</span>
+        )}
         <hr />
         {isLoading && <Loader />}
         <ul className={styles.list}>

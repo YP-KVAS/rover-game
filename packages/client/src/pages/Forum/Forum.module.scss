@@ -61,3 +61,20 @@
   flex-direction: column;
   gap: 20px;
 }
+
+.svg_icons {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.svg_icon {
+  width: 25px;
+  height: 25px;
+  fill: var(--color-accent);
+  cursor: pointer;
+}
+
+.link, .delete_error {
+  color: var(--color-accent);
+}

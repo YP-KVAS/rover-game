@@ -11,6 +11,7 @@ export interface IForumTopic {
   topic_name: string
   date: string
   category_id: number
+  user_id: number
 }
 
 export interface AddForumComment {

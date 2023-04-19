@@ -11,13 +11,15 @@ import {
   onGetForumTopics,
 } from '../../../store/thunks/forum-thunk'
 import { useParams } from 'react-router-dom'
-import { selectAddTopicState } from '../../../store/selectors/forum-selector'
+import { selectTopicState } from '../../../store/selectors/forum-selector'
 import { AddForumItemWithState } from './AddForumItemWithState'
+import { selectCurrentUserId } from '../../../store/selectors/user-selector'
 
 export const AddForumTopic: FC = () => {
   const dispatch = useAppDispatch()
   const { categoryId = -1 } = useParams()
-  const { errorMessage } = useAppSelector(selectAddTopicState)
+  const { errorMessage } = useAppSelector(selectTopicState)
+  const userId = useAppSelector(selectCurrentUserId)
 
   const {
     handleSubmit,
@@ -29,12 +31,14 @@ export const AddForumTopic: FC = () => {
   })
 
   const handleFormSubmit = handleSubmit(data => {
-    dispatch(onAddForumTopic(data)).then(res => {
-      if (res.type.endsWith('fulfilled')) {
-        dispatch(onGetForumTopics(+categoryId))
-        handleFormReset()
-      }
-    })
+    if (userId) {
+      dispatch(onAddForumTopic({ ...data, userId })).then(res => {
+        if (res.type.endsWith('fulfilled')) {
+          dispatch(onGetForumTopics(+categoryId))
+          handleFormReset()
+        }
+      })
+    }
   })
 
   const handleFormReset = () => reset()

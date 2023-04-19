@@ -24,8 +24,8 @@ export const selectCategoryNameById = (
 ): IForumCategory | null =>
   state.forum.categories.categoryItems?.find(cat => cat.id === id) || null
 
-export const selectAddTopicState = (state: RootState) =>
-  state.forum.topicInfo.addTopicState
+export const selectTopicState = (state: RootState) =>
+  state.forum.topicInfo.topicState
 
 export const selectForumCommentsByParentId = (
   state: RootState,
@@ -34,3 +34,6 @@ export const selectForumCommentsByParentId = (
 
 export const selectLastAddedCommentState = (state: RootState) =>
   state.forum.commentInfo.lastAddedCommentState
+
+export const selectLastAddedTopicState = (state: RootState) =>
+  state.forum.topicInfo.topicState

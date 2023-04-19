@@ -87,7 +87,7 @@ export const ForumComment: FC<IForumComment> = ({
         </div>
       </div>
       {message ? (
-        <div>{message}</div>
+        <p className={styles.comment_message}>{message}</p>
       ) : (
         <p className={styles.deleted_comment}>Комментарий был удален.</p>
       )}

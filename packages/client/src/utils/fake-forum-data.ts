@@ -16,18 +16,21 @@ export const FORUM_TOPICS: Record<number, Array<IForumTopic>> = {
       topic_name: 'Новые уровни',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 1,
+      user_id: 172320,
     },
     {
       id: 2,
       topic_name: 'Управление',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 1,
+      user_id: 803086,
     },
     {
       id: 3,
       topic_name: 'Бонусы',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 1,
+      user_id: 172320,
     },
   ],
   2: [
@@ -36,12 +39,14 @@ export const FORUM_TOPICS: Record<number, Array<IForumTopic>> = {
       topic_name: 'Волшебная кнопка',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 2,
+      user_id: 803086,
     },
     {
       id: 6,
       topic_name: 'Как набрать 100 000 очков',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 2,
+      user_id: 172320,
     },
   ],
   3: [
@@ -50,12 +55,14 @@ export const FORUM_TOPICS: Record<number, Array<IForumTopic>> = {
       topic_name: 'Как играть?',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 3,
+      user_id: 803086,
     },
     {
       id: 8,
       topic_name: 'Не получается пройти даже 1-ый уровень...',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 3,
+      user_id: 172320,
     },
   ],
   4: [
@@ -64,18 +71,21 @@ export const FORUM_TOPICS: Record<number, Array<IForumTopic>> = {
       topic_name: 'Фильмы на вечер',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 4,
+      user_id: 172320,
     },
     {
       id: 10,
       topic_name: 'Котики',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 4,
+      user_id: 803086,
     },
     {
       id: 11,
       topic_name: 'Как  сварить гречку?',
       date: '2023-02-15T14:29:35+00:00',
       category_id: 4,
+      user_id: 172320,
     },
   ],
 }

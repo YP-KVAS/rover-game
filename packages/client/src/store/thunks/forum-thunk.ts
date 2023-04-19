@@ -2,9 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
   addForumComment,
   addForumTopic,
+  deleteForumTopic,
   getForumCategories,
   getForumComments,
   getForumTopics,
+  updateForumTopic,
 } from '../../utils/rest-api/forum-api'
 import {
   AddForumComment,
@@ -44,7 +46,7 @@ export const onGetForumTopics = createAsyncThunk<
 
 export const onAddForumTopic = createAsyncThunk<
   IForumTopic,
-  NewTopic,
+  NewTopic & { userId: number },
   { rejectValue: string }
 >('forum/onAddForumTopic', async (newTopic, { rejectWithValue }) => {
   try {
@@ -53,6 +55,32 @@ export const onAddForumTopic = createAsyncThunk<
     return rejectWithValue(
       (err as Error).message || 'При добавлении новой темы возникла ошибка'
     )
+  }
+})
+
+export const onUpdateForumTopic = createAsyncThunk<
+  IForumTopic,
+  { topic_name: string },
+  { rejectValue: string }
+>('forum/onUpdateForumTopic', async ({ topic_name }, { rejectWithValue }) => {
+  try {
+    return await updateForumTopic(topic_name)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Не удалось изменить название темы'
+    )
+  }
+})
+
+export const onDeleteForumTopic = createAsyncThunk<
+  void,
+  void,
+  { rejectValue: string }
+>('forum/onDeleteForumTopic', async (_, { rejectWithValue }) => {
+  try {
+    return await deleteForumTopic()
+  } catch (err: unknown) {
+    return rejectWithValue((err as Error).message || 'Не удалось удалить тему')
   }
 })
 

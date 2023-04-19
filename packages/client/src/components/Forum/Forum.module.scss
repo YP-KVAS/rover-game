@@ -64,6 +64,10 @@
   flex-direction: column;
 }
 
+.comment_message {
+  word-break: break-word;
+}
+
 .deleted_comment {
   font-style: italic;
   opacity: 0.5;
