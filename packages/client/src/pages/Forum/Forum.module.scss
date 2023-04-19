@@ -26,7 +26,7 @@
     color: var(--color-text-on-dark);
     font-size: var(--font-xl);
 
-    @include media-screen-medium {
+    @include media-screen-large {
       font-size: var(--font-sm);
     }
   }
@@ -37,6 +37,7 @@
   flex-direction: row;
   justify-content: space-between;
   gap: 15px;
+  padding-right: 15px;
 }
 
 .list {
@@ -45,9 +46,17 @@
   gap: 20px;
   overflow-y: auto;
   padding-right: 15px;
+
+  @include custom-scroll;
 }
 
-.topics {
+.list_item {
+  width: 100%;
+  min-width: fit-content;
+  border: 2px solid;
+}
+
+.area {
   display: flex;
   flex-direction: column;
   gap: 20px;

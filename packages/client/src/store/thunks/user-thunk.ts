@@ -4,6 +4,7 @@ import {
   changeAvatar,
   changePassword,
   changeProfileSettings,
+  getUserById,
 } from '../../utils/rest-api/user-api'
 
 export const onProfileSettingsChange = createAsyncThunk<
@@ -42,6 +43,20 @@ export const onPasswordChange = createAsyncThunk<
   } catch (err: unknown) {
     return rejectWithValue(
       (err as Error).message || 'Unable to  change password'
+    )
+  }
+})
+
+export const onGetUserById = createAsyncThunk<
+  User,
+  number,
+  { rejectValue: string }
+>('user/onGetUserById', async (userId, { rejectWithValue }) => {
+  try {
+    return await getUserById(userId)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Не удалось получить данные пользователя'
     )
   }
 })

@@ -2,6 +2,9 @@ import { RootState } from '../store'
 
 export const selectCurrentUser = (state: RootState) => state.user.user
 
+export const selectCurrentUserId = (state: RootState) =>
+  state.user.user?.id || null
+
 export const selectCurrentUserAvatar = (state: RootState) =>
   state.user.user?.avatar
 
@@ -13,3 +16,6 @@ export const selectChangePasswordState = (state: RootState) =>
 
 export const selectChangeAvatarState = (state: RootState) =>
   state.user.changeAvatar
+
+export const selectUserById = (state: RootState, id: number) =>
+  state.user.allUsers[id]

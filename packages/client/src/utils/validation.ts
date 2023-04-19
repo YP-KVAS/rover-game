@@ -101,3 +101,7 @@ export const addForumTopicValidationSchema = Yup.object().shape({
   [FormInputNames.FORUM_TITLE]: topicTitleValidation,
   [FormInputNames.FORUM_MESSAGE]: topicCommentValidation,
 })
+
+export const addForumMessageValidationSchema = Yup.object().shape({
+  [FormInputNames.FORUM_MESSAGE]: topicCommentValidation,
+})

@@ -1,5 +1,15 @@
-import { IForumCategory, IForumTopic, NewTopic } from '../types/forum'
-import { FORUM_CATEGORIES, FORUM_TOPICS } from '../fake-forum-data'
+import {
+  AddForumComment,
+  IForumCategory,
+  IForumComment,
+  IForumTopic,
+  NewTopic,
+} from '../types/forum'
+import {
+  FORUM_CATEGORIES,
+  FORUM_COMMENTS,
+  FORUM_TOPICS,
+} from '../fake-forum-data'
 import { FormInputNames } from '../types/forms'
 
 // TODO: implement Forum API (Sprint 8)
@@ -39,5 +49,45 @@ export function addForumTopic(data: NewTopic): Promise<IForumTopic> {
 
       return resolve(topic)
     }, TIMEOUT)
+  })
+}
+
+export function getForumComments(
+  parent_comment_id: number | null = null
+): Promise<Array<IForumComment>> {
+  return new Promise(resolve => {
+    const comments: Array<IForumComment> = !parent_comment_id
+      ? FORUM_COMMENTS[0]
+      : !FORUM_COMMENTS[parent_comment_id]
+      ? FORUM_COMMENTS[0]?.map(comment => ({
+          ...comment,
+          id: Math.floor(Date.now() * Math.random()),
+          parent_comment_id,
+        }))
+      : FORUM_COMMENTS[parent_comment_id]
+    setTimeout(() => resolve(comments || null), TIMEOUT)
+  })
+}
+
+export function addForumComment(
+  comment: AddForumComment
+): Promise<IForumComment> {
+  return new Promise(resolve => {
+    const newComment = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      reply_count: 0,
+      ...comment,
+    }
+    if (comment.parent_comment_id) {
+      FORUM_COMMENTS[comment.parent_comment_id] ||= []
+      FORUM_COMMENTS[comment.parent_comment_id] = [
+        ...FORUM_COMMENTS[comment.parent_comment_id],
+        newComment,
+      ]
+    } else {
+      FORUM_COMMENTS[0] = [...FORUM_COMMENTS[0], newComment]
+    }
+    setTimeout(() => resolve(newComment), TIMEOUT)
   })
 }

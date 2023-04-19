@@ -68,3 +68,21 @@ body {
     @content;
   }
 }
+
+@mixin custom-scroll() {
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(0 0 0 / 80%);
+    background-color: var(--color-disabled);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--color-primary);
+  }
+}
