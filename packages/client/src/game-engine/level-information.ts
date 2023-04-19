@@ -1,11 +1,15 @@
-import { dynamicImages } from './game-images'
-import { Car, MovingDirection, Rover } from '../utils/types/game'
+import { dynamicImages, triggerImages } from './game-images'
+import { Car, MovingDirection, Rover, TriggerInfo } from '../utils/types/game'
+import { CargoTrigger, DeliveryTrigger } from './game-objects/Triggers'
+import GameManager from './GameManager'
+import { BaseTrigger } from './game-objects/base-classes/BaseTrigger'
 
 export interface LevelInformation {
   tileSize: number
   rover: Rover
-  gameMap: Array<Array<Array<number>>>
-  cars: Array<Car>
+  gameMap: number[][][]
+  cars: Car[]
+  triggers: TriggerInfo[]
 }
 
 // 1 | 2
@@ -53,31 +57,95 @@ export const levels: Record<number, LevelInformation> = {
           img: dynamicImages.greenCar,
           coords: { x: 19 * this.tileSize, y: 5 * this.tileSize },
           movingDirection: MovingDirection.LEFT,
+          speed: 3,
         },
         {
           img: dynamicImages.yellowCar,
           coords: { x: 2 * this.tileSize, y: 11 * this.tileSize },
           movingDirection: MovingDirection.LEFT,
+          speed: 3,
         },
         {
           img: dynamicImages.yellowCar,
           coords: { x: 12 * this.tileSize, y: this.tileSize },
           movingDirection: MovingDirection.LEFT,
+          speed: 3,
         },
         {
           img: dynamicImages.redCar,
           coords: { x: 17 * this.tileSize, y: 5 * this.tileSize },
           movingDirection: MovingDirection.DOWN,
+          speed: 3,
         },
         {
           img: dynamicImages.redCar,
           coords: { x: 14 * this.tileSize, y: 12 * this.tileSize },
           movingDirection: MovingDirection.RIGHT,
+          speed: 3,
         },
         {
           img: dynamicImages.greenCar,
           coords: { x: 10 * this.tileSize, y: 6 * this.tileSize },
           movingDirection: MovingDirection.UP,
+          speed: 3,
+        },
+      ]
+    },
+    get triggers(): TriggerInfo[] {
+      return [
+        {
+          triggerId: 0,
+          description: 'Start 1 delivery',
+          coords: { x: 12.5 * this.tileSize, y: 8 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: true,
+          logic: () => BaseTrigger.enableTrigger(1),
+        },
+        {
+          triggerId: 1,
+          description: 'End 1 delivery',
+          coords: { x: 5.5 * this.tileSize, y: 3 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(2),
+        },
+        {
+          triggerId: 2,
+          description: 'Start 2 delivery',
+          coords: { x: 15.5 * this.tileSize, y: 5 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(3),
+        },
+        {
+          triggerId: 3,
+          description: 'End 2 delivery',
+          coords: { x: 14.5 * this.tileSize, y: 11 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(4),
+        },
+        {
+          triggerId: 4,
+          description: 'Start 3 delivery',
+          coords: { x: 1.5 * this.tileSize, y: 3 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(5),
+        },
+        {
+          triggerId: 5,
+          description: 'End 3 delivery',
+          coords: { x: 13.5 * this.tileSize, y: 5 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => GameManager.setLevel(2),
         },
       ]
     },
@@ -85,20 +153,20 @@ export const levels: Record<number, LevelInformation> = {
       // background layer (crosswalk and road)
       // prettier-ignore
       [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 164, 161, 114, 111, 114, 111, 114, 111, 173, 174, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 163, 162, 113, 112, 113, 112, 113, 112, 172, 171, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 131, 132, 0, 0, 0, 0, 0, 0, 121, 122, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 134, 133, 0, 0, 0, 0, 0, 0, 124, 123, 0],
-        [0, 164, 161, 144, 141, 114, 111, 114, 111, 182, 183, 0, 0, 0, 0, 0, 0, 213,214, 114],
-        [0, 163, 162, 143, 142, 113, 112, 113, 112, 181, 184, 0, 0, 0, 0, 0, 0, 212,211, 113],
-        [0, 121, 122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 121, 122, 0],
-        [0, 124, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 124, 123, 0],
-        [0, 121, 122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 121, 122, 0],
-        [0, 124, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 124, 123, 0],
-        [0, 191, 192, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 182, 183, 0],
-        [0, 194, 193, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 181, 184, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 4, 4, 4, 4, 4, 4, 0, 0, 164, 161, 114, 111, 114, 111, 114, 111, 173, 174, 2],
+        [2, 2, 2, 2, 2, 2, 2, 0, 0, 163, 162, 113, 112, 113, 112, 113, 112, 172, 171, 2],
+        [2, 0, 0, 0, 0, 0, 0, 0, 0, 131, 132, 0, 3, 3, 3, 3, 3, 121, 122, 2],
+        [2, 0, 0, 0, 0, 0, 0, 0, 0, 134, 133, 0, 3, 2, 2, 2, 2, 124, 123, 2],
+        [2, 164, 161, 144, 141, 114, 111, 114, 111, 182, 183, 0, 0, 0, 0, 0, 0, 213,214, 114],
+        [2, 163, 162, 143, 142, 113, 112, 113, 112, 181, 184, 0, 4, 4, 0, 0, 0, 212,211, 113],
+        [2, 121, 122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 121, 122, 2],
+        [2, 124, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 124, 123, 2],
+        [2, 121, 122, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 3, 3, 3, 3, 121, 122, 2],
+        [2, 124, 123, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3, 2, 2, 3, 124, 123, 2],
+        [2, 191, 192, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 182, 183, 2],
+        [2, 194, 193, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 181, 184, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
       ],
       // ui layer (buildings, plants)
       // prettier-ignore
@@ -126,7 +194,7 @@ export const levels: Record<number, LevelInformation> = {
       return {
         movingDirection: MovingDirection.RIGHT,
         coords: { x: 3 * this.tileSize, y: 8 * this.tileSize },
-        speed: 8,
+        speed: 4,
       }
     },
     get cars() {
@@ -135,46 +203,113 @@ export const levels: Record<number, LevelInformation> = {
           img: dynamicImages.greenCar,
           coords: { x: 2 * this.tileSize, y: 2 * this.tileSize },
           movingDirection: MovingDirection.RIGHT,
+          speed: 2,
         },
         {
           img: dynamicImages.greenCar,
           coords: { x: 25 * this.tileSize, y: 15 * this.tileSize },
           movingDirection: MovingDirection.LEFT,
+          speed: 2,
         },
         {
           img: dynamicImages.greenCar,
           coords: { x: 25 * this.tileSize, y: 7 * this.tileSize },
           movingDirection: MovingDirection.DOWN,
+          speed: 2,
         },
         {
           img: dynamicImages.yellowCar,
           coords: { x: 10 * this.tileSize, y: 15 * this.tileSize },
           movingDirection: MovingDirection.LEFT,
+          speed: 2,
         },
         {
           img: dynamicImages.yellowCar,
           coords: { x: 5 * this.tileSize, y: 10 * this.tileSize },
           movingDirection: MovingDirection.RIGHT,
+          speed: 2,
         },
         {
           img: dynamicImages.yellowCar,
           coords: { x: this.tileSize, y: 6 * this.tileSize },
           movingDirection: MovingDirection.DOWN,
+          speed: 2,
         },
         {
           img: dynamicImages.redCar,
           coords: { x: 18 * this.tileSize, y: 10 * this.tileSize },
           movingDirection: MovingDirection.UP,
+          speed: 2,
         },
         {
           img: dynamicImages.redCar,
           coords: { x: 23 * this.tileSize, y: 5 * this.tileSize },
           movingDirection: MovingDirection.LEFT,
+          speed: 2,
         },
         {
           img: dynamicImages.redCar,
           coords: { x: 10 * this.tileSize, y: 4 * this.tileSize },
           movingDirection: MovingDirection.UP,
+          speed: 2,
+        },
+      ]
+    },
+    get triggers(): TriggerInfo[] {
+      return [
+        {
+          triggerId: 0,
+          description: 'Start 1 delivery',
+          coords: { x: 13.5 * this.tileSize, y: 8 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: true,
+          logic: () => BaseTrigger.enableTrigger(1),
+        },
+        {
+          triggerId: 1,
+          description: 'End 1 delivery',
+          coords: { x: 5.5 * this.tileSize, y: 5 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(2),
+        },
+        {
+          triggerId: 2,
+          description: 'Start 2 delivery',
+          coords: { x: 5.5 * this.tileSize, y: 8 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(3),
+        },
+        {
+          triggerId: 3,
+          description: 'End 2 delivery',
+          coords: { x: 21.5 * this.tileSize, y: 9 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(4),
+        },
+        {
+          triggerId: 4,
+          description: 'Start 3 delivery',
+          coords: { x: 3.5 * this.tileSize, y: 13 * this.tileSize },
+          class: CargoTrigger,
+          img: triggerImages.cargoLoad,
+          enabled: false,
+          logic: () => BaseTrigger.enableTrigger(5),
+        },
+        {
+          triggerId: 5,
+          description: 'End 3 delivery',
+          coords: { x: 23.5 * this.tileSize, y: 9 * this.tileSize },
+          class: DeliveryTrigger,
+          img: triggerImages.cargoUnload,
+          enabled: false,
+          logic: () => GameManager.endGame(),
         },
       ]
     },
@@ -182,24 +317,24 @@ export const levels: Record<number, LevelInformation> = {
       // background layer (crosswalk and road)
       // prettier-ignore
       [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 164, 161, 114, 111, 114, 111, 114, 111, 222, 223, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 173, 174, 0],
-        [0, 163, 162, 113, 112, 113, 112, 113, 112, 221, 224, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 172, 171, 0],
-        [0, 121, 122, 0, 0, 0, 0, 0, 0, 121, 122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 121, 122, 0],
-        [0, 124, 123, 0, 0, 0, 0, 0, 0, 124, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 124, 123, 0],
-        [0, 121, 122, 0, 0, 0, 0, 0, 0, 121, 122, 0, 0, 0, 0, 0, 0, 164, 161, 114, 111, 114, 111, 114, 111, 231, 232, 0],
-        [0, 124, 123, 0, 0, 0, 0, 0, 0, 124, 123, 0, 0, 0, 0, 0, 0, 163, 162, 113, 112, 113, 112, 113, 112, 234, 233, 0],
-        [0, 121, 122, 0, 0, 0, 0, 0, 0, 131, 132, 0, 0, 0, 0, 0, 0, 131, 132, 0, 0, 0, 0, 0, 0, 121, 122, 0],
-        [0, 124, 123, 0, 0, 0, 0, 0, 0, 134, 133, 0, 0, 0, 0, 0, 0, 134, 133, 0, 0, 0, 0, 0, 0, 124, 123, 0],
-        [0, 213, 214, 114, 111, 114, 111, 114, 111, 151, 152, 144, 141, 114, 111, 114, 111, 182, 183, 0, 0, 0, 0, 0, 0, 213,214, 114],
-        [0, 212, 211, 113, 112, 113, 112, 113, 112, 154, 153, 143, 142, 113, 112, 113, 112, 181, 184, 0, 0, 0, 0, 0, 0, 212,211, 113],
-        [0, 121, 122, 1, 1, 1, 1, 1, 1, 131, 132, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 121, 122, 0],
-        [0, 124, 123, 1, 1, 1, 1, 1, 1, 134, 133, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 124, 123, 0],
-        [0, 121, 122, 1, 1, 1, 1, 1, 1, 121, 122, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 121, 122, 0],
-        [0, 124, 123, 1, 1, 1, 1, 1, 1, 124, 123, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 124, 123, 0],
-        [0, 191, 192, 114, 111, 114, 111, 114, 111, 204, 201, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 182, 183, 0],
-        [0, 194, 193, 113, 112, 113, 112, 113, 112, 203, 202, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 181, 184, 0],
-        [0, 0, 0, 0,0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+        [2, 164, 161, 114, 111, 114, 111, 114, 111, 222, 223, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 173, 174, 2],
+        [2, 163, 162, 113, 112, 113, 112, 113, 112, 221, 224, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 172, 171, 2],
+        [2, 121, 122, 4, 4, 4, 4, 4, 4, 121, 122, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 3, 3, 2, 2, 121, 122, 2],
+        [2, 124, 123, 2, 2, 2, 2, 2, 2, 124, 123, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 124, 123, 2],
+        [2, 121, 122, 0, 0, 0, 0, 0, 0, 121, 122, 0, 0, 0, 0, 0, 0, 164, 161, 114, 111, 114, 111, 114, 111, 231, 232, 2],
+        [2, 124, 123, 0, 3, 3, 3, 0, 0, 124, 123, 0, 0, 3, 3, 0, 0, 163, 162, 113, 112, 113, 112, 113, 112, 234, 233, 2],
+        [2, 121, 122, 0, 3, 3, 3, 0, 0, 131, 132, 0, 0, 3, 3, 0, 0, 131, 132, 0, 3, 3, 3, 3, 3, 121, 122, 2],
+        [2, 124, 123, 0, 0, 0, 0, 0, 0, 134, 133, 0, 0, 0, 0, 0, 0, 134, 133, 0, 3, 2, 2, 2, 2, 124, 123, 2],
+        [2, 213, 214, 114, 111, 114, 111, 114, 111, 151, 152, 144, 141, 114, 111, 114, 111, 182, 183, 0, 0, 0, 0, 0, 0, 213,214, 114],
+        [2, 212, 211, 113, 112, 113, 112, 113, 112, 154, 153, 143, 142, 113, 112, 113, 112, 181, 184, 4, 4, 0, 0, 4, 4, 212,211, 113],
+        [2, 121, 122, 3, 3, 3, 3, 2, 1, 131, 132, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 2, 2, 121, 122, 2],
+        [2, 124, 123, 3, 3, 2, 2, 2, 1, 134, 133, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 124, 123, 2],
+        [2, 121, 122, 1, 1, 1, 1, 1, 1, 121, 122, 4, 4, 4, 4, 0, 3, 3, 0, 0, 0, 3, 3, 3, 3, 121, 122, 2],
+        [2, 124, 123, 2, 2, 2, 2, 2, 1, 124, 123, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 3, 2, 2, 3, 124, 123, 2],
+        [2, 191, 192, 114, 111, 114, 111, 114, 111, 204, 201, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 114, 111, 182, 183, 2],
+        [2, 194, 193, 113, 112, 113, 112, 113, 112, 203, 202, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 113, 112, 181, 184, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
       ],
       // ui layer (buildings, plants)
       // prettier-ignore

@@ -1,19 +1,26 @@
 import React, { FC, RefObject, useEffect } from 'react'
 import styles from './GameField.module.scss'
 import { levels } from '../../game-engine/level-information'
-import { Canvas } from '../canvas/Canvas'
+import { Canvas } from '../Canvas/Canvas'
 import { MovingDirection } from '../../utils/types/game'
 import { StaticMap } from '../../game-engine/game-objects/StaticMap'
 import { Rover } from '../../game-engine/game-objects/Rover'
 import { Car } from '../../game-engine/game-objects/Car'
+import { GameStat } from './GameStat'
 
 interface GameFieldProps {
   level: number
-  gameFieldRef: RefObject<HTMLElement>
+  gameFieldRef: RefObject<HTMLDivElement>
 }
 
 export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
-  const { rover: roverInfo, gameMap, cars: carsInfo, tileSize } = levels[level]
+  const {
+    rover: roverInfo,
+    gameMap,
+    cars: carsInfo,
+    triggers: triggersInfo,
+    tileSize,
+  } = levels[level]
 
   const canvasWidth = gameMap[0][0].length * tileSize
   const canvasHeight = gameMap[0].length * tileSize
@@ -27,16 +34,32 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
     roverInfo.speed
   )
   const cars = carsInfo.map(
-    car => new Car(gameMap, tileSize, car.coords, car.movingDirection, car.img)
+    car =>
+      new Car(
+        gameMap,
+        tileSize,
+        car.coords,
+        car.movingDirection,
+        car.speed,
+        car.img
+      )
   )
   const staticMap = new StaticMap(gameMap, tileSize)
+
+  const triggers = triggersInfo.map(
+    trigger => new trigger.class(gameMap, tileSize, trigger)
+  )
 
   const drawDynamicLayer = (ctx: CanvasRenderingContext2D) => {
     rover.draw(ctx)
     const carsCoords = cars.map(car => car.coords)
     cars.forEach(car => {
-      car.move(rover.coords, carsCoords)
+      car.move(rover, carsCoords)
       car.draw(ctx)
+    })
+    triggers.forEach(trigger => {
+      trigger.check(rover)
+      trigger.draw(ctx)
     })
   }
 
@@ -73,26 +96,32 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
   }
 
   return (
-    <section
-      className={styles.section}
-      onKeyDown={handleOnKeyDown}
-      ref={gameFieldRef}
-      tabIndex={0}
-      style={{ minWidth: canvasWidth, minHeight: canvasHeight }}>
-      <Canvas
-        draw={ctx => staticMap.draw(ctx)}
-        zIndex={1}
-        width={canvasWidth}
-        height={canvasHeight}
-        isStatic={true}
-      />
-      <Canvas
-        draw={ctx => drawDynamicLayer(ctx)}
-        zIndex={2}
-        width={canvasWidth}
-        height={canvasHeight}
-        isStatic={false}
-      />
-    </section>
+    <div className={styles.wrapper}>
+      <div>
+        <GameStat />
+
+        <section
+          ref={gameFieldRef}
+          className={styles.section}
+          onKeyDown={handleOnKeyDown}
+          tabIndex={0}
+          style={{ minWidth: canvasWidth, minHeight: canvasHeight }}>
+          <Canvas
+            draw={ctx => staticMap.draw(ctx)}
+            zIndex={1}
+            width={canvasWidth}
+            height={canvasHeight}
+            isStatic={true}
+          />
+          <Canvas
+            draw={ctx => drawDynamicLayer(ctx)}
+            zIndex={2}
+            width={canvasWidth}
+            height={canvasHeight}
+            isStatic={false}
+          />
+        </section>
+      </div>
+    </div>
   )
 }

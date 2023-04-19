@@ -1,0 +1,22 @@
+.form_actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.form_error_message {
+  color: var(--color-accent);
+  text-align: center;
+  padding-top: 20px;
+}
+
+.link {
+  color: var(--color-text-on-dark);
+  text-align: center;
+
+  &:hover {
+    color: var(--color-accent);
+    transition: 0.4s;
+  }
+}

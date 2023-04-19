@@ -1,27 +1,35 @@
-@import "src/index";
+@import '../../index';
 
-.section {
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    position: relative;
-
-    &:focus {
-        outline: none;
-    }
+.wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 :fullscreen {
-    .section {
-        align-items: center;
-        transform: scale(1.2);
+  .wrapper {
+    align-items: center;
+    background: var(--bg-gradient);
+    transform: scale(1.2);
 
-        @include media-screen-large {
-            transform: scale(1);
-        }
-
-        @include media-screen-medium {
-            transform: scale(0.8);
-        }
+    @include media-screen-large {
+      transform: scale(1);
     }
+
+    @include media-screen-medium {
+      transform: scale(0.8);
+    }
+  }
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+
+  &:focus {
+    outline: none;
+  }
 }

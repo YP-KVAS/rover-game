@@ -20,17 +20,17 @@
     cursor: default;
   }
 
-  &-primary {
+  &_primary {
     background: var(--color-primary);
     color: var(--color-text-on-dark);
   }
 
-  &-secondary {
+  &_secondary {
     background: var(--color-secondary);
     color: var(--color-text-on-dark);
   }
 
-  &-accent {
+  &_accent {
     background: var(--color-accent);
     color: var(--color-text-on-ligh);
   }

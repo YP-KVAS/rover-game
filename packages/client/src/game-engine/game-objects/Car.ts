@@ -1,48 +1,77 @@
 import { Coords, MovingDirection } from '../../utils/types/game'
 import { GameBot } from './base-classes/GameBot'
+import gameManager from '../GameManager'
+import { Rover } from './Rover'
 
 export class Car extends GameBot {
   constructor(
-    gameMap: Array<Array<Array<number>>>,
+    gameMap: number[][][],
     tileSize: number,
     coords: Coords,
     movingDirection: MovingDirection,
+    speed: number,
     img: HTMLImageElement
   ) {
-    super(gameMap, tileSize, coords, movingDirection, tileSize, img)
+    super(gameMap, tileSize, coords, movingDirection, speed, img)
   }
 
-  needToStopOnCrosswalk(tileCoords: Coords, roverCoords: Coords): boolean {
-    return this.coordsAreIntersecting(tileCoords, roverCoords, 2, true)
+  needToStopOnCrosswalk(roverCoords: Coords): boolean {
+    let needToStop = false
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+        needToStop = this.coords.y - roverCoords.y >= this.tileSize
+        break
+      case MovingDirection.DOWN:
+        needToStop = roverCoords.y - this.coords.y >= this.tileSize
+        break
+      case MovingDirection.RIGHT:
+        needToStop = roverCoords.x - this.coords.x >= this.tileSize
+        break
+      case MovingDirection.LEFT:
+        needToStop = this.coords.x - roverCoords.x >= this.tileSize
+        break
+    }
+
+    return needToStop
   }
 
-  getNextCrosswalkCoords(tile: number, tileCoords: Coords): Coords | null {
+  getCrosswalkCoords(tileCoords: Coords): Coords | null {
+    const tile =
+      this.gameMap[0][tileCoords.y / this.tileSize][
+        tileCoords.x / this.tileSize
+      ]
+
     let startX: number | null = null
     let startY: number | null = null
 
     // check if next tile is crosswalk
-    switch (tile) {
-      case 131:
-      case 144:
-        startX = tileCoords.x
-        startY = tileCoords.y
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+        if (tile === 133) {
+          startX = tileCoords.x - this.tileSize
+          startY = tileCoords.y - this.tileSize
+        }
         break
-      case 132:
-      case 141:
-        startX = tileCoords.x - this.tileSize
-        startY = tileCoords.y
+      case MovingDirection.DOWN:
+        if (tile === 131) {
+          startX = tileCoords.x
+          startY = tileCoords.y
+        }
         break
-      case 133:
-      case 142:
-        startX = tileCoords.x - this.tileSize
-        startY = tileCoords.y - this.tileSize
+      case MovingDirection.RIGHT:
+        if (tile === 143) {
+          startX = tileCoords.x
+          startY = tileCoords.y - this.tileSize
+        }
         break
-      case 134:
-      case 143:
-        startX = tileCoords.x
-        startY = tileCoords.y - this.tileSize
+      case MovingDirection.LEFT:
+        if (tile === 141) {
+          startX = tileCoords.x - this.tileSize
+          startY = tileCoords.y
+        }
         break
     }
+
     return startX && startY ? { x: startX, y: startY } : null
   }
 
@@ -163,7 +192,7 @@ export class Car extends GameBot {
   changeDirectionIfCrossBusy(
     tile: number,
     otherCarsCoords: Array<Coords>,
-    nextCoords: Coords
+    nextTileCoords: Coords
   ) {
     switch (this.movingDirection) {
       case MovingDirection.DOWN:
@@ -173,7 +202,7 @@ export class Car extends GameBot {
             coords => rightX === coords.x && this.coords.y === coords.y
           )
           const diagTileNotEmpty = otherCarsCoords.find(
-            coords => rightX === coords.x && nextCoords.y === coords.y
+            coords => rightX === coords.x && nextTileCoords.y === coords.y
           )
           if (rightTileNotEmpty && diagTileNotEmpty) {
             this.movingDirection = MovingDirection.LEFT
@@ -183,11 +212,11 @@ export class Car extends GameBot {
       case MovingDirection.RIGHT:
         if (tile === 154 || tile === 221) {
           const upperY = this.coords.y - this.tileSize
-          const upperTileNotEmpty = otherCarsCoords.find(
+          const upperTileNotEmpty = !!otherCarsCoords.find(
             coords => this.coords.x === coords.x && upperY === coords.y
           )
-          const diagTileNotEmpty = otherCarsCoords.find(
-            coords => nextCoords.x === coords.x && upperY === coords.y
+          const diagTileNotEmpty = !!otherCarsCoords.find(
+            coords => nextTileCoords.x === coords.x && upperY === coords.y
           )
           if (upperTileNotEmpty && diagTileNotEmpty) {
             this.movingDirection = MovingDirection.DOWN
@@ -197,67 +226,120 @@ export class Car extends GameBot {
     }
   }
 
-  move(roverCoords: Coords, allCarsCoords: Array<Coords>) {
-    if (this.collideWithRover(roverCoords)) {
-      // TODO: add game over or reduce health logic
-      console.warn('Game Over')
-      return
-    }
-
-    // allow car to go out of the field
-    // car should disappear and appear after 5 sec
+  getCurrentTileCoords(): Coords {
+    let row: number
+    let column: number
     if (
-      this.movingDirection === MovingDirection.RIGHT &&
-      this.coords.x / this.tileSize === this.gameMap[0][0].length - 1
+      this.movingDirection === MovingDirection.UP ||
+      this.movingDirection === MovingDirection.DOWN
     ) {
-      this.coords.x += this.tileSize
-      window.setTimeout(() => {
-        this.coords.y -= this.tileSize
-        this.movingDirection = MovingDirection.LEFT
-      }, 5_000)
+      row = Math.floor(this.coords.y / this.tileSize)
+      column =
+        this.movingDirection === MovingDirection.UP
+          ? Math.floor(this.coords.x / this.tileSize)
+          : Math.ceil(this.coords.x / this.tileSize)
+    } else {
+      row =
+        this.movingDirection === MovingDirection.LEFT
+          ? Math.floor(this.coords.y / this.tileSize)
+          : Math.ceil(this.coords.y / this.tileSize)
+      column = Math.floor(this.coords.x / this.tileSize)
+    }
+    return { x: column * this.tileSize, y: row * this.tileSize }
+  }
+
+  move(rover: Rover, allCarsCoords: Array<Coords>) {
+    if (this.collideWithRover(rover.coords)) {
+      gameManager.roverHit()
+      rover.hitting()
       return
     }
 
-    // if there is a car in the next tile, stop
+    // check if there is a car ahead
     const nextCoords = this.getNextCoords()
-    const nextTileNotEmpty = allCarsCoords.find(
-      coords => nextCoords.x === coords.x && nextCoords.y === coords.y
+    const nextCoordsNotEmpty = !!allCarsCoords.find(
+      coords =>
+        Math.abs(nextCoords.x - coords.x) < this.tileSize &&
+        Math.abs(nextCoords.y - coords.y) < this.tileSize &&
+        !(this.coords.x === coords.x && this.coords.y === coords.y)
     )
-    const tile =
-      this.gameMap[0][this.coords.y / this.tileSize][
-        this.coords.x / this.tileSize
-      ]
-    if (nextTileNotEmpty) {
-      // change direction if cross is fully busy
-      this.changeDirectionIfCrossBusy(tile, allCarsCoords, nextCoords)
-      return
-    }
 
-    // if next tile is crosswalk with rover, stop
-    const nextRow = nextCoords.y / this.tileSize
-    const nextColumn = nextCoords.x / this.tileSize
-    const nextTile = this.gameMap[0][nextRow][nextColumn]
-    const nextCrosswalkCoords = this.getNextCrosswalkCoords(
-      nextTile,
-      nextCoords
-    )
+    // Tile border
     if (
-      nextCrosswalkCoords &&
-      this.needToStopOnCrosswalk(nextCrosswalkCoords, roverCoords)
+      Number.isInteger(this.coords.x / this.tileSize) &&
+      Number.isInteger(this.coords.y / this.tileSize)
     ) {
-      return
-    }
+      // allow car to go out of the field
+      // car should disappear and appear after 5 sec
+      if (
+        this.movingDirection === MovingDirection.RIGHT &&
+        this.coords.x / this.tileSize === this.gameMap[0][0].length
+      ) {
+        this.coords.x += this.speed
+        window.setTimeout(() => {
+          this.coords.y -= this.tileSize
+          this.movingDirection = MovingDirection.LEFT
+        }, 5_000)
+        return
+      }
 
-    // if current tile is cross, go straight or change direction randomly
-    if (this.isAllowedToChangeDirection(tile)) {
-      this.changeMovingDirectionOrGoStraight(tile)
-      return
-    }
+      const tile =
+        this.gameMap[0][this.coords.y / this.tileSize][
+          this.coords.x / this.tileSize
+        ]
 
-    // if tile is corner, certain part of cross => change direction
-    const directionChanged = this.changeDirectionIfCrossOrCorner(tile)
-    if (directionChanged) {
-      return
+      // if tile is corner, certain part of cross => change direction
+      const directionChanged = this.changeDirectionIfCrossOrCorner(tile)
+      if (directionChanged) {
+        return
+      }
+
+      const nextTileCoords = this.getNextCoords(this.tileSize)
+
+      // if there is a car ahead, stop or change direction on busy cross
+      if (nextCoordsNotEmpty) {
+        this.changeDirectionIfCrossBusy(tile, allCarsCoords, nextTileCoords)
+        return
+      }
+
+      // if next tile is crosswalk with rover, stop
+      const nextCrosswalkCoords = this.getCrosswalkCoords(nextTileCoords)
+      if (
+        nextCrosswalkCoords &&
+        this.coordsAreIntersecting(
+          nextCrosswalkCoords,
+          rover.coords,
+          2,
+          true
+        ) &&
+        this.needToStopOnCrosswalk(rover.coords)
+      ) {
+        return
+      }
+
+      // if current tile is cross, go straight or change direction randomly
+      if (this.isAllowedToChangeDirection(tile)) {
+        this.changeMovingDirectionOrGoStraight(tile)
+        return
+      }
+    }
+    // Tile middle
+    else {
+      // if there is a car ahead, stop
+      if (nextCoordsNotEmpty) {
+        return
+      }
+
+      // if current tile is crosswalk with rover, stop
+      const tileCoords = this.getCurrentTileCoords()
+      const crosswalkCoords = this.getCrosswalkCoords(tileCoords)
+      if (
+        crosswalkCoords &&
+        this.coordsAreIntersecting(crosswalkCoords, rover.coords, 2, true) &&
+        this.needToStopOnCrosswalk(rover.coords)
+      ) {
+        return
+      }
     }
 
     this.goStraight()

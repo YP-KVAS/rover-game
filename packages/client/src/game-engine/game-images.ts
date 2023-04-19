@@ -1,8 +1,14 @@
-// sidewalk
+// background
 const sideWalk = new Image()
-sideWalk.src = './images/sidewalk/sidewalk.jpg'
+sideWalk.src = './images/background/sidewalk.jpg'
 const sideWalk2 = new Image()
-sideWalk2.src = './images/sidewalk/sidewalk-2.png'
+sideWalk2.src = './images/background/sidewalk-2.png'
+const ground = new Image()
+ground.src = './images/background/ground.png'
+const grass = new Image()
+grass.src = './images/background/grass.png'
+const grass2 = new Image()
+grass2.src = './images/background/grass-2.png'
 
 // road elements
 const roadCorner = new Image()
@@ -66,9 +72,15 @@ roverOpenRight.src = './images/rover/rover-open-right.png'
 const roverOpenLeft = new Image()
 roverOpenLeft.src = './images/rover/rover-open-left.png'
 
+const cargoLoad = new Image()
+cargoLoad.src = './images/triggers/cargo-load.png'
+const cargoUnload = new Image()
+cargoUnload.src = './images/triggers/cargo-unload.png'
+
 export const tileMapImages = {
   sideWalk,
   sideWalk2,
+  ground,
   roadCorner,
   roadCross,
   roadTCross,
@@ -76,6 +88,8 @@ export const tileMapImages = {
   roadStraight,
   tree,
   flower,
+  grass,
+  grass2,
   postOffice,
   policeOffice,
   house1,
@@ -95,11 +109,16 @@ export const roverImages = {
   roverRight,
   roverLeft,
   roverOpenLeft,
-  roverOpenRight
+  roverOpenRight,
 }
 
 export const dynamicImages = {
   greenCar,
   yellowCar,
   redCar,
+}
+
+export const triggerImages = {
+  cargoLoad,
+  cargoUnload,
 }

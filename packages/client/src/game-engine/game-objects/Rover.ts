@@ -1,10 +1,18 @@
 import { DynamicGameCharacter } from './base-classes/DynamicGameCharacter'
 import { roverImages } from '../game-images'
 import { Coords, MovingDirection } from '../../utils/types/game'
-import { IMG_WIDTH } from '../../utils/const-variables/game'
+import { IMG_WIDTH, immunityTimeMs } from '../../utils/const-variables/game'
+
+interface FreezeMov {
+  start: number
+  duration: number
+}
 
 export class Rover extends DynamicGameCharacter {
   protected img: HTMLImageElement
+  private _freezeMov: FreezeMov | null = null
+  private _blinking = false
+  private _blink = false
 
   constructor(
     gameMap: Array<Array<Array<number>>>,
@@ -35,7 +43,30 @@ export class Rover extends DynamicGameCharacter {
     this.img = this.getRoverImg()
   }
 
+  openRover(freezeSec = 1000) {
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+        this.movingDirection = MovingDirection.RIGHT
+        this.img = roverImages.roverOpenRight
+        break
+      case MovingDirection.DOWN:
+        this.movingDirection = MovingDirection.LEFT
+        this.img = roverImages.roverOpenLeft
+        break
+      case MovingDirection.RIGHT:
+        this.img = roverImages.roverOpenRight
+        break
+      case MovingDirection.LEFT:
+        this.img = roverImages.roverOpenLeft
+        break
+    }
+    this._freezeMov = { start: performance.now(), duration: freezeSec }
+  }
+
   draw(ctx: CanvasRenderingContext2D): void {
+    console.log(this._blink)
+    if (this._blink) return
+
     // vertical offset to correctly display rover in a tile
     const offset = Math.round(
       (this.img.height / IMG_WIDTH) * this.tileSize - this.tileSize
@@ -58,9 +89,50 @@ export class Rover extends DynamicGameCharacter {
       this.tileSize,
       this.tileSize + offset
     )
+
+    if (this._freezeMov) {
+      if (
+        performance.now() - this._freezeMov.start >=
+        this._freezeMov.duration
+      ) {
+        this._freezeMov = null
+        this.img = this.getRoverImg()
+      }
+    }
+  }
+
+  private async _blinkFoo() {
+    function sleep(ms: number) {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+
+    this._blink = true
+    await sleep(200)
+    this._blink = false
+    console.log('blink')
+  }
+
+  hitting() {
+    if (this._blinking) return
+
+    this._blinking = true
+
+    this._blinkFoo()
+    const interval = setInterval(this._blinkFoo.bind(this), 400)
+
+    setTimeout(() => {
+      clearInterval(interval)
+      this._blinking = false
+    }, immunityTimeMs)
   }
 
   move(movingDirection: MovingDirection): void {
+    // disable movement if not allowed
+    if (this._freezeMov) {
+      return
+    }
+
+    // switch direction
     if (this.movingDirection !== movingDirection) {
       this.changeMovingDirection(movingDirection)
       return

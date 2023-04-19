@@ -15,7 +15,11 @@ const initialState: InitialState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    clearAuthError: state => {
+      state.errorMessage = null
+    },
+  },
   extraReducers: builder => {
     // onGetUser
     builder
@@ -28,9 +32,9 @@ const authSlice = createSlice({
         state.isLoading = true
         state.errorMessage = null
       })
-      .addCase(onGetUser.rejected, (state, action) => {
+      .addCase(onGetUser.rejected, state => {
+        state.isLoggedIn = false
         state.isLoading = false
-        state.errorMessage = action.payload || null
       })
 
     // onSignUp
@@ -83,3 +87,4 @@ const authSlice = createSlice({
 })
 
 export const authReducer = authSlice.reducer
+export const { clearAuthError } = authSlice.actions

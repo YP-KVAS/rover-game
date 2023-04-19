@@ -10,7 +10,8 @@
     "test": "lerna run test",
     "lint": "lerna run lint",
     "format": "lerna run format",
-    "preview": "lerna run preview"
+    "preview": "lerna run preview",
+    "prepare": "husky install"
   },
   "license": "MIT",
   "workspaces": [
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@evilmartians/lefthook": "^1.1.1",
-    "lerna": "^5.4.3"
+    "lerna": "^5.4.3",
+    "husky": "^8.0.0"
   }
 }
