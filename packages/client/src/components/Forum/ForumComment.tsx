@@ -88,6 +88,13 @@ export const ForumComment: FC<IForumComment> = ({
   }
 
   const handleCommentDelete = () => {
+    if (addCommentEnabled) {
+      hideCommentInput()
+    }
+    if (editCommentEnabled) {
+      hideCommentEditInput()
+    }
+
     dispatch(onDeleteForumComment(id)).then(res => {
       if (res.type.endsWith('fulfilled')) {
         dispatch(onGetForumComments(parent_comment_id))
