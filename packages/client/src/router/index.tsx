@@ -7,6 +7,7 @@ import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
 import { Start } from '../pages/Start/Start'
 import { Registration } from '../pages/Registration'
+import { Leaderboard } from '../pages/Leaderboard/Leaderboard'
 import { UserSettings } from '../pages/UserSettings'
 import { Login } from '../pages/Login'
 
@@ -51,7 +52,7 @@ export const router = createBrowserRouter([
       },
       {
         path: RoutesEnum.LEADERBOARD,
-        element: in_work_component,
+        element: <Leaderboard />,
       },
       {
         path: RoutesEnum.ERROR_500,
