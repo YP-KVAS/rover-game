@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useRef } from 'react'
+import React, { FC, RefObject, useRef, useState } from 'react'
 import styles from './GamePage.module.scss'
 import { GameField } from '../../components/GameField/GameField'
 import { Button } from '../../components/Button/Button'
@@ -10,9 +10,11 @@ const GamePage: FC = () => {
   const gamePageRef: RefObject<HTMLDivElement> = useRef(null)
   const gameFieldRef: RefObject<HTMLDivElement> = useRef(null)
 
-  const [level, setLevel] = React.useState(1)
-
+  const [level, setLevel] = useState(1)
+  const [isGameOver, setGameOverState] = useState(false)
   gameManager.useChangeLevel(setLevel)
+  gameManager.useChangeGameOverState(setGameOverState)
+
   const setFullScreen = () => {
     gamePageRef.current
       ?.requestFullscreen()
@@ -21,7 +23,9 @@ const GamePage: FC = () => {
       .catch(() => console.warn('Fullscreen is not supported'))
   }
 
-  return (
+  return isGameOver ? (
+    <div>GAME OVER (PAGE IN WORK)</div>
+  ) : (
     <div className={styles.game}>
       <div ref={gamePageRef}>
         {/*TODO: replace with actual game level, add game level progress, timer, etc.*/}
