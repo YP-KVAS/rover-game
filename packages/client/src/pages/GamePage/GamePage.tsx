@@ -21,28 +21,18 @@ export const GamePage: FC = () => {
       .catch(() => console.warn('Fullscreen is not supported'))
   }
 
-  return (
-    <>
-    {(() => {
-      if(isGameOver) {
-        return (
-          <div>GAME OVER (PAGE IN WORK)</div>
-        )
-      } else {
-        return (
-          <div className={styles.game}>
-            <div ref={gamePageRef}>
-              {/*TODO: replace with actual game level, add game level progress, timer, etc.*/}
-              <GameField level={level} gameFieldRef={gameFieldRef} />
-            </div>
-            <Button clickHandler={setFullScreen}>
-              Перейти в полноэкранный режим
-            </Button>
-          </div>
-        )
-      }
-    })()}
-    </>
-  )
+  return isGameOver ?
+    ( <div>GAME OVER (PAGE IN WORK)</div> ) :
+    (
+      <div className={styles.game}>
+        <div ref={gamePageRef}>
+          {/*TODO: replace with actual game level, add game level progress, timer, etc.*/}
+          <GameField level={level} gameFieldRef={gameFieldRef} />
+        </div>
+        <Button clickHandler={setFullScreen}>
+          Перейти в полноэкранный режим
+        </Button>
+      </div>
+    )
 
 }
