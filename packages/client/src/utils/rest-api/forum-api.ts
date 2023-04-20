@@ -49,6 +49,10 @@ export function addForumTopic(
         user_id: data.userId,
       }
 
+      if (!FORUM_TOPICS[categoryId]) {
+        FORUM_TOPICS[categoryId] = []
+      }
+
       FORUM_TOPICS[categoryId] = [...FORUM_TOPICS[categoryId], topic]
 
       return resolve(topic)
