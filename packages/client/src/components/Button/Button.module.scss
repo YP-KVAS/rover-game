@@ -1,0 +1,37 @@
+.btn {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: var(--shadow);
+  transition: all;
+  transition-duration: 0.5s;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+  }
+
+  &:active {
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:disabled {
+    background: var(--color-disabled);
+    cursor: default;
+  }
+
+  &_primary {
+    background: var(--color-primary);
+    color: var(--color-text-on-dark);
+  }
+
+  &_secondary {
+    background: var(--color-secondary);
+    color: var(--color-text-on-dark);
+  }
+
+  &_accent {
+    background: var(--color-accent);
+    color: var(--color-text-on-ligh);
+  }
+}

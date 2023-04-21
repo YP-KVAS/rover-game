@@ -1,0 +1,26 @@
+.input_error {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  margin-right: 15px;
+  width: max-content;
+  max-width: 320px;
+  font-size: var(--font-xs);
+  background: var(--color-accent);
+  border-radius: 5px;
+  padding: 5px;
+  color: var(--color-text-on-light);
+
+  &:after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid var(--color-accent);
+    top: 50%;
+    left: 100%;
+    transform: translate(0, -50%) rotate(-90deg);
+  }
+}

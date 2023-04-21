@@ -1,0 +1,31 @@
+<svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <symbol id="sun" viewBox="0 0 24 24" fill="none" stroke="current">
+            <path d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 1V3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 21V23" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4.22021 4.21997L5.64021 5.63997" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18.3599 18.36L19.7799 19.78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 12H23" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4.22021 19.78L5.64021 18.36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18.3599 5.63997L19.7799 4.21997" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <symbol id="moon" viewBox="0 0 24 24" fill="none" stroke="current">
+            <path d="M20.9999 12.79C20.8426 14.4922 20.2038 16.1144 19.1581 17.4668C18.1125 18.8192 16.7034 19.8458 15.0956 20.4265C13.4878 21.0073 11.7479 21.1181 10.0794 20.7461C8.41092 20.3741 6.8829 19.5345 5.67413 18.3258C4.46536 17.117 3.62584 15.589 3.25381 13.9205C2.88178 12.252 2.99262 10.5121 3.57336 8.9043C4.15411 7.29651 5.18073 5.88737 6.53311 4.84175C7.8855 3.79614 9.5077 3.15731 11.2099 3C10.2133 4.34827 9.73375 6.00945 9.85843 7.68141C9.98312 9.35338 10.7038 10.9251 11.8893 12.1106C13.0748 13.2961 14.6465 14.0168 16.3185 14.1415C17.9905 14.2662 19.6516 13.7866 20.9999 12.79V12.79Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+        <symbol id="edit" width="20" height="20" viewBox="0 0 20 20" fill="current">
+            <path d="M0.83545 15.5571L0 20L4.44291 19.1645L16.4621 7.1453L12.8547 3.53784L0.83545 15.5571ZM3.96495 18.2589L1.22608 18.7739L1.74108 16.035L12.8547 4.92143L15.0785 7.1453L3.96495 18.2589Z" fill="current"/>
+            <path d="M16.3925 0L13.6853 2.70724L17.2927 6.31463L19.9999 3.60739L16.3925 0ZM15.0689 2.70724L16.3925 1.38359L18.6163 3.60739L17.2927 4.93104L15.0689 2.70724Z" fill="current"/>
+        </symbol>
+        <symbol id="exit" fill="none" stroke="current" height="200px" width="200px" viewBox="0 0 384.971 384.971">
+            <g>
+                <line class="cls-1" x1="15.92" x2="28.92" y1="16" y2="16"/>
+                <path d="M23.93,25v3h-16V4h16V7h2V3a1,1,0,0,0-1-1h-18a1,1,0,0,0-1,1V29a1,1,0,0,0,1,1h18a1,1,0,0,0,1-1V25Z"/><line class="cls-1" x1="28.92" x2="24.92" y1="16" y2="20"/>
+                <line class="cls-1" x1="28.92" x2="24.92" y1="16" y2="12"/>
+                <line class="cls-1" x1="24.92" x2="24.92" y1="8.09" y2="6.09"/>
+                <line class="cls-1" x1="24.92" x2="24.92" y1="26" y2="24"/>
+            </g>
+        </symbol>
+    </defs>
+</svg>
