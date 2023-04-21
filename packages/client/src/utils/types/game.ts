@@ -45,3 +45,10 @@ export interface GameStatType {
   hitPoints: number
   timer: number
 }
+
+export type LevelProgress =
+  | 'notStarted'
+  | 'playing'
+  | 'completed'
+  | 'willFail'
+  | 'failed'

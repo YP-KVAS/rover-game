@@ -5,7 +5,6 @@ import { Main } from '../pages/MainPage/Main'
 import { RoutesEnum } from '../utils/const-variables/routes'
 import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
-import { Start } from '../pages/Start/Start'
 import { Registration } from '../pages/Registration'
 import { Leaderboard } from '../pages/Leaderboard/Leaderboard'
 import { UserSettings } from '../pages/UserSettings'
@@ -41,10 +40,6 @@ export const router = createBrowserRouter([
       {
         path: RoutesEnum.FORUM,
         element: in_work_component,
-      },
-      {
-        path: RoutesEnum.START,
-        element: <Start />,
       },
       {
         path: RoutesEnum.GAME,

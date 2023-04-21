@@ -13,6 +13,7 @@ export class Rover extends DynamicGameCharacter {
   private _freezeMov: FreezeMov | null = null
   private _blinking = false
   private _blink = false
+  private _isGameOver = false
 
   constructor(
     gameMap: Array<Array<Array<number>>>,
@@ -23,6 +24,8 @@ export class Rover extends DynamicGameCharacter {
   ) {
     super(gameMap, tileSize, coords, movingDirection, speed)
     this.img = this.getRoverImg()
+    this.hitting = this.hitting.bind(this)
+    this.setGameOver = this.setGameOver.bind(this)
   }
 
   getRoverImg() {
@@ -43,7 +46,7 @@ export class Rover extends DynamicGameCharacter {
     this.img = this.getRoverImg()
   }
 
-  openRover(freezeSec = 1000) {
+  openRover(freezeMs = 1000) {
     switch (this.movingDirection) {
       case MovingDirection.UP:
         this.movingDirection = MovingDirection.RIGHT
@@ -60,7 +63,7 @@ export class Rover extends DynamicGameCharacter {
         this.img = roverImages.roverOpenLeft
         break
     }
-    this._freezeMov = { start: performance.now(), duration: freezeSec }
+    this._freezeMov = { start: performance.now(), duration: freezeMs }
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
@@ -111,7 +114,7 @@ export class Rover extends DynamicGameCharacter {
   }
 
   hitting() {
-    if (this._blinking) return
+    if (this._blinking || this._isGameOver) return
 
     this._blinking = true
 
@@ -122,6 +125,12 @@ export class Rover extends DynamicGameCharacter {
       clearInterval(interval)
       this._blinking = false
     }, immunityTimeMs)
+  }
+
+  setGameOver() {
+    this._blink = false
+    this._blinking = false
+    this._isGameOver = true
   }
 
   move(movingDirection: MovingDirection): void {

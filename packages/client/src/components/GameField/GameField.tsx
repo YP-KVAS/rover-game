@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useEffect } from 'react'
+import React, { FC, RefObject, useEffect, useState } from 'react'
 import styles from './GameField.module.scss'
 import { levels } from '../../game-engine/level-information'
 import { Canvas } from '../Canvas/Canvas'
@@ -6,7 +6,9 @@ import { MovingDirection } from '../../utils/types/game'
 import { StaticMap } from '../../game-engine/game-objects/StaticMap'
 import { Rover } from '../../game-engine/game-objects/Rover'
 import { Car } from '../../game-engine/game-objects/Car'
-import { GameStat } from './GameStat'
+import { GameStat } from './GameStat/GameStat'
+import { GameControls } from './GameControls/GameControls'
+import eventBus from '../../game-engine/services/EventBus'
 
 interface GameFieldProps {
   level: number
@@ -14,6 +16,14 @@ interface GameFieldProps {
 }
 
 export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  const changeIsPlayingState = (isPlaying: boolean) => {
+    setIsPlaying(isPlaying)
+    // focus to start listening keyboard events
+    gameFieldRef.current?.focus()
+  }
+
   const {
     rover: roverInfo,
     gameMap,
@@ -50,11 +60,18 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
     trigger => new trigger.class(gameMap, tileSize, trigger)
   )
 
+  useEffect(() => {
+    eventBus.addListeners(rover)
+    return () => {
+      eventBus.removeListeners()
+    }
+  }, [isPlaying])
+
   const drawDynamicLayer = (ctx: CanvasRenderingContext2D) => {
     rover.draw(ctx)
     const carsCoords = cars.map(car => car.coords)
     cars.forEach(car => {
-      car.move(rover, carsCoords)
+      car.move(rover.coords, carsCoords)
       car.draw(ctx)
     })
     triggers.forEach(trigger => {
@@ -62,11 +79,6 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
       trigger.draw(ctx)
     })
   }
-
-  useEffect(() => {
-    // focus to start listening keyboard events
-    gameFieldRef.current?.focus()
-  }, [])
 
   const handleOnKeyDown = (event: React.KeyboardEvent) => {
     event.preventDefault()
@@ -97,7 +109,7 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
 
   return (
     <div className={styles.wrapper}>
-      <div>
+      <div className={styles.field}>
         <GameStat />
 
         <section
@@ -113,14 +125,18 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
             height={canvasHeight}
             isStatic={true}
           />
-          <Canvas
-            draw={ctx => drawDynamicLayer(ctx)}
-            zIndex={2}
-            width={canvasWidth}
-            height={canvasHeight}
-            isStatic={false}
-          />
+          {isPlaying && (
+            <Canvas
+              draw={ctx => drawDynamicLayer(ctx)}
+              zIndex={2}
+              width={canvasWidth}
+              height={canvasHeight}
+              isStatic={false}
+            />
+          )}
         </section>
+
+        <GameControls changeIsPlayingState={changeIsPlayingState} />
       </div>
     </div>
   )

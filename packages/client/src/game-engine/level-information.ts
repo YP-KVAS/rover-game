@@ -147,7 +147,7 @@ export const levels: Record<number, LevelInformation> = {
           class: DeliveryTrigger,
           img: triggerImages.cargoUnload,
           enabled: false,
-          logic: () => GameManager.setLevel(2),
+          logic: () => GameManager.completeLevel(),
         },
       ]
     },
@@ -312,7 +312,7 @@ export const levels: Record<number, LevelInformation> = {
           class: DeliveryTrigger,
           img: triggerImages.cargoUnload,
           enabled: false,
-          logic: () => GameManager.endGame(),
+          logic: () => GameManager.completeLevel(),
         },
       ]
     },
@@ -364,3 +364,5 @@ export const levels: Record<number, LevelInformation> = {
     ],
   },
 }
+
+export const maxLevel = Object.keys(levels).length

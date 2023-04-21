@@ -1,9 +1,11 @@
 import { Coords, MovingDirection } from '../../utils/types/game'
 import { GameBot } from './base-classes/GameBot'
-import gameManager from '../GameManager'
-import { Rover } from './Rover'
+import eventBus, { RoverEvents } from '../services/EventBus'
 
 export class Car extends GameBot {
+  private _directionChanged = false
+  private _isOutOfField = false
+
   constructor(
     gameMap: number[][][],
     tileSize: number,
@@ -79,11 +81,20 @@ export class Car extends GameBot {
     let allowedToChange = false
     switch (this.movingDirection) {
       case MovingDirection.UP:
-        allowedToChange = tile === 211 || tile === 224 || tile === 232
+        allowedToChange =
+          tile === 152 ||
+          tile === 153 ||
+          tile === 211 ||
+          tile === 224 ||
+          tile === 232
         break
       case MovingDirection.DOWN:
         allowedToChange =
-          tile === 212 || tile === 151 || tile === 204 || tile === 231
+          tile === 212 ||
+          tile === 151 ||
+          tile === 154 ||
+          tile === 204 ||
+          tile === 231
         break
       case MovingDirection.RIGHT:
         allowedToChange =
@@ -102,48 +113,55 @@ export class Car extends GameBot {
     return allowedToChange
   }
 
-  changeMovingDirectionOrGoStraight(tile: number) {
+  changeMovingDirectionOrNotRandomly(tile: number): boolean {
     const random = Math.round(Math.random())
+    let directionChanged = false
+
     switch (this.movingDirection) {
       case MovingDirection.UP:
         if (random === 0) {
-          this.coords.y -= this.speed
-        } else {
           this.movingDirection =
-            tile === 232 ? MovingDirection.LEFT : MovingDirection.RIGHT
+            tile === 232 || tile === 152
+              ? MovingDirection.LEFT
+              : MovingDirection.RIGHT
+          directionChanged = true
         }
         break
+
       case MovingDirection.DOWN:
         if (random === 0) {
-          this.coords.y += this.speed
-        } else {
           this.movingDirection =
-            tile === 212 ? MovingDirection.RIGHT : MovingDirection.LEFT
+            tile === 212 || tile === 154
+              ? MovingDirection.RIGHT
+              : MovingDirection.LEFT
+          directionChanged = true
         }
         break
+
       case MovingDirection.RIGHT:
         if (random === 0) {
-          tile === 204
-            ? (this.coords.y += this.speed)
-            : (this.coords.x += this.speed)
-        } else {
           this.movingDirection =
             tile === 204
               ? MovingDirection.LEFT
               : tile === 202 || tile === 153
               ? MovingDirection.UP
               : MovingDirection.DOWN
+          directionChanged = true
         }
         break
+
       case MovingDirection.LEFT:
         if (random === 0) {
-          this.coords.x -= this.speed
-        } else {
           this.movingDirection =
-            tile === 222 ? MovingDirection.DOWN : MovingDirection.UP
+            tile === 222 || tile === 151
+              ? MovingDirection.DOWN
+              : MovingDirection.UP
+          directionChanged = true
         }
         break
     }
+
+    return directionChanged
   }
 
   changeDirectionIfCrossOrCorner(tile: number): boolean {
@@ -180,7 +198,7 @@ export class Car extends GameBot {
         if (tile === 164 || tile === 213) {
           this.movingDirection = MovingDirection.DOWN
           directionChanged = true
-        } else if (tile === 192 || tile === 214) {
+        } else if (tile === 192) {
           this.movingDirection = MovingDirection.UP
           directionChanged = true
         }
@@ -210,7 +228,7 @@ export class Car extends GameBot {
         }
         break
       case MovingDirection.RIGHT:
-        if (tile === 154 || tile === 221) {
+        if (tile === 154 || tile === 221 || tile === 234) {
           const upperY = this.coords.y - this.tileSize
           const upperTileNotEmpty = !!otherCarsCoords.find(
             coords => this.coords.x === coords.x && upperY === coords.y
@@ -248,10 +266,13 @@ export class Car extends GameBot {
     return { x: column * this.tileSize, y: row * this.tileSize }
   }
 
-  move(rover: Rover, allCarsCoords: Array<Coords>) {
-    if (this.collideWithRover(rover.coords)) {
-      gameManager.roverHit()
-      rover.hitting()
+  move(roverCoords: Coords, allCarsCoords: Array<Coords>) {
+    if (this._isOutOfField) {
+      return
+    }
+
+    if (this.collideWithRover(roverCoords)) {
+      eventBus.emit(RoverEvents.CAR_COLLIDE)
       return
     }
 
@@ -275,10 +296,12 @@ export class Car extends GameBot {
         this.movingDirection === MovingDirection.RIGHT &&
         this.coords.x / this.tileSize === this.gameMap[0][0].length
       ) {
-        this.coords.x += this.speed
+        this.coords.x += this.tileSize * 2
+        this._isOutOfField = true
         window.setTimeout(() => {
           this.coords.y -= this.tileSize
           this.movingDirection = MovingDirection.LEFT
+          this._isOutOfField = false
         }, 5_000)
         return
       }
@@ -302,26 +325,26 @@ export class Car extends GameBot {
         return
       }
 
+      // if current tile is cross, change direction or not randomly
+      if (!this._directionChanged && this.isAllowedToChangeDirection(tile)) {
+        const directionChanged = this.changeMovingDirectionOrNotRandomly(tile)
+        if (directionChanged) {
+          this._directionChanged = true
+          return
+        }
+      }
+
       // if next tile is crosswalk with rover, stop
       const nextCrosswalkCoords = this.getCrosswalkCoords(nextTileCoords)
       if (
         nextCrosswalkCoords &&
-        this.coordsAreIntersecting(
-          nextCrosswalkCoords,
-          rover.coords,
-          2,
-          true
-        ) &&
-        this.needToStopOnCrosswalk(rover.coords)
+        this.coordsAreIntersecting(nextCrosswalkCoords, roverCoords, 2, true) &&
+        this.needToStopOnCrosswalk(roverCoords)
       ) {
         return
       }
 
-      // if current tile is cross, go straight or change direction randomly
-      if (this.isAllowedToChangeDirection(tile)) {
-        this.changeMovingDirectionOrGoStraight(tile)
-        return
-      }
+      this._directionChanged = false
     }
     // Tile middle
     else {
@@ -335,8 +358,8 @@ export class Car extends GameBot {
       const crosswalkCoords = this.getCrosswalkCoords(tileCoords)
       if (
         crosswalkCoords &&
-        this.coordsAreIntersecting(crosswalkCoords, rover.coords, 2, true) &&
-        this.needToStopOnCrosswalk(rover.coords)
+        this.coordsAreIntersecting(crosswalkCoords, roverCoords, 2, true) &&
+        this.needToStopOnCrosswalk(roverCoords)
       ) {
         return
       }

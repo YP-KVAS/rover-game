@@ -3,7 +3,7 @@
   justify-content: space-between;
 }
 
-.statBlock {
+.stat_block {
   width: 150px;
   font-size: var(--font-xl);
   color: var(--color-secondary);
@@ -14,11 +14,11 @@
   }
 }
 
-.hitPoints {
+.hit_points {
   display: flex;
   justify-content: flex-start;
 
-  &__image {
+  & .image {
     width: 40px;
     height: 40px;
     margin: 0 5px;
