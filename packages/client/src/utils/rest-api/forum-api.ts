@@ -6,20 +6,46 @@ import {
   NewTopic,
   UpdateForumComment,
 } from '../types/forum'
-import {
-  FORUM_CATEGORIES,
-  FORUM_COMMENTS,
-  FORUM_TOPICS,
-} from '../fake-forum-data'
+import { FORUM_COMMENTS, FORUM_TOPICS } from '../fake-forum-data'
 import { FormInputNames } from '../types/forms'
+import { FetchMethods, request } from './base-request'
+import {
+  BASE_SERVER_URL,
+  FORUM_CATEGORIES_API_URL,
+} from '../const-variables/api'
 
 // TODO: implement Forum API (Sprint 8)
 
 const TIMEOUT = 500
 
-export function getForumCategories(): Promise<Array<IForumCategory>> {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(FORUM_CATEGORIES), TIMEOUT)
+// categories
+
+export async function getForumCategories(): Promise<Array<IForumCategory>> {
+  return await request(BASE_SERVER_URL, FORUM_CATEGORIES_API_URL, {
+    method: FetchMethods.GET,
+  })
+}
+
+export async function addForumCategory(name: string): Promise<IForumCategory> {
+  return await request(BASE_SERVER_URL, FORUM_CATEGORIES_API_URL, {
+    method: FetchMethods.POST,
+    data: { name },
+  })
+}
+
+export async function updateForumCategory(
+  id: number,
+  name: string
+): Promise<IForumCategory> {
+  return await request(BASE_SERVER_URL, `${FORUM_CATEGORIES_API_URL}/${id}`, {
+    method: FetchMethods.PUT,
+    data: { name },
+  })
+}
+
+export async function deleteForumCategory(id: number): Promise<void> {
+  return await request(BASE_SERVER_URL, `${FORUM_CATEGORIES_API_URL}/${id}`, {
+    method: FetchMethods.DELETE,
   })
 }
 
@@ -45,7 +71,7 @@ export function addForumTopic(
         id,
         category_id: categoryId,
         date: new Date().toISOString(),
-        topic_name: data[FormInputNames.FORUM_TITLE],
+        topic_name: data[FormInputNames.FORUM_TOPIC_TITLE],
         user_id: data.userId,
       }
 

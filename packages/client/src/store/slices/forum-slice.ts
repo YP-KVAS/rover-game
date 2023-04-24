@@ -6,20 +6,19 @@ import {
   IForumTopic,
 } from '../../utils/types/forum'
 import {
+  onAddForumCategory,
   onAddForumComment,
   onAddForumTopic,
+  onDeleteForumCategory,
   onDeleteForumComment,
   onDeleteForumTopic,
   onGetForumCategories,
   onGetForumComments,
   onGetForumTopics,
+  onUpdateForumCategory,
   onUpdateForumComment,
   onUpdateForumTopic,
 } from '../thunks/forum-thunk'
-
-interface CategoryState extends FetchState {
-  categoryItems: Array<IForumCategory> | null
-}
 
 interface TopicState extends FetchState {
   topicItems: Array<IForumTopic> | null
@@ -30,7 +29,14 @@ interface CommentState extends FetchState {
 }
 
 interface InitialState {
-  categories: CategoryState
+  categories: {
+    categoryItems: Array<IForumCategory> | null
+    lastTouchedCategoryId: number | null
+    getCategoriesState: FetchState
+    addCategoryState: FetchState
+    updateCategoryState: FetchState
+    deleteCategoryState: FetchState
+  }
   topicInfo: {
     topics: Record<number, TopicState>
     lastTouchedTopicId: number | null
@@ -53,9 +59,12 @@ const defaultFetchState: FetchState = {
 
 const initialState: InitialState = {
   categories: {
-    isLoading: false,
-    errorMessage: null,
     categoryItems: null,
+    lastTouchedCategoryId: null,
+    getCategoriesState: defaultFetchState,
+    addCategoryState: defaultFetchState,
+    updateCategoryState: defaultFetchState,
+    deleteCategoryState: defaultFetchState,
   },
   topicInfo: {
     topics: {},
@@ -76,6 +85,22 @@ const forumSlice = createSlice({
   name: 'forum',
   initialState,
   reducers: {
+    clearForumCategoriesState: state => {
+      state.categories.lastTouchedCategoryId = null
+      state.categories.getCategoriesState = defaultFetchState
+      state.categories.addCategoryState = defaultFetchState
+      state.categories.updateCategoryState = defaultFetchState
+      state.categories.deleteCategoryState = defaultFetchState
+    },
+    clearGetCategoriesState: state => {
+      state.categories.getCategoriesState = defaultFetchState
+    },
+    clearAddCategoryState: state => {
+      state.categories.addCategoryState = defaultFetchState
+    },
+    clearUpdateCategoryState: state => {
+      state.categories.updateCategoryState = defaultFetchState
+    },
     clearForumComments: state => {
       state.commentInfo = initialState.commentInfo
     },
@@ -116,18 +141,69 @@ const forumSlice = createSlice({
       .addCase(
         onGetForumCategories.fulfilled,
         (state, action: PayloadAction<Array<IForumCategory>>) => {
-          state.categories.isLoading = false
-          state.categories.errorMessage = null
+          state.categories.getCategoriesState.isLoading = false
+          state.categories.getCategoriesState.errorMessage = null
           state.categories.categoryItems = action.payload
         }
       )
       .addCase(onGetForumCategories.pending, state => {
-        state.categories.isLoading = true
-        state.categories.errorMessage = null
+        state.categories.getCategoriesState.isLoading = true
+        state.categories.getCategoriesState.errorMessage = null
       })
       .addCase(onGetForumCategories.rejected, (state, action) => {
-        state.categories.isLoading = false
-        state.categories.errorMessage = action.payload || null
+        state.categories.getCategoriesState.isLoading = false
+        state.categories.getCategoriesState.errorMessage =
+          action.payload || null
+      })
+
+    // onAddForumCategory
+    builder
+      .addCase(onAddForumCategory.fulfilled, (state, action) => {
+        state.categories.addCategoryState.isLoading = false
+        state.categories.addCategoryState.errorMessage = null
+        state.categories.lastTouchedCategoryId = action.payload.id
+      })
+      .addCase(onAddForumCategory.pending, state => {
+        state.categories.addCategoryState.isLoading = true
+        state.categories.addCategoryState.errorMessage = null
+      })
+      .addCase(onAddForumCategory.rejected, (state, action) => {
+        state.categories.addCategoryState.isLoading = false
+        state.categories.addCategoryState.errorMessage = action.payload || null
+      })
+
+    // onUpdateForumCategory
+    builder
+      .addCase(onUpdateForumCategory.fulfilled, (state, action) => {
+        state.categories.updateCategoryState.isLoading = false
+        state.categories.updateCategoryState.errorMessage = null
+        state.categories.lastTouchedCategoryId = action.payload.id
+      })
+      .addCase(onUpdateForumCategory.pending, state => {
+        state.categories.updateCategoryState.isLoading = true
+        state.categories.updateCategoryState.errorMessage = null
+      })
+      .addCase(onUpdateForumCategory.rejected, (state, action) => {
+        state.categories.updateCategoryState.isLoading = false
+        state.categories.updateCategoryState.errorMessage =
+          action.payload || null
+      })
+
+    // onDeleteForumCategory
+    builder
+      .addCase(onDeleteForumCategory.fulfilled, state => {
+        state.categories.deleteCategoryState.isLoading = false
+        state.categories.deleteCategoryState.errorMessage = null
+        state.categories.lastTouchedCategoryId = null
+      })
+      .addCase(onDeleteForumCategory.pending, state => {
+        state.categories.deleteCategoryState.isLoading = true
+        state.categories.deleteCategoryState.errorMessage = null
+      })
+      .addCase(onDeleteForumCategory.rejected, (state, action) => {
+        state.categories.deleteCategoryState.isLoading = false
+        state.categories.deleteCategoryState.errorMessage =
+          action.payload || null
       })
 
     // onGetForumTopics
@@ -373,6 +449,10 @@ const forumSlice = createSlice({
 
 export const forumReducer = forumSlice.reducer
 export const {
+  clearForumCategoriesState,
+  clearGetCategoriesState,
+  clearAddCategoryState,
+  clearUpdateCategoryState,
   clearForumComments,
   clearAddCommentErrorState,
   clearUpdateCommentErrorState,

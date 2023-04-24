@@ -8,9 +8,16 @@ import {
   onProfileSettingsChange,
 } from '../thunks/user-thunk'
 import { onGetUser, onLogout } from '../thunks/auth-thunk'
+import { UserRolesEnum } from '../../utils/const-variables/user-roles'
+import { onGetUserRole } from '../thunks/forum-thunk'
+
+interface UserRoleState extends FetchState {
+  userRole: UserRolesEnum | null
+}
 
 interface InitialState {
   user: User | null
+  userRoleState: UserRoleState
   changeSettings: FetchState
   changeAvatar: FetchState
   changePassword: FetchState
@@ -24,6 +31,7 @@ const defaultFetchState = {
 
 const initialState: InitialState = {
   user: null,
+  userRoleState: { ...defaultFetchState, userRole: null },
   changeSettings: defaultFetchState,
   changeAvatar: defaultFetchState,
   changePassword: defaultFetchState,
@@ -42,6 +50,9 @@ const userSlice = createSlice({
     },
     clearChangePasswordError: state => {
       state.changePassword.errorMessage = null
+    },
+    clearUserRoleErrorMessage: state => {
+      state.userRoleState.errorMessage = null
     },
   },
   extraReducers: builder => {
@@ -101,6 +112,25 @@ const userSlice = createSlice({
         state.allUsers[action.meta.arg] = null
       })
 
+    // onGetUserRole
+    builder
+      .addCase(
+        onGetUserRole.fulfilled,
+        (state, action: PayloadAction<{ role: UserRolesEnum }>) => {
+          state.userRoleState.isLoading = false
+          state.userRoleState.errorMessage = null
+          state.userRoleState.userRole = action.payload.role
+        }
+      )
+      .addCase(onGetUserRole.pending, state => {
+        state.userRoleState.isLoading = true
+        state.userRoleState.errorMessage = null
+      })
+      .addCase(onGetUserRole.rejected, (state, action) => {
+        state.userRoleState.isLoading = false
+        state.userRoleState.errorMessage = action.payload || null
+      })
+
     // external auth-slice
     builder
       .addCase(onGetUser.fulfilled, (state, action: PayloadAction<User>) => {
@@ -118,4 +148,5 @@ export const {
   clearChangeSettingsError,
   clearChangeAvatarError,
   clearChangePasswordError,
+  clearUserRoleErrorMessage,
 } = userSlice.actions

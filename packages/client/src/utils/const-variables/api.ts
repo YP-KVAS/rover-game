@@ -1,10 +1,15 @@
-export const BASE_URL = 'https://ya-praktikum.tech/api/v2'
+export const BASE_YA_URL = 'https://ya-praktikum.tech/api/v2'
+// TODO: make url configurable (local, dev, prod)
+export const BASE_SERVER_URL = 'http://localhost:3001/api/v1'
 
 export const AUTH_API_URL = '/auth'
 export const USER_API_URL = '/user'
 export const RESOURCES_API_URL = '/resources'
 export const LEADERBOARD_API_URL = '/leaderboard'
 export const TEAM_NAME = 'kvas'
+
+export const USERS_API_URL = '/users'
+export const FORUM_CATEGORIES_API_URL = '/categories'
 
 export enum AuthApiPaths {
   SIGN_UP = '/signup',

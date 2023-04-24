@@ -111,7 +111,7 @@ export const ForumComments: FC = () => {
           />
         )}
         {deleteErrorMessage && (
-          <span className={styles.delete_error}>{deleteErrorMessage}</span>
+          <span className={styles.error}>{deleteErrorMessage}</span>
         )}
         <hr />
         {isLoading && <Loader />}

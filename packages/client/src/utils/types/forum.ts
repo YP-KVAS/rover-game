@@ -3,7 +3,7 @@ import { FormInputNames } from './forms'
 export interface IForumCategory {
   id: number
   name: string
-  topic_count?: number
+  topicCount: number
 }
 
 export interface IForumTopic {
@@ -32,6 +32,6 @@ export interface IForumComment extends AddForumComment {
 }
 
 export interface NewTopic extends Record<string, unknown> {
-  [FormInputNames.FORUM_TITLE]: string
+  [FormInputNames.FORUM_TOPIC_TITLE]: string
   [FormInputNames.FORUM_MESSAGE]: string
 }

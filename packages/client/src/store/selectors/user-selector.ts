@@ -19,3 +19,6 @@ export const selectChangeAvatarState = (state: RootState) =>
 
 export const selectUserById = (state: RootState, id: number) =>
   state.user.allUsers[id]
+
+export const selectUserRoleState = (state: RootState) =>
+  state.user.userRoleState

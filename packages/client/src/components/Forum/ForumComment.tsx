@@ -7,7 +7,7 @@ import {
   selectUserById,
 } from '../../store/selectors/user-selector'
 import { onGetUserById } from '../../store/thunks/user-thunk'
-import { BASE_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
+import { BASE_YA_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
 import { FormInputNames } from '../../utils/types/forms'
 import { AddForumComment } from './AddForumItems/AddForumComment'
 import {
@@ -122,7 +122,9 @@ export const ForumComment: FC<IForumComment> = ({
           className={styles.avatar}
           src={
             user?.[FormInputNames.AVATAR]
-              ? `${BASE_URL}${RESOURCES_API_URL}${user[FormInputNames.AVATAR]}`
+              ? `${BASE_YA_URL}${RESOURCES_API_URL}${
+                  user[FormInputNames.AVATAR]
+                }`
               : './images/user/empty-avatar.webp'
           }
         />

@@ -4,7 +4,7 @@ import { FormInputNames } from '../../../utils/types/forms'
 import { AddForumItemForm } from '../AddForumItems/AddForumItemForm'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { addForumTitleValidationSchema } from '../../../utils/validation'
+import { addForumTopicTitleValidationSchema } from '../../../utils/validation'
 import {
   onGetForumTopics,
   onUpdateForumTopic,
@@ -31,9 +31,9 @@ export const EditForumTopicName: FC<EditForumTopicNameProps> = ({
   )
 
   const { handleSubmit, register } = useForm<{
-    [FormInputNames.FORUM_TITLE]: string
+    [FormInputNames.FORUM_TOPIC_TITLE]: string
   }>({
-    resolver: yupResolver(addForumTitleValidationSchema),
+    resolver: yupResolver(addForumTopicTitleValidationSchema),
   })
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const EditForumTopicName: FC<EditForumTopicNameProps> = ({
       errorMessage={errorMessage}>
       <FormInput
         defaultValue={currentTopicName}
-        registerObj={{ ...register(FormInputNames.FORUM_TITLE) }}
+        registerObj={{ ...register(FormInputNames.FORUM_TOPIC_TITLE) }}
         placeholder="Новое название темы"
       />
     </AddForumItemForm>

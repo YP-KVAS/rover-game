@@ -1,12 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
+  addForumCategory,
   addForumComment,
   addForumTopic,
+  deleteForumCategory,
   deleteForumComment,
   deleteForumTopic,
   getForumCategories,
   getForumComments,
   getForumTopics,
+  updateForumCategory,
   updateForumComment,
   updateForumTopic,
 } from '../../utils/rest-api/forum-api'
@@ -18,6 +21,8 @@ import {
   NewTopic,
   UpdateForumComment,
 } from '../../utils/types/forum'
+import { UserRolesEnum } from '../../utils/const-variables/user-roles'
+import { getUserRole } from '../../utils/rest-api/user-api'
 
 export const onGetForumCategories = createAsyncThunk<
   Array<IForumCategory>,
@@ -29,6 +34,48 @@ export const onGetForumCategories = createAsyncThunk<
   } catch (err: unknown) {
     return rejectWithValue(
       (err as Error).message || 'Ошибка при загрузке категорий'
+    )
+  }
+})
+
+export const onAddForumCategory = createAsyncThunk<
+  IForumCategory,
+  string,
+  { rejectValue: string }
+>('forum/onAddForumCategory', async (name, { rejectWithValue }) => {
+  try {
+    return await addForumCategory(name)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'При добавлении новой категории возникла ошибка'
+    )
+  }
+})
+
+export const onUpdateForumCategory = createAsyncThunk<
+  IForumCategory,
+  { id: number; name: string },
+  { rejectValue: string }
+>('forum/onUpdateForumCategory', async ({ id, name }, { rejectWithValue }) => {
+  try {
+    return await updateForumCategory(id, name)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Не удалось изменить название категории'
+    )
+  }
+})
+
+export const onDeleteForumCategory = createAsyncThunk<
+  void,
+  number,
+  { rejectValue: string }
+>('forum/onDeleteForumCategory', async (id, { rejectWithValue }) => {
+  try {
+    return await deleteForumCategory(id)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Не удалось удалить категорию'
     )
   }
 })
@@ -139,6 +186,20 @@ export const onDeleteForumComment = createAsyncThunk<
   } catch (err: unknown) {
     return rejectWithValue(
       (err as Error).message || 'При удалении комментария возникла ошибка'
+    )
+  }
+})
+
+export const onGetUserRole = createAsyncThunk<
+  { role: UserRolesEnum },
+  number,
+  { rejectValue: string }
+>('forum/onGetUserRole', async (userId, { rejectWithValue }) => {
+  try {
+    return await getUserRole(userId)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Не удалось получить роль пользователя'
     )
   }
 })
