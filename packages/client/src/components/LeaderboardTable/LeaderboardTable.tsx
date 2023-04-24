@@ -1,15 +1,9 @@
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { selectLeaderboardItems } from '../../store/selectors/leaderboard-selector'
-import {
-  onGetAllLeaderboards,
-  onGetLeaderboardByTeamName,
-} from '../../store/thunks/leaderboard-thunk'
-import {
-  LeaderboardRequest,
-  LeaderboardItem,
-} from '../../utils/types/leaderboard'
-import { BASE_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
+import { onGetAllLeaderboards } from '../../store/thunks/leaderboard-thunk'
+import { LeaderboardRequest } from '../../utils/types/leaderboard'
+import { BASE_YA_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
 
 import styles from './LeaderboardTable.module.scss'
 
@@ -42,7 +36,7 @@ export const LeaderboardTable = () => {
         alt="photo"
         src={
           value.data.avatar
-            ? `${BASE_URL}${RESOURCES_API_URL}${value.data.avatar}`
+            ? `${BASE_YA_URL}${RESOURCES_API_URL}${value.data.avatar}`
             : './images/user/empty-avatar.webp'
         }
       />

@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import styles from '../Forum.module.scss'
 import { Button } from '../../Button/Button'
 import { Form } from '../../Form/Form'
@@ -20,8 +20,18 @@ export const AddForumItemForm: FC<AddForumItemFormProps> = ({
   handleFormSubmit,
   handleFormReset,
 }) => {
+  const ref = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    ref.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+      inline: 'nearest',
+    })
+  }, [])
+
   return (
-    <div className={styles.form}>
+    <div className={styles.form} ref={ref}>
       <Form onSubmit={handleFormSubmit} onReset={handleFormReset}>
         {children}
         <div className={styles.actions}>

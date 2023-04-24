@@ -3,6 +3,7 @@ import {
   LEADERBOARD_API_URL,
   TEAM_NAME,
   LeaderboardApiPaths,
+  BASE_YA_URL,
 } from '../const-variables/api'
 import {
   LeaderboardItem,
@@ -14,6 +15,7 @@ export async function getAllLeaderboards(
   data: LeaderboardRequest
 ): Promise<Array<LeaderboardItem>> {
   return await request<Array<LeaderboardItem>>(
+    BASE_YA_URL,
     `${LEADERBOARD_API_URL}${LeaderboardApiPaths.GET_ALL_LEADERBOARDS}`,
     {
       method: FetchMethods.POST,
@@ -27,6 +29,7 @@ export async function getLeaderboardByTeamName(
   teamName: string = TEAM_NAME
 ): Promise<Array<LeaderboardItem>> {
   return await request<Array<LeaderboardItem>>(
+    BASE_YA_URL,
     `${LEADERBOARD_API_URL}/${teamName}`,
     {
       method: FetchMethods.POST,
@@ -38,7 +41,7 @@ export async function getLeaderboardByTeamName(
 export async function addUserToLeaderboard(
   data: addUserToLeaderboardRequest
 ): Promise<void> {
-  return await request(`${LEADERBOARD_API_URL}`, {
+  return await request(BASE_YA_URL, `${LEADERBOARD_API_URL}`, {
     method: FetchMethods.POST,
     data,
   })

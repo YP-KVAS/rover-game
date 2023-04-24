@@ -3,10 +3,10 @@ import { IForumCategory, IForumComment, IForumTopic } from './types/forum'
 // TODO: Remove file after implementing Forum API (Sprint 8)
 
 export const FORUM_CATEGORIES: Array<IForumCategory> = [
-  { id: 1, name: 'Предложения и идеи', topic_count: 5 },
-  { id: 2, name: 'Секреты прохождения', topic_count: 8 },
-  { id: 3, name: 'Ваши вопросы', topic_count: 2 },
-  { id: 4, name: 'Off Topic', topic_count: 2 },
+  { id: 1, name: 'Предложения и идеи', topicCount: 5 },
+  { id: 2, name: 'Секреты прохождения', topicCount: 8 },
+  { id: 3, name: 'Ваши вопросы', topicCount: 2 },
+  { id: 4, name: 'Off Topic', topicCount: 2 },
 ]
 
 export const FORUM_TOPICS: Record<number, Array<IForumTopic>> = {

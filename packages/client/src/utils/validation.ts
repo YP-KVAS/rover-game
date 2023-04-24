@@ -93,12 +93,17 @@ export const signinValidationSchema = Yup.object().shape({
 // Forum validation
 const topicTitleValidation = Yup.string()
   .required(REQUIRED_MESSAGE)
-  .max(120, 'Длина названия темы должна быть не более 120 символов')
+  .min(3, 'Длина названия темы должна быть от 3-х до 120-ти символов')
+  .max(120, 'Длина названия темы должна быть от 3-х до 120-ти символов')
 
 const topicCommentValidation = Yup.string().required(REQUIRED_MESSAGE)
 
-export const addForumTitleValidationSchema = Yup.object().shape({
-  [FormInputNames.FORUM_TITLE]: topicTitleValidation,
+export const addForumTopicTitleValidationSchema = Yup.object().shape({
+  [FormInputNames.FORUM_TOPIC_TITLE]: topicTitleValidation,
+})
+
+export const addForumCategoryTitleValidationSchema = Yup.object().shape({
+  [FormInputNames.FORUM_CATEGORY_TITLE]: topicTitleValidation,
 })
 
 export const addForumMessageValidationSchema = Yup.object().shape({
@@ -106,4 +111,4 @@ export const addForumMessageValidationSchema = Yup.object().shape({
 })
 
 export const addForumTopicValidationSchema =
-  addForumTitleValidationSchema.concat(addForumMessageValidationSchema)
+  addForumTopicTitleValidationSchema.concat(addForumMessageValidationSchema)

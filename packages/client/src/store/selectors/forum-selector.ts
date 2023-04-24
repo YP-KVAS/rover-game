@@ -2,9 +2,23 @@ import { RootState } from '../store'
 import { IForumCategory } from '../../utils/types/forum'
 import { FetchState } from '../slices/slices-types'
 
+// categories
 export const selectForumCategories = (state: RootState) =>
-  state.forum.categories
+  state.forum.categories.categoryItems
 
+export const selectGetForumCategoriesState = (state: RootState) =>
+  state.forum.categories.getCategoriesState
+
+export const selectAddForumCategoryState = (state: RootState) =>
+  state.forum.categories.addCategoryState
+
+export const selectUpdateForumCategoryState = (state: RootState) =>
+  state.forum.categories.updateCategoryState
+
+export const selectForumLastTouchedCategoryId = (state: RootState) =>
+  state.forum.categories.lastTouchedCategoryId
+
+// topics
 export const selectForumTopicsByCategoryId = (
   state: RootState,
   categoryId: number
@@ -37,6 +51,7 @@ export const selectCategoryNameById = (
 ): IForumCategory | null =>
   state.forum.categories.categoryItems?.find(cat => cat.id === id) || null
 
+// comments
 export const selectForumCommentsByParentId = (
   state: RootState,
   parentId: number

@@ -127,7 +127,7 @@ export const ADD_FORUM_TOPIC_FORM_INPUTS: Array<FormInput> = [
     label: 'Название темы',
     type: 'text',
     placeholder: 'Топик',
-    name: FormInputNames.FORUM_TITLE,
+    name: FormInputNames.FORUM_TOPIC_TITLE,
   },
   {
     label: 'Комментарий',
