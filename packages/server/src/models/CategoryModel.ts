@@ -6,7 +6,9 @@ import {
   AllowNull,
   Length,
   Default,
+  HasMany,
 } from 'sequelize-typescript'
+import { TopicModel } from './TopicModel'
 
 @Table({ modelName: 'categories' })
 export class CategoryModel extends Model {
@@ -19,4 +21,7 @@ export class CategoryModel extends Model {
   @Default(0)
   @Column({ type: DataType.INTEGER, field: 'topic_count' })
   topicCount: number
+
+  @HasMany(() => TopicModel, 'category_id')
+  topicModels: Array<TopicModel>
 }

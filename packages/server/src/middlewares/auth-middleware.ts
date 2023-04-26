@@ -1,9 +1,9 @@
 import { ApiError, instanceOfApiError, RolesEnum } from '../utils/types/api'
 import type { NextFunction, Request, Response } from 'express'
 import { getUser } from '../utils/yandex-api/auth-api'
-import { UserRepository } from '../repositories/UserRepository'
 import type { User } from '../utils/types/user'
 import { INTERNAL_SERVER_ERROR } from '../utils/const-variables/api'
+import { UserService } from '../services/UserService'
 
 export const checkAuth =
   (roles?: Array<RolesEnum>) =>
@@ -17,13 +17,14 @@ export const checkAuth =
         return res.status(status).json({ reason })
       }
 
+      res.locals.user = userOrErr
+
       // check role
       if (roles) {
-        const user = await new UserRepository().getById((userOrErr as User).id)
-        if (
-          !user?.role?.name ||
-          !Object.values(roles).includes(user.role.name)
-        ) {
+        const role = await new UserService().findRoleById(
+          (userOrErr as User).id
+        )
+        if (!role || !Object.values(roles).includes(role)) {
           return res.status(403).json({ reason: 'Forbidden' })
         }
       }

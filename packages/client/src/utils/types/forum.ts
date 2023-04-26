@@ -6,12 +6,25 @@ export interface IForumCategory {
   topicCount: number
 }
 
+export interface IUpdateForumTopic {
+  id: number
+  name: string
+  newCategoryId: number
+}
+
 export interface IForumTopic {
   id: number
-  topic_name: string
-  date: string
-  category_id: number
-  user_id: number
+  name: string
+  categoryId: number
+  createdAt: string
+  userId: number
+}
+
+export interface IGetForumTopic {
+  categoryId: number
+  offset?: number
+  limit?: number
+  search?: string
 }
 
 export interface AddForumComment {
@@ -34,4 +47,9 @@ export interface IForumComment extends AddForumComment {
 export interface NewTopic extends Record<string, unknown> {
   [FormInputNames.FORUM_TOPIC_TITLE]: string
   [FormInputNames.FORUM_MESSAGE]: string
+}
+
+export interface IAddTopic extends NewTopic {
+  userId: number
+  categoryId: number
 }

@@ -2,6 +2,8 @@ import { Sequelize, SequelizeOptions } from 'sequelize-typescript'
 import { CategoryModel } from './src/models/CategoryModel'
 import { UserModel } from './src/models/UserModel'
 import { RoleModel } from './src/models/RoleModel'
+import { TopicModel } from './src/models/TopicModel'
+import { CommentModel } from './src/models/CommentModel'
 
 const {
   POSTGRES_USER,
@@ -19,14 +21,13 @@ const sequelizeOptions: SequelizeOptions = {
   database: POSTGRES_DB,
   dialect: 'postgres',
 
-  models: [CategoryModel],
+  models: [UserModel, CategoryModel, RoleModel, TopicModel, CommentModel],
 }
 
 export const sequelize = new Sequelize(sequelizeOptions)
 
 export async function dbConnect() {
   try {
-    await sequelize.addModels([UserModel, CategoryModel, RoleModel])
     await sequelize.authenticate()
     await sequelize.sync()
     console.log('Connection has been established successfully.')

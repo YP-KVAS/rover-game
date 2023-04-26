@@ -78,3 +78,11 @@
 .link, .error {
   color: var(--color-accent);
 }
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}

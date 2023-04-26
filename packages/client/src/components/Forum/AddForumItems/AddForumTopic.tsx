@@ -14,12 +14,16 @@ import { useParams } from 'react-router-dom'
 import { AddForumItemWithState } from './AddForumItemWithState'
 import { selectCurrentUserId } from '../../../store/selectors/user-selector'
 import { clearAddTopicState } from '../../../store/slices/forum-slice'
-import { selectForumAddTopicState } from '../../../store/selectors/forum-selector'
+import {
+  selectForumAddTopicState,
+  selectForumTopicSearchQuery,
+} from '../../../store/selectors/forum-selector'
 
 export const AddForumTopic: FC = () => {
   const dispatch = useAppDispatch()
   const { categoryId = -1 } = useParams()
   const { errorMessage } = useAppSelector(selectForumAddTopicState)
+  const searchQuery = useAppSelector(selectForumTopicSearchQuery)
   const userId = useAppSelector(selectCurrentUserId)
 
   const {
@@ -33,9 +37,16 @@ export const AddForumTopic: FC = () => {
 
   const handleFormSubmit = handleSubmit(data => {
     if (userId) {
-      dispatch(onAddForumTopic({ ...data, userId })).then(res => {
+      dispatch(
+        onAddForumTopic({ ...data, userId, categoryId: +categoryId })
+      ).then(res => {
         if (res.type.endsWith('fulfilled')) {
-          dispatch(onGetForumTopics(+categoryId))
+          dispatch(
+            onGetForumTopics({
+              categoryId: +categoryId,
+              search: searchQuery || '',
+            })
+          )
           handleFormReset()
         }
       })

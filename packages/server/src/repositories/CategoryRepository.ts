@@ -1,10 +1,12 @@
 import { CategoryModel } from '../models/CategoryModel'
+import type { Transaction } from 'sequelize'
 
 interface ICategoryRepository {
   save(categoryName: string): Promise<CategoryModel>
   update(category: CategoryModel): Promise<CategoryModel>
   delete(categoryId: number): Promise<void>
   getAll(): Promise<Array<CategoryModel>>
+  incrementTopics(categoryId: number, transaction?: Transaction): Promise<void>
 }
 
 export class CategoryRepository implements ICategoryRepository {
@@ -62,6 +64,22 @@ export class CategoryRepository implements ICategoryRepository {
       })
     } catch (err) {
       throw new Error('GET: Failed to get all categories')
+    }
+  }
+
+  async incrementTopics(
+    categoryId: number,
+    transaction?: Transaction
+  ): Promise<void> {
+    try {
+      await CategoryModel.increment('topicCount', {
+        where: { id: categoryId },
+        transaction,
+      })
+    } catch (err) {
+      throw new Error(
+        `UPDATE: Failed to increment topic count for category with id ${categoryId}`
+      )
     }
   }
 }

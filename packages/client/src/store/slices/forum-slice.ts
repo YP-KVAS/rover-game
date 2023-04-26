@@ -43,6 +43,7 @@ interface InitialState {
     addTopicState: FetchState
     updateTopicState: FetchState
     deleteTopicState: FetchState
+    searchQuery: string | null
   }
   commentInfo: {
     comments: Record<number, CommentState>
@@ -72,6 +73,7 @@ const initialState: InitialState = {
     addTopicState: defaultFetchState,
     updateTopicState: defaultFetchState,
     deleteTopicState: defaultFetchState,
+    searchQuery: null,
   },
   commentInfo: {
     comments: {},
@@ -133,6 +135,10 @@ const forumSlice = createSlice({
       state.topicInfo.addTopicState = defaultFetchState
       state.topicInfo.updateTopicState = defaultFetchState
       state.topicInfo.deleteTopicState = defaultFetchState
+      state.topicInfo.searchQuery = null
+    },
+    setTopicSearchQuery: (state, action: PayloadAction<string>) => {
+      state.topicInfo.searchQuery = action.payload
     },
   },
   extraReducers: builder => {
@@ -209,15 +215,15 @@ const forumSlice = createSlice({
     // onGetForumTopics
     builder
       .addCase(onGetForumTopics.fulfilled, (state, action) => {
-        const id = action.meta.arg
-        state.topicInfo.topics[id] = {
-          isLoading: false,
-          errorMessage: null,
-          topicItems: action.payload,
-        }
+        const id = action.meta.arg.categoryId
+        state.topicInfo.topics[id].isLoading = false
+        state.topicInfo.topics[id].errorMessage = null
+        state.topicInfo.topics[id].topicItems = !action.meta.arg.offset
+          ? action.payload
+          : (state.topicInfo.topics[id].topicItems || []).concat(action.payload)
       })
       .addCase(onGetForumTopics.pending, (state, action) => {
-        const id = action.meta.arg
+        const id = action.meta.arg.categoryId
         if (!state.topicInfo.topics[id]) {
           state.topicInfo.topics[id] = {
             isLoading: true,
@@ -230,7 +236,7 @@ const forumSlice = createSlice({
         }
       })
       .addCase(onGetForumTopics.rejected, (state, action) => {
-        const id = action.meta.arg
+        const id = action.meta.arg.categoryId
         state.topicInfo.topics[id].isLoading = false
         state.topicInfo.topics[id].errorMessage = action.payload || null
       })
@@ -461,4 +467,5 @@ export const {
   clearAddTopicState,
   clearUpdateTopicState,
   clearTopicInfoState,
+  setTopicSearchQuery,
 } = forumSlice.actions

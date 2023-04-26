@@ -51,6 +51,9 @@ export const selectCategoryNameById = (
 ): IForumCategory | null =>
   state.forum.categories.categoryItems?.find(cat => cat.id === id) || null
 
+export const selectForumTopicSearchQuery = (state: RootState) =>
+  state.forum.topicInfo.searchQuery
+
 // comments
 export const selectForumCommentsByParentId = (
   state: RootState,
