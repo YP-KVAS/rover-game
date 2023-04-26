@@ -1,17 +1,20 @@
 import {
   AddForumComment,
+  IAddTopic,
   IForumCategory,
   IForumComment,
   IForumTopic,
-  NewTopic,
+  IGetForumTopic,
+  IUpdateForumTopic,
   UpdateForumComment,
 } from '../types/forum'
-import { FORUM_COMMENTS, FORUM_TOPICS } from '../fake-forum-data'
-import { FormInputNames } from '../types/forms'
+import { FORUM_COMMENTS } from '../fake-forum-data'
 import { FetchMethods, request } from './base-request'
 import {
   BASE_SERVER_URL,
   FORUM_CATEGORIES_API_URL,
+  FORUM_TOPICS_API_URL,
+  TOPICS_LOAD_LIMIT,
 } from '../const-variables/api'
 
 // TODO: implement Forum API (Sprint 8)
@@ -49,71 +52,54 @@ export async function deleteForumCategory(id: number): Promise<void> {
   })
 }
 
-export function getForumTopics(
-  categoryId: number
+// topics
+
+export async function getForumTopics(
+  topic: IGetForumTopic
 ): Promise<Array<IForumTopic>> {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(FORUM_TOPICS[categoryId]), TIMEOUT)
-  })
-}
-
-export function addForumTopic(
-  data: NewTopic & { userId: number }
-): Promise<IForumTopic> {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const id: number = Date.now()
-      const categoryId: number = +(
-        window.location.pathname.split('/').pop() || 0
-      )
-
-      const topic: IForumTopic = {
-        id,
-        category_id: categoryId,
-        date: new Date().toISOString(),
-        topic_name: data[FormInputNames.FORUM_TOPIC_TITLE],
-        user_id: data.userId,
-      }
-
-      if (!FORUM_TOPICS[categoryId]) {
-        FORUM_TOPICS[categoryId] = []
-      }
-
-      FORUM_TOPICS[categoryId] = [...FORUM_TOPICS[categoryId], topic]
-
-      return resolve(topic)
-    }, TIMEOUT)
-  })
-}
-
-export function updateForumTopic(newName: string): Promise<IForumTopic> {
-  return new Promise(resolve => {
-    const paths = window.location.pathname.split('/')
-    const categoryId = paths[2]
-    const topicId = paths[3]
-    const topicToUpdate = FORUM_TOPICS[+categoryId].find(
-      topic => topic.id === +topicId
-    )
-    FORUM_TOPICS[+categoryId] = FORUM_TOPICS[+categoryId].map(topic =>
-      topic.id === +topicId ? { ...topic, topic_name: newName } : topic
-    )
-    if (topicToUpdate) {
-      setTimeout(() => resolve(topicToUpdate), TIMEOUT)
+  const {
+    categoryId,
+    offset = 0,
+    limit = TOPICS_LOAD_LIMIT,
+    search = '',
+  } = topic
+  return await request(
+    BASE_SERVER_URL,
+    `${FORUM_CATEGORIES_API_URL}/${categoryId}${FORUM_TOPICS_API_URL}?limit=${limit}&offset=${offset}&search=${search}`,
+    {
+      method: FetchMethods.GET,
     }
+  )
+}
+
+export async function addForumTopic(topic: IAddTopic): Promise<IForumTopic> {
+  const { categoryId, topicName, ...restData } = topic
+  return await request(
+    BASE_SERVER_URL,
+    `${FORUM_CATEGORIES_API_URL}/${categoryId}${FORUM_TOPICS_API_URL}`,
+    {
+      method: FetchMethods.POST,
+      data: { ...restData, name: topicName },
+    }
+  )
+}
+
+export async function updateForumTopic(
+  topic: IUpdateForumTopic
+): Promise<IForumTopic> {
+  return await request(BASE_SERVER_URL, `${FORUM_TOPICS_API_URL}/${topic.id}`, {
+    method: FetchMethods.PATCH,
+    data: { name: topic.name, categoryId: topic.newCategoryId },
   })
 }
 
-export function deleteForumTopic(): Promise<void> {
-  return new Promise(resolve => {
-    const paths = window.location.pathname.split('/')
-    const categoryId = paths[2]
-    const topicId = paths[3]
-    FORUM_TOPICS[+categoryId] = FORUM_TOPICS[+categoryId].filter(
-      topic => topic.id !== +topicId
-    )
-    setTimeout(() => resolve(), TIMEOUT)
+export async function deleteForumTopic(id: number): Promise<void> {
+  return await request(BASE_SERVER_URL, `${FORUM_TOPICS_API_URL}/${id}`, {
+    method: FetchMethods.DELETE,
   })
 }
+
+// comments
 
 export function getForumComments(
   parent_comment_id: number | null = null

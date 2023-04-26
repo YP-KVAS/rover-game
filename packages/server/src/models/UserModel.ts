@@ -4,10 +4,13 @@ import {
   Column,
   DataType,
   ForeignKey,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript'
 import { RoleModel } from './RoleModel'
+import { TopicModel } from './TopicModel'
+import { CommentModel } from './CommentModel'
 
 @Table({ modelName: 'users', timestamps: false })
 export class UserModel extends Model {
@@ -18,4 +21,10 @@ export class UserModel extends Model {
 
   @BelongsTo(() => RoleModel, 'role_id')
   role: RoleModel
+
+  @HasMany(() => TopicModel, 'user_id')
+  topicModels: Array<TopicModel>
+
+  @HasMany(() => CommentModel, 'user_id')
+  commentModels: Array<CommentModel>
 }

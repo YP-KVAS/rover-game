@@ -15,10 +15,12 @@ import {
 } from '../../utils/rest-api/forum-api'
 import {
   AddForumComment,
+  IAddTopic,
   IForumCategory,
   IForumComment,
   IForumTopic,
-  NewTopic,
+  IGetForumTopic,
+  IUpdateForumTopic,
   UpdateForumComment,
 } from '../../utils/types/forum'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
@@ -82,11 +84,11 @@ export const onDeleteForumCategory = createAsyncThunk<
 
 export const onGetForumTopics = createAsyncThunk<
   Array<IForumTopic>,
-  number,
+  IGetForumTopic,
   { rejectValue: string }
->('forum/onGetForumTopics', async (categoryId, { rejectWithValue }) => {
+>('forum/onGetForumTopics', async (topic, { rejectWithValue }) => {
   try {
-    return await getForumTopics(categoryId)
+    return await getForumTopics(topic)
   } catch (err: unknown) {
     return rejectWithValue(
       (err as Error).message || 'Не удалось загрузить топики'
@@ -96,7 +98,7 @@ export const onGetForumTopics = createAsyncThunk<
 
 export const onAddForumTopic = createAsyncThunk<
   IForumTopic,
-  NewTopic & { userId: number },
+  IAddTopic,
   { rejectValue: string }
 >('forum/onAddForumTopic', async (newTopic, { rejectWithValue }) => {
   try {
@@ -110,11 +112,11 @@ export const onAddForumTopic = createAsyncThunk<
 
 export const onUpdateForumTopic = createAsyncThunk<
   IForumTopic,
-  { topic_name: string },
+  IUpdateForumTopic,
   { rejectValue: string }
->('forum/onUpdateForumTopic', async ({ topic_name }, { rejectWithValue }) => {
+>('forum/onUpdateForumTopic', async (topic, { rejectWithValue }) => {
   try {
-    return await updateForumTopic(topic_name)
+    return await updateForumTopic(topic)
   } catch (err: unknown) {
     return rejectWithValue(
       (err as Error).message || 'Не удалось изменить название темы'
@@ -124,11 +126,11 @@ export const onUpdateForumTopic = createAsyncThunk<
 
 export const onDeleteForumTopic = createAsyncThunk<
   void,
-  void,
+  number,
   { rejectValue: string }
->('forum/onDeleteForumTopic', async (_, { rejectWithValue }) => {
+>('forum/onDeleteForumTopic', async (id, { rejectWithValue }) => {
   try {
-    return await deleteForumTopic()
+    return await deleteForumTopic(id)
   } catch (err: unknown) {
     return rejectWithValue((err as Error).message || 'Не удалось удалить тему')
   }

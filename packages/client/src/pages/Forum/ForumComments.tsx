@@ -10,6 +10,7 @@ import {
   selectForumCommentsByParentId,
   selectForumDeleteTopicState,
   selectForumTopicById,
+  selectForumTopicSearchQuery,
 } from '../../store/selectors/forum-selector'
 import { Loader } from '../../components/Loader/Loader'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -22,7 +23,7 @@ import { AddForumTopLevelComment } from '../../components/Forum/AddForumItems/Ad
 import { Page404 } from '../Page404'
 import { selectCurrentUserId } from '../../store/selectors/user-selector'
 import { RoutesEnum } from '../../utils/const-variables/routes'
-import { EditForumTopicName } from '../../components/Forum/EditForumItems/EditForumTopicName'
+import { EditForumTopic } from '../../components/Forum/EditForumItems/EditForumTopic'
 import { Title } from '../../components/Title/Title'
 
 export const ForumComments: FC = () => {
@@ -44,10 +45,13 @@ export const ForumComments: FC = () => {
   const { errorMessage: deleteErrorMessage } = useAppSelector(
     selectForumDeleteTopicState
   )
+  const searchQuery = useAppSelector(selectForumTopicSearchQuery)
 
   useEffect(() => {
     if (!topic) {
-      dispatch(onGetForumTopics(+categoryId))
+      dispatch(
+        onGetForumTopics({ categoryId: +categoryId, search: searchQuery || '' })
+      )
     }
     dispatch(onGetForumComments(null))
 
@@ -58,9 +62,14 @@ export const ForumComments: FC = () => {
   }, [dispatch, topic?.id])
 
   const handleTopicDelete = () => {
-    dispatch(onDeleteForumTopic()).then(res => {
+    dispatch(onDeleteForumTopic(+topicId)).then(res => {
       if (res.type.endsWith('fulfilled')) {
-        dispatch(onGetForumTopics(+categoryId))
+        dispatch(
+          onGetForumTopics({
+            categoryId: +categoryId,
+            search: searchQuery || '',
+          })
+        )
         navigate(
           RoutesEnum.FORUM_CATEGORY.replace(
             ':categoryId',
@@ -80,20 +89,22 @@ export const ForumComments: FC = () => {
   ) : (
     <div className={styles.area}>
       <Title text="Просмотр комментариев" />
-      <Link
-        className={styles.link}
-        to={RoutesEnum.FORUM_CATEGORY.replace(
-          ':categoryId',
-          categoryId.toString()
-        )}>
-        Вернуться к выбору темы
-      </Link>
+      <div className={styles.actions}>
+        <Link
+          className={styles.link}
+          to={RoutesEnum.FORUM_CATEGORY.replace(
+            ':categoryId',
+            categoryId.toString()
+          )}>
+          Вернуться к выбору темы
+        </Link>
+      </div>
       <div className={styles.wrapper}>
         <div className={styles.header}>
           <h3 style={{ wordBreak: 'break-word' }}>
-            Комментарии к теме "{topic.topic_name || 'Без названия'}"
+            Комментарии к теме "{topic.name || 'Без названия'}"
           </h3>
-          {topic.user_id === userId && (
+          {topic.userId === userId && (
             <div className={styles.svg_icons}>
               <svg className={styles.svg_icon} onClick={enableTopicEdit}>
                 <use xlinkHref="./images/icons-sprite.svg#edit"></use>
@@ -105,9 +116,9 @@ export const ForumComments: FC = () => {
           )}
         </div>
         {topicEditEnabled && (
-          <EditForumTopicName
+          <EditForumTopic
             handleFormReset={hideTopicEdit}
-            currentTopicName={topic.topic_name}
+            currentTopicName={topic.name}
           />
         )}
         {deleteErrorMessage && (

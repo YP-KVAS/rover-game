@@ -10,6 +10,9 @@ export const TEAM_NAME = 'kvas'
 
 export const USERS_API_URL = '/users'
 export const FORUM_CATEGORIES_API_URL = '/categories'
+export const FORUM_TOPICS_API_URL = '/topics'
+
+export const TOPICS_LOAD_LIMIT = 15
 
 export enum AuthApiPaths {
   SIGN_UP = '/signup',
