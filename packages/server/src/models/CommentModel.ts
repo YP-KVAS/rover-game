@@ -14,7 +14,7 @@ import { TopicModel } from './TopicModel'
 export class CommentModel extends Model {
   @AllowNull(true)
   @Column(DataType.STRING)
-  message: string
+  message: string | null
 
   @AllowNull(true)
   @Column({ type: DataType.INTEGER, field: 'parent_comment_id' })
@@ -27,7 +27,12 @@ export class CommentModel extends Model {
 
   @AllowNull(false)
   @ForeignKey(() => TopicModel)
-  @Column({ type: DataType.INTEGER, field: 'topic_id' })
+  @Column({
+    type: DataType.INTEGER,
+    field: 'topic_id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   topicId: number
 
   @BelongsTo(() => UserModel, 'user_id')

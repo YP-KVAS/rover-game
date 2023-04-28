@@ -59,7 +59,7 @@ export const ForumTopic: FC<IForumTopic & { index: number }> = ({
     <Link
       ref={ref}
       className={styles.link}
-      to={`${RoutesEnum.FORUM}/${categoryId}/${id}`}>
+      to={`${RoutesEnum.FORUM}/${categoryId}/${id}?page=1`}>
       <span className={styles.name}>{name}</span>
       <span>{new Date(createdAt).toLocaleDateString()}</span>
     </Link>

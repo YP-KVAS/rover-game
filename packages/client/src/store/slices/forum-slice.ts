@@ -47,6 +47,7 @@ interface InitialState {
   }
   commentInfo: {
     comments: Record<number, CommentState>
+    total: number
     fetchStates: Record<number, { update: FetchState; delete: FetchState }>
     addTopLevelCommentState: FetchState
     lastTouchedCommentId: number | null
@@ -77,6 +78,7 @@ const initialState: InitialState = {
   },
   commentInfo: {
     comments: {},
+    total: 0,
     fetchStates: {},
     lastTouchedCommentId: null,
     addTopLevelCommentState: defaultFetchState,
@@ -104,7 +106,9 @@ const forumSlice = createSlice({
       state.categories.updateCategoryState = defaultFetchState
     },
     clearForumComments: state => {
-      state.commentInfo = initialState.commentInfo
+      state.commentInfo.comments = {}
+      state.commentInfo.fetchStates = {}
+      state.commentInfo.addTopLevelCommentState = defaultFetchState
     },
     clearAddCommentErrorState: (state, action: PayloadAction<number>) => {
       if (state.commentInfo.comments[action.payload]) {
@@ -292,13 +296,16 @@ const forumSlice = createSlice({
     // onGetForumComments
     builder
       .addCase(onGetForumComments.fulfilled, (state, action) => {
-        const id = action.meta.arg || 0
-        state.commentInfo.comments[id].isLoading = false
-        state.commentInfo.comments[id].errorMessage = null
-        state.commentInfo.comments[id].commentItems = action.payload
+        const id = action.meta.arg.parentCommentId || 0
+        state.commentInfo.comments[id] = {
+          isLoading: false,
+          errorMessage: null,
+          commentItems: action.payload.comments,
+        }
+        state.commentInfo.total = action.payload.total
       })
       .addCase(onGetForumComments.pending, (state, action) => {
-        const id = action.meta.arg || 0
+        const id = action.meta.arg.parentCommentId || 0
         if (!state.commentInfo.comments[id]) {
           state.commentInfo.comments[id] = {
             isLoading: true,
@@ -311,7 +318,7 @@ const forumSlice = createSlice({
         }
       })
       .addCase(onGetForumComments.rejected, (state, action) => {
-        const id = action.meta.arg || 0
+        const id = action.meta.arg.parentCommentId || 0
         if (!state.commentInfo.comments[id]) {
           state.commentInfo.comments[id] = {
             isLoading: false,
@@ -327,7 +334,7 @@ const forumSlice = createSlice({
     // onAddForumComment
     builder
       .addCase(onAddForumComment.fulfilled, (state, action) => {
-        const parentCommentId = action.meta.arg.parent_comment_id
+        const parentCommentId = action.meta.arg.parentCommentId
         if (!parentCommentId) {
           state.commentInfo.addTopLevelCommentState.isLoading = false
           state.commentInfo.addTopLevelCommentState.errorMessage = null
@@ -338,7 +345,7 @@ const forumSlice = createSlice({
         state.commentInfo.lastTouchedCommentId = action.payload.id
       })
       .addCase(onAddForumComment.pending, (state, action) => {
-        const parentCommentId = action.meta.arg.parent_comment_id
+        const parentCommentId = action.meta.arg.parentCommentId
         if (!parentCommentId) {
           state.commentInfo.addTopLevelCommentState.isLoading = true
           state.commentInfo.addTopLevelCommentState.errorMessage = null
@@ -354,7 +361,7 @@ const forumSlice = createSlice({
         }
       })
       .addCase(onAddForumComment.rejected, (state, action) => {
-        const parentCommentId = action.meta.arg.parent_comment_id
+        const parentCommentId = action.meta.arg.parentCommentId
         if (!parentCommentId) {
           state.commentInfo.addTopLevelCommentState.isLoading = false
           state.commentInfo.addTopLevelCommentState.errorMessage =

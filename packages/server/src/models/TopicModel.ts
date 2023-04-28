@@ -29,7 +29,12 @@ export class TopicModel extends Model {
 
   @AllowNull(false)
   @ForeignKey(() => CategoryModel)
-  @Column({ type: DataType.INTEGER, field: 'category_id' })
+  @Column({
+    type: DataType.INTEGER,
+    field: 'category_id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   categoryId: number
 
   @BelongsTo(() => CategoryModel, 'category_id')

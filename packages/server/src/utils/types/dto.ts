@@ -1,4 +1,5 @@
 import type { TopicModel } from '../../models/TopicModel'
+import type { CommentModel } from '../../models/CommentModel'
 
 interface Timestamp {
   createdAt: string
@@ -17,10 +18,39 @@ export const getTopicDTOFromModel = (model: TopicModel): TopicDTO => {
   return { id, name, categoryId, userId, createdAt, updatedAt }
 }
 
-export interface CommentDTO extends Timestamp {
-  id: number
-  message: string
-  parentCommentId: number | null
+export interface CreateComment {
+  message: string | null
   userId: number
   topicId: number
+  parentCommentId: number | null
+}
+
+export interface CommentDTO extends Timestamp, CreateComment {
+  id: number
+  replyCount: number
+}
+
+export const getCommentDTOFromModel = (
+  model: CommentModel,
+  replyCount: number
+): CommentDTO => {
+  const {
+    id,
+    message,
+    parentCommentId,
+    topicId,
+    userId,
+    createdAt,
+    updatedAt,
+  } = model
+  return {
+    id,
+    message,
+    parentCommentId,
+    topicId,
+    userId,
+    createdAt,
+    updatedAt,
+    replyCount,
+  }
 }

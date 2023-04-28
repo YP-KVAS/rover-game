@@ -13,12 +13,18 @@ import {
   onGetForumCategories,
 } from '../../store/thunks/forum-thunk'
 import { selectUserRoleState } from '../../store/selectors/user-selector'
+import { ConfirmModal } from '../Modal/ConfirmModal'
+import { UpdateDeleteIcons } from './CrudIcons/UpdateDeleteIcons'
 
 export const ForumCategory: FC<IForumCategory> = ({ id, name, topicCount }) => {
   const ref = useRef<HTMLDivElement | null>(null)
   const dispatch = useAppDispatch()
   const { userRole } = useAppSelector(selectUserRoleState)
   const lastTouchedCategoryId = useAppSelector(selectForumLastTouchedCategoryId)
+
+  const [modalIsOpened, setModalIsOpened] = useState(false)
+  const openModal = () => setModalIsOpened(true)
+  const closeModal = () => setModalIsOpened(false)
 
   const [editCategoryEnabled, setEditCategoryEnabled] = useState(false)
   const enableCategoryEdit = () => setEditCategoryEnabled(true)
@@ -37,6 +43,8 @@ export const ForumCategory: FC<IForumCategory> = ({ id, name, topicCount }) => {
     if (editCategoryEnabled) {
       hideCategoryEditInput()
     }
+
+    closeModal()
 
     dispatch(onDeleteForumCategory(id)).then(res => {
       if (res.type.endsWith('fulfilled')) {
@@ -61,14 +69,18 @@ export const ForumCategory: FC<IForumCategory> = ({ id, name, topicCount }) => {
         )}
       </div>
       {userRole === UserRolesEnum.ADMIN && (
-        <div className={styles.svg_icons}>
-          <svg className={styles.svg_icon} onClick={enableCategoryEdit}>
-            <use xlinkHref="./images/icons-sprite.svg#edit"></use>
-          </svg>
-          <svg className={styles.svg_icon} onClick={handleCategoryDelete}>
-            <use xlinkHref="./images/icons-sprite.svg#delete"></use>
-          </svg>
-        </div>
+        <UpdateDeleteIcons
+          editHandler={enableCategoryEdit}
+          deleteHandler={openModal}
+        />
+      )}
+      {modalIsOpened && (
+        <ConfirmModal
+          confirmHandler={handleCategoryDelete}
+          cancelHandler={closeModal}
+          message={`Вы действительно хотите удалить категорию ${name} и входящие в неё
+              темы?`}
+        />
       )}
     </div>
   )

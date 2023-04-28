@@ -2,27 +2,38 @@ import { sequelize } from '../../db'
 import { TopicModel } from '../models/TopicModel'
 import type { TopicDTO } from '../utils/types/dto'
 import { getTopicDTOFromModel } from '../utils/types/dto'
-import { TopicRepository } from '../repositories/TopicRepository'
-import { CategoryRepository } from '../repositories/CategoryRepository'
-import { CommentRepository } from '../repositories/CommentRepository'
-
-const topicRepository = new TopicRepository()
-const categoryRepository = new CategoryRepository()
-const commentRepository = new CommentRepository()
+import {
+  ITopicRepository,
+  TopicRepository,
+} from '../repositories/TopicRepository'
+import {
+  CategoryRepository,
+  ICategoryRepository,
+} from '../repositories/CategoryRepository'
+import {
+  CommentRepository,
+  ICommentRepository,
+} from '../repositories/CommentRepository'
 
 export class TopicService {
+  constructor(
+    private _topicRepository: ITopicRepository,
+    private _categoryRepository: ICategoryRepository,
+    private _commentRepository: ICommentRepository
+  ) {}
+
   async findAll(
     id: number,
     limit?: number,
     offset?: number,
     search?: string
   ): Promise<Array<TopicDTO>> {
-    const topics = await topicRepository.getAll(id, limit, offset, search)
+    const topics = await this._topicRepository.getAll(id, limit, offset, search)
     return topics.map(topic => getTopicDTOFromModel(topic))
   }
 
   async findById(id: number): Promise<TopicModel | null> {
-    return await topicRepository.getById(id)
+    return await this._topicRepository.getById(id)
   }
 
   async create(
@@ -33,14 +44,14 @@ export class TopicService {
   ): Promise<TopicModel> {
     const transaction = await sequelize.transaction()
     try {
-      const topic = await topicRepository.save(
+      const topic = await this._topicRepository.save(
         name,
         userId,
         categoryId,
         transaction
       )
-      await categoryRepository.incrementTopics(categoryId, transaction)
-      await commentRepository.save(
+      await this._categoryRepository.incrementTopics(categoryId, transaction)
+      await this._commentRepository.save(
         { message, userId, topicId: topic.id, parentCommentId: null },
         transaction
       )
@@ -68,11 +79,17 @@ export class TopicService {
       topicToUpdate.categoryId = categoryId
     }
 
-    const topic = await topicRepository.update(topicToUpdate)
+    const topic = await this._topicRepository.update(topicToUpdate)
     return getTopicDTOFromModel(topic)
   }
 
   async delete(id: number): Promise<void> {
-    return await topicRepository.delete(id)
+    return await this._topicRepository.delete(id)
   }
 }
+
+export const topicService = new TopicService(
+  new TopicRepository(),
+  new CategoryRepository(),
+  new CommentRepository()
+)

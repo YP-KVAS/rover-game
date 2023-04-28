@@ -20,28 +20,37 @@ export interface IForumTopic {
   userId: number
 }
 
-export interface IGetForumTopic {
-  categoryId: number
+interface GetForumItems {
   offset?: number
   limit?: number
   search?: string
 }
 
-export interface AddForumComment {
+export interface IGetForumTopics extends GetForumItems {
+  categoryId: number
+}
+
+export interface IGetForumComments extends GetForumItems {
+  topicId: number
+  parentCommentId: number | null
+}
+
+export interface IGetForumCommentsRes {
+  comments: Array<IForumComment>
+  total: number
+}
+
+export interface IAddForumComment {
   message: string | null
-  parent_comment_id: number | null
-  user_id: number
+  topicId: number
+  parentCommentId: number | null
+  userId: number
 }
 
-export interface UpdateForumComment {
+export interface IForumComment extends IAddForumComment {
   id: number
-  message: string
-}
-
-export interface IForumComment extends AddForumComment {
-  id: number
-  date: string
-  reply_count: number
+  createdAt: string
+  replyCount: number
 }
 
 export interface NewTopic extends Record<string, unknown> {

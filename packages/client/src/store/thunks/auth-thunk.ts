@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { User, UserSignIn, UserSignUp } from '../../utils/types/user'
 import { getUser, logout, signIn, signUp } from '../../utils/rest-api/auth-api'
+import { RootState } from '../store'
 
 export const onGetUser = createAsyncThunk<User, void, { rejectValue: string }>(
   'auth/onGetUser',
@@ -10,6 +11,15 @@ export const onGetUser = createAsyncThunk<User, void, { rejectValue: string }>(
     } catch (err: unknown) {
       return rejectWithValue((err as Error).message || 'Unable to get user')
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState() as RootState
+      const userIsLoading = state.auth.isLoading
+      if (userIsLoading) {
+        return false
+      }
+    },
   }
 )
 

@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express'
-import { CategoryService } from '../services/CategoryService'
 import { INTERNAL_SERVER_ERROR } from '../utils/const-variables/api'
-
-const categoryService = new CategoryService()
+import { categoryService } from '../services/CategoryService'
 
 export class CategoryController {
   async findAll(_: Request, res: Response) {

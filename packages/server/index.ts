@@ -12,12 +12,14 @@ import { BASE_YA_URL, YA_API_URL } from './src/utils/const-variables/api-yandex'
 import {
   API_VERSION,
   CATEGORIES_URL,
+  COMMENTS_URL,
   TOPICS_URL,
   USERS_URL,
 } from './src/utils/const-variables/api'
 import categoryRouter from './src/router/api-router/CategoryRouter'
 import userRouter from './src/router/api-router/UserRouter'
 import topicRouter from './src/router/api-router/TopicRouter'
+import commentRouter from './src/router/api-router/CommentRouter'
 
 const app = express()
 app.use(cookieParser())
@@ -58,6 +60,7 @@ app.get('/', (_, res) => {
 })
 app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
 app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
+app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
 app.use(`${API_VERSION}${USERS_URL}`, userRouter)
 app.use(YA_API_URL, proxy)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))

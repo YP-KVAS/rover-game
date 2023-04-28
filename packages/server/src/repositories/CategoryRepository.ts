@@ -1,7 +1,7 @@
 import { CategoryModel } from '../models/CategoryModel'
 import type { Transaction } from 'sequelize'
 
-interface ICategoryRepository {
+export interface ICategoryRepository {
   save(categoryName: string): Promise<CategoryModel>
   update(category: CategoryModel): Promise<CategoryModel>
   delete(categoryId: number): Promise<void>

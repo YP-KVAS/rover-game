@@ -12,6 +12,9 @@ import {
 } from '../../../store/thunks/forum-thunk'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
 import { selectForumUpdateCommentsStateById } from '../../../store/selectors/forum-selector'
+import { COMMENTS_LOAD_LIMIT } from '../../../utils/const-variables/api'
+import { useCurrentPage } from '../../../hooks/useCurrentPage'
+import { useIntegerParams } from '../../../hooks/useIntegerParams'
 
 interface EditForumCommentProps {
   commentId: number
@@ -27,6 +30,9 @@ export const EditForumComment: FC<EditForumCommentProps> = ({
   handleFormReset,
 }) => {
   const dispatch = useAppDispatch()
+  const topicId = useIntegerParams('topicId')
+  const currentPage = useCurrentPage()
+
   const updateState = useAppSelector(state =>
     selectForumUpdateCommentsStateById(state, commentId)
   )
@@ -45,7 +51,19 @@ export const EditForumComment: FC<EditForumCommentProps> = ({
       })
     ).then(res => {
       if (res.type.endsWith('fulfilled')) {
-        dispatch(onGetForumComments(parentCommentId))
+        const limit = parentCommentId ? undefined : COMMENTS_LOAD_LIMIT
+        const offset = parentCommentId
+          ? 0
+          : (currentPage - 1) * COMMENTS_LOAD_LIMIT
+
+        dispatch(
+          onGetForumComments({
+            parentCommentId,
+            topicId,
+            limit,
+            offset,
+          })
+        )
         handleFormReset()
       }
     })

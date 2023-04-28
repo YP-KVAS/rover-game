@@ -10,7 +10,6 @@ import {
   onAddForumTopic,
   onGetForumTopics,
 } from '../../../store/thunks/forum-thunk'
-import { useParams } from 'react-router-dom'
 import { AddForumItemWithState } from './AddForumItemWithState'
 import { selectCurrentUserId } from '../../../store/selectors/user-selector'
 import { clearAddTopicState } from '../../../store/slices/forum-slice'
@@ -18,10 +17,11 @@ import {
   selectForumAddTopicState,
   selectForumTopicSearchQuery,
 } from '../../../store/selectors/forum-selector'
+import { useIntegerParams } from '../../../hooks/useIntegerParams'
 
 export const AddForumTopic: FC = () => {
   const dispatch = useAppDispatch()
-  const { categoryId = -1 } = useParams()
+  const categoryId = useIntegerParams('categoryId')
   const { errorMessage } = useAppSelector(selectForumAddTopicState)
   const searchQuery = useAppSelector(selectForumTopicSearchQuery)
   const userId = useAppSelector(selectCurrentUserId)
@@ -37,13 +37,11 @@ export const AddForumTopic: FC = () => {
 
   const handleFormSubmit = handleSubmit(data => {
     if (userId) {
-      dispatch(
-        onAddForumTopic({ ...data, userId, categoryId: +categoryId })
-      ).then(res => {
+      dispatch(onAddForumTopic({ ...data, userId, categoryId })).then(res => {
         if (res.type.endsWith('fulfilled')) {
           dispatch(
             onGetForumTopics({
-              categoryId: +categoryId,
+              categoryId,
               search: searchQuery || '',
             })
           )
@@ -55,7 +53,9 @@ export const AddForumTopic: FC = () => {
 
   const handleFormReset = () => {
     reset()
-    dispatch(clearAddTopicState())
+    if (errorMessage) {
+      dispatch(clearAddTopicState())
+    }
   }
 
   return (

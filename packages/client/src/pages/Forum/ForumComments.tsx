@@ -1,90 +1,79 @@
 import styles from './Forum.module.scss'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import {
-  onDeleteForumTopic,
   onGetForumComments,
   onGetForumTopics,
 } from '../../store/thunks/forum-thunk'
 import {
   selectForumCommentsByParentId,
-  selectForumDeleteTopicState,
+  selectForumCommentsTotal,
   selectForumTopicById,
+  selectForumTopicsByCategoryId,
   selectForumTopicSearchQuery,
 } from '../../store/selectors/forum-selector'
 import { Loader } from '../../components/Loader/Loader'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ForumComment } from '../../components/Forum/ForumComment'
-import {
-  clearForumComments,
-  clearTopicInfoState,
-} from '../../store/slices/forum-slice'
+import { clearForumComments } from '../../store/slices/forum-slice'
 import { AddForumTopLevelComment } from '../../components/Forum/AddForumItems/AddForumTopLevelComment'
 import { Page404 } from '../Page404'
-import { selectCurrentUserId } from '../../store/selectors/user-selector'
 import { RoutesEnum } from '../../utils/const-variables/routes'
-import { EditForumTopic } from '../../components/Forum/EditForumItems/EditForumTopic'
 import { Title } from '../../components/Title/Title'
+import { PageLinks } from '../../components/PageLinks/PageLinks'
+import { COMMENTS_LOAD_LIMIT } from '../../utils/const-variables/api'
+import { useIntegerParams } from '../../hooks/useIntegerParams'
+import { useCurrentPage } from '../../hooks/useCurrentPage'
+import { TopicHeaderWithActions } from '../../components/Forum/TopicHeaderWithActions/TopicHeaderWithActions'
 
 export const ForumComments: FC = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const { categoryId = -1, topicId = -1 } = useParams()
+  const categoryId = useIntegerParams('categoryId')
+  const topicId = useIntegerParams('topicId')
 
-  const [topicEditEnabled, setTopicEditEnabled] = useState(false)
-  const enableTopicEdit = () => setTopicEditEnabled(true)
-  const hideTopicEdit = () => setTopicEditEnabled(false)
-
-  const { isLoading, errorMessage, commentItems } = useAppSelector(
-    state => selectForumCommentsByParentId(state, 0) || {}
+  const forumCommentsState = useAppSelector(state =>
+    selectForumCommentsByParentId(state, 0)
   )
   const topic = useAppSelector(state =>
-    selectForumTopicById(state, +categoryId, +topicId)
+    selectForumTopicById(state, categoryId, topicId)
   )
-  const userId = useAppSelector(selectCurrentUserId)
-  const { errorMessage: deleteErrorMessage } = useAppSelector(
-    selectForumDeleteTopicState
+  const topicsState = useAppSelector(state =>
+    selectForumTopicsByCategoryId(state, categoryId)
   )
+
   const searchQuery = useAppSelector(selectForumTopicSearchQuery)
+  const totalComments = useAppSelector(selectForumCommentsTotal)
+  const totalPages = Math.ceil(totalComments / COMMENTS_LOAD_LIMIT)
+
+  const currentPage = useCurrentPage()
+  const offset = (currentPage - 1) * COMMENTS_LOAD_LIMIT
 
   useEffect(() => {
     if (!topic) {
-      dispatch(
-        onGetForumTopics({ categoryId: +categoryId, search: searchQuery || '' })
-      )
+      dispatch(onGetForumTopics({ categoryId, search: searchQuery || '' }))
     }
-    dispatch(onGetForumComments(null))
+
+    dispatch(
+      onGetForumComments({
+        parentCommentId: null,
+        topicId,
+        limit: COMMENTS_LOAD_LIMIT,
+        offset,
+      })
+    )
 
     return () => {
       dispatch(clearForumComments())
-      dispatch(clearTopicInfoState())
     }
-  }, [dispatch, topic?.id])
+  }, [dispatch, topicId, currentPage])
 
-  const handleTopicDelete = () => {
-    dispatch(onDeleteForumTopic(+topicId)).then(res => {
-      if (res.type.endsWith('fulfilled')) {
-        dispatch(
-          onGetForumTopics({
-            categoryId: +categoryId,
-            search: searchQuery || '',
-          })
-        )
-        navigate(
-          RoutesEnum.FORUM_CATEGORY.replace(
-            ':categoryId',
-            categoryId.toString()
-          )
-        )
-      }
-    })
-  }
-
-  return isLoading && !commentItems ? (
+  return topicsState?.isLoading ? (
     <Loader />
-  ) : errorMessage ? (
-    <strong className={styles.message}>{errorMessage}</strong>
-  ) : !topic ? (
+  ) : forumCommentsState?.errorMessage ? (
+    <strong className={styles.message}>
+      {forumCommentsState.errorMessage}
+    </strong>
+  ) : !topic || currentPage > totalPages ? (
     <Page404 />
   ) : (
     <div className={styles.area}>
@@ -100,41 +89,28 @@ export const ForumComments: FC = () => {
         </Link>
       </div>
       <div className={styles.wrapper}>
-        <div className={styles.header}>
-          <h3 style={{ wordBreak: 'break-word' }}>
-            Комментарии к теме "{topic.name || 'Без названия'}"
-          </h3>
-          {topic.userId === userId && (
-            <div className={styles.svg_icons}>
-              <svg className={styles.svg_icon} onClick={enableTopicEdit}>
-                <use xlinkHref="./images/icons-sprite.svg#edit"></use>
-              </svg>
-              <svg className={styles.svg_icon} onClick={handleTopicDelete}>
-                <use xlinkHref="./images/icons-sprite.svg#delete"></use>
-              </svg>
-            </div>
-          )}
-        </div>
-        {topicEditEnabled && (
-          <EditForumTopic
-            handleFormReset={hideTopicEdit}
-            currentTopicName={topic.name}
-          />
-        )}
-        {deleteErrorMessage && (
-          <span className={styles.error}>{deleteErrorMessage}</span>
-        )}
+        <TopicHeaderWithActions
+          topicUserId={topic.userId}
+          topicName={topic.name}
+        />
         <hr />
-        {isLoading && <Loader />}
+        {forumCommentsState?.isLoading && <Loader />}
         <ul className={styles.list}>
-          {commentItems?.map(comment => (
+          {forumCommentsState?.commentItems?.map(comment => (
             <li key={comment.id} className={styles.list_item}>
               <ForumComment {...comment} />
             </li>
           ))}
         </ul>
+        {totalPages > 1 && (
+          <PageLinks currentPage={currentPage} maxPage={totalPages} />
+        )}
       </div>
-      <AddForumTopLevelComment />
+      <AddForumTopLevelComment
+        totalComments={totalComments}
+        totalPages={totalPages}
+        currentPage={currentPage}
+      />
     </div>
   )
 }

@@ -11,7 +11,7 @@ import {
   onUpdateForumTopic,
 } from '../../../store/thunks/forum-thunk'
 import { useAppDispatch, useAppSelector } from '../../../hooks/useStore'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { clearUpdateTopicState } from '../../../store/slices/forum-slice'
 import { Loader } from '../../Loader/Loader'
 import {
@@ -20,6 +20,7 @@ import {
 } from '../../../store/selectors/forum-selector'
 import { Dropdown } from '../../Dropdown/Dropdown'
 import { RoutesEnum } from '../../../utils/const-variables/routes'
+import { useIntegerParams } from '../../../hooks/useIntegerParams'
 
 interface EditForumTopicProps {
   handleFormReset: () => void
@@ -32,7 +33,9 @@ export const EditForumTopic: FC<EditForumTopicProps> = ({
 }) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { categoryId = -1, topicId = -1 } = useParams()
+  const categoryId = useIntegerParams('categoryId')
+  const topicId = useIntegerParams('topicId')
+
   const { isLoading, errorMessage } = useAppSelector(
     selectForumUpdateTopicState
   )
@@ -40,8 +43,13 @@ export const EditForumTopic: FC<EditForumTopicProps> = ({
     id: category.id,
     name: category.name,
   }))
-  const [newCategoryId, setNewCategoryId] = useState(+categoryId)
-  const updateCategoryId = (id: number) => setNewCategoryId(id)
+
+  const [newCategoryId, setNewCategoryId] = useState(categoryId)
+  const updateCategoryId = (id: number) => {
+    if (id !== newCategoryId) {
+      setNewCategoryId(id)
+    }
+  }
 
   const { handleSubmit, register } = useForm<{
     [FormInputNames.FORUM_TOPIC_TITLE]: string
@@ -51,18 +59,20 @@ export const EditForumTopic: FC<EditForumTopicProps> = ({
 
   useEffect(() => {
     return () => {
-      dispatch(clearUpdateTopicState())
+      if (errorMessage) {
+        dispatch(clearUpdateTopicState())
+      }
     }
   }, [dispatch])
 
   const handleFormSubmit = handleSubmit(data => {
     const name = data[FormInputNames.FORUM_TOPIC_TITLE]
-    if (currentTopicName !== name || newCategoryId !== +categoryId) {
-      dispatch(onUpdateForumTopic({ id: +topicId, newCategoryId, name })).then(
+    if (currentTopicName !== name || newCategoryId !== categoryId) {
+      dispatch(onUpdateForumTopic({ id: topicId, newCategoryId, name })).then(
         res => {
           if (res.type.endsWith('fulfilled')) {
             handleFormReset()
-            dispatch(onGetForumTopics({ categoryId: +categoryId }))
+            dispatch(onGetForumTopics({ categoryId }))
             navigate(
               RoutesEnum.FORUM_TOPIC.replace(
                 ':categoryId',
@@ -81,7 +91,8 @@ export const EditForumTopic: FC<EditForumTopicProps> = ({
     <AddForumItemForm
       handleFormSubmit={handleFormSubmit}
       handleFormReset={handleFormReset}
-      errorMessage={errorMessage}>
+      errorMessage={errorMessage}
+      flexGrow={0}>
       <div className={styles.inputs}>
         <div className={styles.text_input_wrapper}>
           <FormInput
@@ -94,7 +105,7 @@ export const EditForumTopic: FC<EditForumTopicProps> = ({
           <div className={styles.dropdown_wrapper}>
             <Dropdown
               options={categories}
-              defaultOption={categories.find(cat => cat.id === +categoryId)}
+              defaultOption={categories.find(cat => cat.id === categoryId)}
               onSelect={updateCategoryId}
             />
           </div>

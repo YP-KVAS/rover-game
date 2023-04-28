@@ -1,25 +1,23 @@
 import {
-  AddForumComment,
+  IAddForumComment,
   IAddTopic,
   IForumCategory,
   IForumComment,
   IForumTopic,
-  IGetForumTopic,
+  IGetForumComments,
+  IGetForumCommentsRes,
+  IGetForumTopics,
   IUpdateForumTopic,
-  UpdateForumComment,
 } from '../types/forum'
-import { FORUM_COMMENTS } from '../fake-forum-data'
 import { FetchMethods, request } from './base-request'
 import {
   BASE_SERVER_URL,
   FORUM_CATEGORIES_API_URL,
+  FORUM_COMMENTS_API_URL,
   FORUM_TOPICS_API_URL,
   TOPICS_LOAD_LIMIT,
 } from '../const-variables/api'
-
-// TODO: implement Forum API (Sprint 8)
-
-const TIMEOUT = 500
+import { stringifyQuery } from '../stringify-query'
 
 // categories
 
@@ -55,17 +53,19 @@ export async function deleteForumCategory(id: number): Promise<void> {
 // topics
 
 export async function getForumTopics(
-  topic: IGetForumTopic
+  topicsQuery: IGetForumTopics
 ): Promise<Array<IForumTopic>> {
   const {
     categoryId,
     offset = 0,
     limit = TOPICS_LOAD_LIMIT,
     search = '',
-  } = topic
+  } = topicsQuery
   return await request(
     BASE_SERVER_URL,
-    `${FORUM_CATEGORIES_API_URL}/${categoryId}${FORUM_TOPICS_API_URL}?limit=${limit}&offset=${offset}&search=${search}`,
+    `${FORUM_CATEGORIES_API_URL}/${categoryId}${FORUM_TOPICS_API_URL}${stringifyQuery(
+      { limit, offset, search }
+    )}`,
     {
       method: FetchMethods.GET,
     }
@@ -101,67 +101,47 @@ export async function deleteForumTopic(id: number): Promise<void> {
 
 // comments
 
-export function getForumComments(
-  parent_comment_id: number | null = null
-): Promise<Array<IForumComment>> {
-  return new Promise(resolve => {
-    const comments: Array<IForumComment> = !parent_comment_id
-      ? FORUM_COMMENTS[0]
-      : !FORUM_COMMENTS[parent_comment_id]
-      ? FORUM_COMMENTS[0]?.map(comment => ({
-          ...comment,
-          id: Math.floor(Date.now() * Math.random()),
-          parent_comment_id,
-        }))
-      : FORUM_COMMENTS[parent_comment_id]
-    setTimeout(() => resolve(comments || null), TIMEOUT)
-  })
+export async function getForumComments(
+  commentsQuery: IGetForumComments
+): Promise<IGetForumCommentsRes> {
+  const { topicId, parentCommentId, offset = 0, limit } = commentsQuery
+  return await request(
+    BASE_SERVER_URL,
+    `${FORUM_TOPICS_API_URL}/${topicId}${FORUM_COMMENTS_API_URL}${stringifyQuery(
+      { limit, offset, parentCommentId }
+    )}`,
+    {
+      method: FetchMethods.GET,
+    }
+  )
 }
 
-export function addForumComment(
-  comment: AddForumComment
+export async function addForumComment(
+  comment: IAddForumComment
 ): Promise<IForumComment> {
-  return new Promise(resolve => {
-    const newComment = {
-      id: Date.now(),
-      date: new Date().toISOString(),
-      reply_count: 0,
-      ...comment,
+  const { topicId, ...restData } = comment
+  return await request(
+    BASE_SERVER_URL,
+    `${FORUM_TOPICS_API_URL}/${topicId}${FORUM_COMMENTS_API_URL}`,
+    {
+      method: FetchMethods.POST,
+      data: { ...restData },
     }
-    if (comment.parent_comment_id) {
-      FORUM_COMMENTS[comment.parent_comment_id] ||= []
-      FORUM_COMMENTS[comment.parent_comment_id] = [
-        ...FORUM_COMMENTS[comment.parent_comment_id],
-        newComment,
-      ]
-    } else {
-      FORUM_COMMENTS[0] = [...FORUM_COMMENTS[0], newComment]
-    }
-    setTimeout(() => resolve(newComment), TIMEOUT)
-  })
+  )
 }
 
-export function updateForumComment(
-  comment: UpdateForumComment
+export async function updateForumComment(
+  id: number,
+  message: string
 ): Promise<IForumComment> {
-  return new Promise((resolve, reject) => {
-    const commentToUpdate = FORUM_COMMENTS[0].find(c => c.id === +comment.id)
-    FORUM_COMMENTS[0] = FORUM_COMMENTS[0].map(c =>
-      c.id === +comment.id ? { ...c, message: comment.message } : c
-    )
-    if (commentToUpdate) {
-      setTimeout(() => resolve(commentToUpdate), TIMEOUT)
-    } else {
-      reject('Unknown')
-    }
+  return await request(BASE_SERVER_URL, `${FORUM_COMMENTS_API_URL}/${id}`, {
+    method: FetchMethods.PATCH,
+    data: { message },
   })
 }
 
-export function deleteForumComment(id: number): Promise<void> {
-  return new Promise(resolve => {
-    FORUM_COMMENTS[0] = FORUM_COMMENTS[0].map(c =>
-      c.id === id ? { ...c, message: null } : c
-    )
-    setTimeout(() => resolve(), TIMEOUT)
+export async function deleteForumComment(id: number): Promise<void> {
+  return await request(BASE_SERVER_URL, `${FORUM_COMMENTS_API_URL}/${id}`, {
+    method: FetchMethods.DELETE,
   })
 }

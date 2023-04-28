@@ -1,7 +1,7 @@
 import { UserModel } from '../models/UserModel'
 import { RoleModel } from '../models/RoleModel'
 
-interface IUserRepository {
+export interface IUserRepository {
   save(user: UserModel): Promise<void>
   update(user: UserModel): Promise<void>
   delete(userId: number): Promise<void>

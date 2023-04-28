@@ -10,7 +10,10 @@ import { Loader } from '../../components/Loader/Loader'
 import { ForumCategory } from '../../components/Forum/ForumCategory'
 import { Title } from '../../components/Title/Title'
 import { AddForumCategory } from '../../components/Forum/AddForumItems/AddForumCategory'
-import { onGetUserRole } from '../../store/thunks/forum-thunk'
+import {
+  onGetForumCategories,
+  onGetUserRole,
+} from '../../store/thunks/forum-thunk'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
 import { clearUserRoleErrorMessage } from '../../store/slices/user-slice'
 import {
@@ -43,6 +46,8 @@ export const ForumCategories: FC = () => {
   }, [dispatch, userRoleErrorMessage, userId])
 
   useEffect(() => {
+    dispatch(onGetForumCategories())
+
     return () => {
       if (userRoleErrorMessage) {
         dispatch(clearUserRoleErrorMessage())
