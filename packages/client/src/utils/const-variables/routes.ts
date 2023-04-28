@@ -11,3 +11,5 @@ export enum RoutesEnum {
   ERROR_500 = '/500',
   START = '/start',
 }
+
+export const PAGE_QUERY = 'page'

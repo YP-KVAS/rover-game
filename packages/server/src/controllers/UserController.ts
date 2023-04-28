@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express'
 import { INTERNAL_SERVER_ERROR } from '../utils/const-variables/api'
-import { UserService } from '../services/UserService'
-
-const userService = new UserService()
+import { userService } from '../services/UserService'
 
 export class UserController {
   async findRoleById(req: Request, res: Response) {

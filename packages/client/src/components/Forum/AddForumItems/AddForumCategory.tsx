@@ -39,7 +39,9 @@ export const AddForumCategory: FC = () => {
 
   const handleFormReset = () => {
     reset()
-    dispatch(clearAddCategoryState())
+    if (errorMessage) {
+      dispatch(clearAddCategoryState())
+    }
   }
 
   return (

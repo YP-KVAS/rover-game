@@ -60,6 +60,9 @@ export const selectForumCommentsByParentId = (
   parentId: number
 ) => state.forum.commentInfo.comments[parentId]
 
+export const selectForumCommentsTotal = (state: RootState) =>
+  state.forum.commentInfo.total
+
 export const selectForumAddGetCommentsStateByParentId = (
   state: RootState,
   parentId: number

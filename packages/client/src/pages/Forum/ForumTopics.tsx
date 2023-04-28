@@ -1,6 +1,6 @@
 import styles from './Forum.module.scss'
 import { FC, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import {
   selectCategoryNameById,
@@ -17,16 +17,17 @@ import { RoutesEnum } from '../../utils/const-variables/routes'
 import { Title } from '../../components/Title/Title'
 import { SearchTopicItems } from '../../components/Forum/SearchForumItems/SearchTopicItems'
 import { clearTopicInfoState } from '../../store/slices/forum-slice'
+import { useIntegerParams } from '../../hooks/useIntegerParams'
 
 export const ForumTopics: FC = () => {
-  const { categoryId = -1 } = useParams()
+  const categoryId = useIntegerParams('categoryId')
   const dispatch = useAppDispatch()
 
   const category = useAppSelector(state =>
-    selectCategoryNameById(state, +categoryId)
+    selectCategoryNameById(state, categoryId)
   )
   const topics = useAppSelector(state =>
-    selectForumTopicsByCategoryId(state, +categoryId)
+    selectForumTopicsByCategoryId(state, categoryId)
   )
   const { isLoading: addTopicLoading } = useAppSelector(
     selectForumAddTopicState
@@ -35,9 +36,7 @@ export const ForumTopics: FC = () => {
 
   useEffect(() => {
     if (categoryId !== -1 && !topics?.isLoading) {
-      dispatch(
-        onGetForumTopics({ categoryId: +categoryId, search: searchQuery || '' })
-      )
+      dispatch(onGetForumTopics({ categoryId, search: searchQuery || '' }))
     }
   }, [dispatch, categoryId])
 

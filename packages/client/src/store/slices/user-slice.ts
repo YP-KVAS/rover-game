@@ -15,13 +15,17 @@ interface UserRoleState extends FetchState {
   userRole: UserRolesEnum | null
 }
 
+interface UserWithState extends FetchState {
+  user: User | null
+}
+
 interface InitialState {
   user: User | null
   userRoleState: UserRoleState
   changeSettings: FetchState
   changeAvatar: FetchState
   changePassword: FetchState
-  allUsers: Record<number, User | null>
+  allUsers: Record<number, UserWithState>
 }
 
 const defaultFetchState = {
@@ -106,10 +110,37 @@ const userSlice = createSlice({
     // onGetUserById
     builder
       .addCase(onGetUserById.fulfilled, (state, action) => {
-        state.allUsers[action.meta.arg] = action.payload
+        state.allUsers[action.meta.arg] = {
+          isLoading: false,
+          errorMessage: null,
+          user: action.payload,
+        }
+      })
+      .addCase(onGetUserById.pending, (state, action) => {
+        const id = action.meta.arg
+        if (!state.allUsers[id]) {
+          state.allUsers[id] = {
+            isLoading: true,
+            errorMessage: null,
+            user: null,
+          }
+        } else {
+          state.allUsers[id].isLoading = true
+          state.allUsers[id].errorMessage = null
+        }
       })
       .addCase(onGetUserById.rejected, (state, action) => {
-        state.allUsers[action.meta.arg] = null
+        const id = action.meta.arg
+        if (!state.allUsers[id]) {
+          state.allUsers[id] = {
+            isLoading: false,
+            errorMessage: null,
+            user: null,
+          }
+        } else {
+          state.allUsers[id].isLoading = false
+          state.allUsers[id].errorMessage = action.payload || null
+        }
       })
 
     // onGetUserRole

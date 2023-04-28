@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment_header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+
+  & span {
+    font-size: var(--font-sm);
+  }
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.comment_user {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment_message {
+  word-break: break-word;
+}
+
+.deleted_comment {
+  font-style: italic;
+  opacity: 0.5;
+}

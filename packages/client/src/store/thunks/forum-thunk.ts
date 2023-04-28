@@ -14,31 +14,46 @@ import {
   updateForumTopic,
 } from '../../utils/rest-api/forum-api'
 import {
-  AddForumComment,
+  IAddForumComment,
   IAddTopic,
   IForumCategory,
   IForumComment,
   IForumTopic,
-  IGetForumTopic,
+  IGetForumComments,
+  IGetForumCommentsRes,
+  IGetForumTopics,
   IUpdateForumTopic,
-  UpdateForumComment,
 } from '../../utils/types/forum'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
 import { getUserRole } from '../../utils/rest-api/user-api'
+import { RootState } from '../store'
 
 export const onGetForumCategories = createAsyncThunk<
   Array<IForumCategory>,
   void,
   { rejectValue: string }
->('forum/onGetForumCategories', async (_, { rejectWithValue }) => {
-  try {
-    return await getForumCategories()
-  } catch (err: unknown) {
-    return rejectWithValue(
-      (err as Error).message || 'Ошибка при загрузке категорий'
-    )
+>(
+  'forum/onGetForumCategories',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await getForumCategories()
+    } catch (err: unknown) {
+      return rejectWithValue(
+        (err as Error).message || 'Ошибка при загрузке категорий'
+      )
+    }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState() as RootState
+      const categoriesAreLoading =
+        state.forum.categories.getCategoriesState.isLoading
+      if (categoriesAreLoading) {
+        return false
+      }
+    },
   }
-})
+)
 
 export const onAddForumCategory = createAsyncThunk<
   IForumCategory,
@@ -84,17 +99,35 @@ export const onDeleteForumCategory = createAsyncThunk<
 
 export const onGetForumTopics = createAsyncThunk<
   Array<IForumTopic>,
-  IGetForumTopic,
+  IGetForumTopics,
   { rejectValue: string }
->('forum/onGetForumTopics', async (topic, { rejectWithValue }) => {
-  try {
-    return await getForumTopics(topic)
-  } catch (err: unknown) {
-    return rejectWithValue(
-      (err as Error).message || 'Не удалось загрузить топики'
-    )
+>(
+  'forum/onGetForumTopics',
+  async (topicsQuery, { rejectWithValue }) => {
+    try {
+      return await getForumTopics(topicsQuery)
+    } catch (err: unknown) {
+      return rejectWithValue(
+        (err as Error).message || 'Не удалось загрузить топики'
+      )
+    }
+  },
+  {
+    condition: (topicsQuery: IGetForumTopics, { getState }) => {
+      const state = getState() as RootState
+      const categoryId = topicsQuery.categoryId
+      const topicsAreLoading =
+        state.forum.topicInfo.topics[categoryId]?.isLoading
+      if (
+        topicsAreLoading &&
+        (!topicsQuery.offset || topicsQuery.offset === 0) &&
+        !topicsQuery.search
+      ) {
+        return false
+      }
+    },
   }
-})
+)
 
 export const onAddForumTopic = createAsyncThunk<
   IForumTopic,
@@ -137,22 +170,39 @@ export const onDeleteForumTopic = createAsyncThunk<
 })
 
 export const onGetForumComments = createAsyncThunk<
-  Array<IForumComment>,
-  number | null,
+  IGetForumCommentsRes,
+  IGetForumComments,
   { rejectValue: string }
->('forum/onGetForumComments', async (parentCommentId, { rejectWithValue }) => {
-  try {
-    return await getForumComments(parentCommentId)
-  } catch (err: unknown) {
-    return rejectWithValue(
-      (err as Error).message || 'Не удалось загрузить комментарии'
-    )
+>(
+  'forum/onGetForumComments',
+  async (commentsQuery, { rejectWithValue }) => {
+    try {
+      return await getForumComments(commentsQuery)
+    } catch (err: unknown) {
+      return rejectWithValue(
+        (err as Error).message || 'Не удалось загрузить комментарии'
+      )
+    }
+  },
+  {
+    condition: (commentsQuery: IGetForumComments, { getState }) => {
+      const state = getState() as RootState
+      const parentId = commentsQuery.parentCommentId || 0
+      const commentsAreLoading =
+        state.forum.commentInfo.comments[parentId]?.isLoading
+      if (
+        commentsAreLoading &&
+        (!commentsQuery.offset || commentsQuery.offset === 0)
+      ) {
+        return false
+      }
+    },
   }
-})
+)
 
 export const onAddForumComment = createAsyncThunk<
   IForumComment,
-  AddForumComment,
+  IAddForumComment,
   { rejectValue: string }
 >('forum/onAddForumComment', async (comment, { rejectWithValue }) => {
   try {
@@ -166,17 +216,20 @@ export const onAddForumComment = createAsyncThunk<
 
 export const onUpdateForumComment = createAsyncThunk<
   IForumComment,
-  UpdateForumComment,
+  { id: number; message: string },
   { rejectValue: string }
->('forum/onUpdateForumComment', async (comment, { rejectWithValue }) => {
-  try {
-    return await updateForumComment(comment)
-  } catch (err: unknown) {
-    return rejectWithValue(
-      (err as Error).message || 'Ошибка при изменении комментария'
-    )
+>(
+  'forum/onUpdateForumComment',
+  async ({ id, message }, { rejectWithValue }) => {
+    try {
+      return await updateForumComment(id, message)
+    } catch (err: unknown) {
+      return rejectWithValue(
+        (err as Error).message || 'Ошибка при изменении комментария'
+      )
+    }
   }
-})
+)
 
 export const onDeleteForumComment = createAsyncThunk<
   void,

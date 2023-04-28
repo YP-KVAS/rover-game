@@ -1,21 +1,13 @@
 import type { Request, Response } from 'express'
-import { TopicService } from '../services/TopicService'
 import { INTERNAL_SERVER_ERROR } from '../utils/const-variables/api'
-
-const topicService = new TopicService()
+import { getQueryLimitAndOffset } from '../utils/util-functions'
+import { topicService } from '../services/TopicService'
 
 export class TopicController {
   async findAll(req: Request, res: Response) {
     try {
       const categoryId = parseInt(req.params['id'])
-      const limit =
-        typeof req.query['limit'] === 'string'
-          ? parseInt(req.query['limit'])
-          : undefined
-      const offset =
-        typeof req.query['offset'] === 'string'
-          ? parseInt(req.query['offset'])
-          : undefined
+      const { limit, offset } = getQueryLimitAndOffset(req)
       const search =
         typeof req.query['search'] === 'string' ? req.query['search'] : ''
 

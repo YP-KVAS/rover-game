@@ -2,7 +2,7 @@ import { TopicModel } from '../models/TopicModel'
 import type { Transaction } from 'sequelize'
 import { sequelize } from '../../db'
 
-interface ITopicRepository {
+export interface ITopicRepository {
   save(
     name: string,
     userId: number,

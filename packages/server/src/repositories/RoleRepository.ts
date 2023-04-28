@@ -1,6 +1,6 @@
 import { RoleModel } from '../models/RoleModel'
 
-interface IRoleRepository {
+export interface IRoleRepository {
   save(role: RoleModel): Promise<void>
   update(role: RoleModel): Promise<void>
   delete(roleId: number): Promise<void>
@@ -74,13 +74,11 @@ export class RoleRepository implements IRoleRepository {
 
   async getByName(name: string): Promise<RoleModel | null> {
     try {
-      const role = await RoleModel.findOne({
+      return await RoleModel.findOne({
         where: {
           name,
         },
       })
-
-      return role
     } catch (err) {
       throw new Error(`GET: Failed to get role by name ${name}`)
     }
