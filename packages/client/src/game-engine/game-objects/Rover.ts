@@ -64,7 +64,6 @@ export class Rover extends DynamicGameCharacter {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    console.log(this._blink)
     if (this._blink) return
 
     // vertical offset to correctly display rover in a tile
@@ -109,7 +108,6 @@ export class Rover extends DynamicGameCharacter {
     this._blink = true
     await sleep(200)
     this._blink = false
-    console.log('blink')
   }
 
   hitting() {

@@ -6,6 +6,7 @@ import { BaseTrigger } from './game-objects/base-classes/BaseTrigger'
 
 export interface LevelInformation {
   tileSize: number
+  timer: number
   rover: Rover
   gameMap: number[][][]
   cars: Car[]
@@ -44,6 +45,7 @@ export interface LevelInformation {
 export const levels: Record<number, LevelInformation> = {
   1: {
     tileSize: 48,
+    timer: 60,
     get rover() {
       return {
         movingDirection: MovingDirection.RIGHT,
@@ -190,6 +192,7 @@ export const levels: Record<number, LevelInformation> = {
   },
   2: {
     tileSize: 32,
+    timer: 60,
     get rover() {
       return {
         movingDirection: MovingDirection.RIGHT,

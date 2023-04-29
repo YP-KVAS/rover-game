@@ -6,16 +6,23 @@ import { immunityTimeMs, initialHitPoints } from '../utils/const-variables/game'
 
 class GameManager {
   private _level = 1
+  private _timer = 0
+  private _timerId: number | undefined = undefined
   private _points = 0
   private _hitPoints = initialHitPoints
   private _immunity = false
 
   private _changeLevelFoo?: React.Dispatch<React.SetStateAction<number>>
-  private _changeGameOverStateFoo?: React.Dispatch<React.SetStateAction<boolean>>
+  private _changeGameOverStateFoo?: React.Dispatch<
+    React.SetStateAction<boolean>
+  >
   private _changeStatFoo?: React.Dispatch<React.SetStateAction<GameStatType>>
 
   useChangeLevel(foo: React.Dispatch<React.SetStateAction<number>>) {
     this._changeLevelFoo = foo
+
+    this._timer = levels[this._level].timer
+    this.startTimer()
   }
 
   useChangeGameOverState(foo: React.Dispatch<React.SetStateAction<boolean>>) {
@@ -38,7 +45,12 @@ class GameManager {
 
     BaseTrigger.removeTriggers()
 
+    this.stopTimer()
+    this.startTimer()
+
     this._level = val
+    this._timer = levels[this._level].timer
+
     this.updateStat()
 
     this._changeLevelFoo(val)
@@ -54,7 +66,27 @@ class GameManager {
       level: this._level,
       points: this._points,
       hitPoints: this._hitPoints,
+      timer: this._timer,
     })
+  }
+
+  startTimer() {
+    if (this._timerId) return
+
+    this._timerId = setInterval(() => {
+      this.updateStat()
+      this._timer -= 1
+      if (this._timer <= 0) {
+        clearInterval(this._timerId)
+        this.endGame()
+      }
+    }, 1000) as unknown as number
+  }
+
+  stopTimer() {
+    this._points += this._timer * 100
+    clearInterval(this._timerId)
+    this._timerId = undefined
   }
 
   private _addPoints(val: number) {
@@ -74,8 +106,14 @@ class GameManager {
     return this._points
   }
   endGame() {
+    this.stopTimer()
+
     console.warn('End game with', this._points, 'points')
-    if(this._changeGameOverStateFoo) {
+
+    if (this._changeGameOverStateFoo) {
+      this._level = 1
+      this._hitPoints = initialHitPoints
+      this._points = 0
       this._changeGameOverStateFoo(true)
     }
   }

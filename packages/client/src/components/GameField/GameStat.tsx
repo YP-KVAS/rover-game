@@ -3,12 +3,14 @@ import gameManager from '../../game-engine/GameManager'
 import { useState } from 'react'
 import { GameStatType } from '../../utils/types/game'
 import { initialHitPoints } from '../../utils/const-variables/game'
+import { timerToString } from './utils/foo'
 
 export function GameStat() {
   const [stat, setStat] = useState<GameStatType>({
     level: 1,
     points: 0,
     hitPoints: initialHitPoints,
+    timer: 0,
   })
 
   gameManager.useStat(setStat)
@@ -18,6 +20,8 @@ export function GameStat() {
       <span className={styles.statBlock}>
         Уровень: <b>{stat.level}</b>
       </span>
+
+      <span className={styles.statBlock}>{timerToString(stat.timer)}</span>
 
       <div className={styles.hitPoints}>
         {Array.from({ length: stat.hitPoints }, (_, i) => (
