@@ -7,7 +7,7 @@ import { DOMParser as ProseDOMParser } from 'prosemirror-model'
 import { schema } from 'prosemirror-schema-basic'
 import { addListNodes } from 'prosemirror-schema-list'
 import { exampleSetup } from 'prosemirror-example-setup'
-import sanitizeHtml from 'sanitize-html'
+import { getSanitizedHtmlString } from '../../utils/sanitizeHtml'
 
 const mySchema = new Schema({
   nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block'),
@@ -35,7 +35,7 @@ export const TextEditor: FC<TextEditorProps> = ({
     const editor = document.getElementById(editorId)
 
     const doc = document.createElement('div')
-    doc.innerHTML = sanitizeHtml(htmlString)
+    doc.innerHTML = getSanitizedHtmlString(htmlString)
 
     editorRef.current = new EditorView(editorDomRef.current, {
       state: EditorState.create({

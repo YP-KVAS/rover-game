@@ -12,7 +12,7 @@ import { useIntegerParams } from '../../../hooks/useIntegerParams'
 import { TextEditor } from '../../TextEditor/TextEditor'
 import { EditorView } from 'prosemirror-view'
 import { useCommentEditor } from '../../../hooks/useCommentEditor'
-import sanitizeHtml from 'sanitize-html'
+import { getSanitizedHtmlString } from '../../../utils/sanitizeHtml'
 
 interface EditForumCommentProps {
   commentId: number
@@ -58,7 +58,7 @@ export const EditForumComment: FC<EditForumCommentProps> = ({
       dispatch(
         onUpdateForumComment({
           id: commentId,
-          message: sanitizeHtml(message),
+          message: getSanitizedHtmlString(message),
         })
       ).then(res => {
         if (res.type.endsWith('fulfilled')) {

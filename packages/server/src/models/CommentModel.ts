@@ -13,7 +13,7 @@ import { TopicModel } from './TopicModel'
 @Table({ modelName: 'comments' })
 export class CommentModel extends Model {
   @AllowNull(true)
-  @Column(DataType.STRING)
+  @Column(DataType.TEXT)
   message: string | null
 
   @AllowNull(true)

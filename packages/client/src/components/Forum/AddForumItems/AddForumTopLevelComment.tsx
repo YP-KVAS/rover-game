@@ -15,9 +15,9 @@ import { useIntegerParams } from '../../../hooks/useIntegerParams'
 import { TextEditor } from '../../TextEditor/TextEditor'
 import { EditorView } from 'prosemirror-view'
 import { useCommentEditor } from '../../../hooks/useCommentEditor'
-import sanitizeHtml from 'sanitize-html'
 import styles from '../../FormInput/FormInput.module.scss'
 import { InputError } from '../../InputError/InputError'
+import { getSanitizedHtmlString } from '../../../utils/sanitizeHtml'
 
 interface AddForumTopLevelCommentProps {
   totalPages: number
@@ -60,7 +60,7 @@ export const AddForumTopLevelComment: FC<AddForumTopLevelCommentProps> = ({
     if (userId && message) {
       dispatch(
         onAddForumComment({
-          message: sanitizeHtml(message),
+          message: getSanitizedHtmlString(message),
           parentCommentId: null,
           userId,
           topicId,
