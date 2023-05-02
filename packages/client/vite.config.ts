@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dotenv from 'dotenv'
+import * as path from 'path'
 dotenv.config()
 
 // https://vitejs.dev/config/
@@ -13,12 +14,12 @@ export default defineConfig({
   },
   plugins: [react()],
   resolve: {
-    // empty aliases needed to avoid sanitize-html errors
+    // empty file needed to avoid vite errors caused by sanitize-html
     alias: {
-      path: '',
-      fs: '',
-      url: '',
-      'source-map-js': '',
+      path: path.resolve(__dirname, './src/assets/empty.ts'),
+      fs: path.resolve(__dirname, './src/assets/empty.ts'),
+      url: path.resolve(__dirname, './src/assets/empty.ts'),
+      'source-map-js': path.resolve(__dirname, './src/assets/empty.ts'),
     },
   },
 })
