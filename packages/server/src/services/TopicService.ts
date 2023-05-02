@@ -75,12 +75,38 @@ export class TopicService {
     if (name) {
       topicToUpdate.name = name
     }
-    if (categoryId) {
-      topicToUpdate.categoryId = categoryId
+
+    if (!categoryId) {
+      const topic = await this._topicRepository.update(topicToUpdate)
+      return getTopicDTOFromModel(topic)
     }
 
-    const topic = await this._topicRepository.update(topicToUpdate)
-    return getTopicDTOFromModel(topic)
+    const transaction = await sequelize.transaction()
+    try {
+      topicToUpdate.categoryId = categoryId
+      const oldTopic = await this._topicRepository.getById(id)
+
+      if (!oldTopic) {
+        throw new Error(`Topic with id ${id} was not found`)
+      }
+
+      const topic = await this._topicRepository.update(topicToUpdate)
+      await this._categoryRepository.incrementTopics(
+        topic.categoryId,
+        transaction
+      )
+      await this._categoryRepository.decrementTopics(
+        oldTopic.categoryId,
+        transaction
+      )
+
+      await transaction.commit()
+
+      return getTopicDTOFromModel(topic)
+    } catch (err) {
+      await transaction.rollback()
+      throw new Error('UpdateTopic: Transaction rollback')
+    }
   }
 
   async delete(id: number): Promise<void> {

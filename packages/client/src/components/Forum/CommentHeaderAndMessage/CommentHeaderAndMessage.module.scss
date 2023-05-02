@@ -28,6 +28,10 @@
 
 .comment_message {
   word-break: break-word;
+
+  & a {
+    color: var(--color-accent);
+  }
 }
 
 .deleted_comment {

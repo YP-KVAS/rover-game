@@ -122,26 +122,9 @@ export const USER_SETTINGS_TABS: Array<Tab> = [
   },
 ]
 
-export const ADD_FORUM_TOPIC_FORM_INPUTS: Array<FormInput> = [
-  {
-    label: 'Название темы',
-    type: 'text',
-    placeholder: 'Топик',
-    name: FormInputNames.FORUM_TOPIC_TITLE,
-  },
-  {
-    label: 'Комментарий',
-    type: 'text',
-    placeholder: 'Первый комментарий',
-    name: FormInputNames.FORUM_MESSAGE,
-    rows: 5,
-  },
-]
-
-export const ADD_FORUM_MESSAGE_FORM_INPUT: FormInput = {
-  label: 'Комментарий',
+export const ADD_FORUM_TOPIC_FORM_INPUT: FormInput = {
+  label: 'Название темы',
   type: 'text',
-  placeholder: 'Комментарий',
-  name: FormInputNames.FORUM_MESSAGE,
-  rows: 3,
+  placeholder: 'Топик',
+  name: FormInputNames.FORUM_TOPIC_TITLE,
 }

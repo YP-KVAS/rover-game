@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
-import { selectForumLastTouchedCategoryId } from '../../store/selectors/forum-selector'
+import {
+  selectDeleteForumCategoryState,
+  selectForumLastTouchedCategoryId,
+} from '../../store/selectors/forum-selector'
 import { EditForumCategoryName } from './EditForumItems/EditForumCategoryName'
 import { clearUpdateCategoryState } from '../../store/slices/forum-slice'
 import {
@@ -21,6 +24,9 @@ export const ForumCategory: FC<IForumCategory> = ({ id, name, topicCount }) => {
   const dispatch = useAppDispatch()
   const { userRole } = useAppSelector(selectUserRoleState)
   const lastTouchedCategoryId = useAppSelector(selectForumLastTouchedCategoryId)
+  const deleteCategoryState = useAppSelector(state =>
+    selectDeleteForumCategoryState(state, id)
+  )
 
   const [modalIsOpened, setModalIsOpened] = useState(false)
   const openModal = () => setModalIsOpened(true)
@@ -30,7 +36,7 @@ export const ForumCategory: FC<IForumCategory> = ({ id, name, topicCount }) => {
   const enableCategoryEdit = () => setEditCategoryEnabled(true)
   const hideCategoryEditInput = () => {
     setEditCategoryEnabled(false)
-    dispatch(clearUpdateCategoryState())
+    dispatch(clearUpdateCategoryState(id))
   }
 
   useEffect(() => {
@@ -54,34 +60,39 @@ export const ForumCategory: FC<IForumCategory> = ({ id, name, topicCount }) => {
   }
 
   return (
-    <div className={styles.category} ref={ref}>
-      <div className={styles.link_wrapper}>
-        <Link className={styles.link} to={`${RoutesEnum.FORUM}/${id}`}>
-          <span className={styles.name}>{name}</span>
-          <span>{topicCount || 0}</span>
-        </Link>
-        {editCategoryEnabled && (
-          <EditForumCategoryName
-            handleFormReset={hideCategoryEditInput}
-            id={id}
-            currentName={name}
+    <>
+      <div className={styles.category} ref={ref}>
+        <div className={styles.link_wrapper}>
+          <Link className={styles.link} to={`${RoutesEnum.FORUM}/${id}`}>
+            <span className={styles.name}>{name}</span>
+            <span>{topicCount || 0}</span>
+          </Link>
+          {editCategoryEnabled && (
+            <EditForumCategoryName
+              handleFormReset={hideCategoryEditInput}
+              id={id}
+              currentName={name}
+            />
+          )}
+        </div>
+        {userRole === UserRolesEnum.ADMIN && (
+          <UpdateDeleteIcons
+            editHandler={enableCategoryEdit}
+            deleteHandler={openModal}
+          />
+        )}
+        {modalIsOpened && (
+          <ConfirmModal
+            confirmHandler={handleCategoryDelete}
+            cancelHandler={closeModal}
+            message={`Вы действительно хотите удалить категорию ${name} и входящие в неё
+              темы?`}
           />
         )}
       </div>
-      {userRole === UserRolesEnum.ADMIN && (
-        <UpdateDeleteIcons
-          editHandler={enableCategoryEdit}
-          deleteHandler={openModal}
-        />
+      {deleteCategoryState?.errorMessage && (
+        <p className={styles.form_error}>{deleteCategoryState.errorMessage}</p>
       )}
-      {modalIsOpened && (
-        <ConfirmModal
-          confirmHandler={handleCategoryDelete}
-          cancelHandler={closeModal}
-          message={`Вы действительно хотите удалить категорию ${name} и входящие в неё
-              темы?`}
-        />
-      )}
-    </div>
+    </>
   )
 }

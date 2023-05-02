@@ -12,8 +12,33 @@ export const selectGetForumCategoriesState = (state: RootState) =>
 export const selectAddForumCategoryState = (state: RootState) =>
   state.forum.categories.addCategoryState
 
-export const selectUpdateForumCategoryState = (state: RootState) =>
-  state.forum.categories.updateCategoryState
+export const selectUpdateForumCategoryState = (
+  state: RootState,
+  id: number
+) => {
+  const categoryState = state.forum.categories.fetchStates[id]?.update
+  if (!categoryState) {
+    return null
+  }
+  return {
+    isLoading: categoryState.isLoading,
+    errorMessage: categoryState.errorMessage,
+  }
+}
+
+export const selectDeleteForumCategoryState = (
+  state: RootState,
+  id: number
+) => {
+  const categoryState = state.forum.categories.fetchStates[id]?.delete
+  if (!categoryState) {
+    return null
+  }
+  return {
+    isLoading: categoryState.isLoading,
+    errorMessage: categoryState.errorMessage,
+  }
+}
 
 export const selectForumLastTouchedCategoryId = (state: RootState) =>
   state.forum.categories.lastTouchedCategoryId

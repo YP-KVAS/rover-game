@@ -1,11 +1,5 @@
-import { FC } from 'react'
+import { FC, FormEvent, useRef } from 'react'
 import { AddForumItemForm } from '../AddForumItems/AddForumItemForm'
-import { FormInput } from '../../FormInput/FormInput'
-import { FormInputNames } from '../../../utils/types/forms'
-import { ADD_FORUM_MESSAGE_FORM_INPUT } from '../../../utils/const-variables/forms'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { addForumMessageValidationSchema } from '../../../utils/validation'
 import {
   onGetForumComments,
   onUpdateForumComment,
@@ -15,6 +9,10 @@ import { selectForumUpdateCommentsStateById } from '../../../store/selectors/for
 import { COMMENTS_LOAD_LIMIT } from '../../../utils/const-variables/api'
 import { useCurrentPage } from '../../../hooks/useCurrentPage'
 import { useIntegerParams } from '../../../hooks/useIntegerParams'
+import { TextEditor } from '../../TextEditor/TextEditor'
+import { EditorView } from 'prosemirror-view'
+import { useCommentEditor } from '../../../hooks/useCommentEditor'
+import sanitizeHtml from 'sanitize-html'
 
 interface EditForumCommentProps {
   commentId: number
@@ -37,48 +35,66 @@ export const EditForumComment: FC<EditForumCommentProps> = ({
     selectForumUpdateCommentsStateById(state, commentId)
   )
 
-  const { handleSubmit, register } = useForm<{
-    [FormInputNames.FORUM_MESSAGE]: string
-  }>({
-    resolver: yupResolver(addForumMessageValidationSchema),
-  })
+  const editorRef = useRef<EditorView | null>(null)
 
-  const handleFormSubmit = handleSubmit(data => {
-    dispatch(
-      onUpdateForumComment({
-        id: commentId,
-        message: data[FormInputNames.FORUM_MESSAGE],
+  const {
+    commentIsEmpty,
+    setCommentIsEmpty,
+    checkCommentIsEmpty,
+    handleCommentEdit,
+  } = useCommentEditor(editorRef)
+
+  const handleFormSubmit = (e: FormEvent) => {
+    e.preventDefault()
+
+    const isEmpty = checkCommentIsEmpty()
+    if (isEmpty) {
+      setCommentIsEmpty(true)
+      return
+    }
+    const message = editorRef.current?.dom.innerHTML
+
+    if (message) {
+      dispatch(
+        onUpdateForumComment({
+          id: commentId,
+          message: sanitizeHtml(message),
+        })
+      ).then(res => {
+        if (res.type.endsWith('fulfilled')) {
+          const limit = parentCommentId ? undefined : COMMENTS_LOAD_LIMIT
+          const offset = parentCommentId
+            ? 0
+            : (currentPage - 1) * COMMENTS_LOAD_LIMIT
+
+          dispatch(
+            onGetForumComments({
+              parentCommentId,
+              topicId,
+              limit,
+              offset,
+            })
+          )
+          handleFormReset()
+        }
       })
-    ).then(res => {
-      if (res.type.endsWith('fulfilled')) {
-        const limit = parentCommentId ? undefined : COMMENTS_LOAD_LIMIT
-        const offset = parentCommentId
-          ? 0
-          : (currentPage - 1) * COMMENTS_LOAD_LIMIT
-
-        dispatch(
-          onGetForumComments({
-            parentCommentId,
-            topicId,
-            limit,
-            offset,
-          })
-        )
-        handleFormReset()
-      }
-    })
-  })
+    }
+  }
 
   return (
     <AddForumItemForm
       handleFormSubmit={handleFormSubmit}
       handleFormReset={handleFormReset}
-      errorMessage={updateState?.errorMessage}>
-      <FormInput
-        defaultValue={message}
-        registerObj={{ ...register(FormInputNames.FORUM_MESSAGE) }}
-        placeholder={ADD_FORUM_MESSAGE_FORM_INPUT.placeholder}
-        rows={3}
+      errorMessage={
+        commentIsEmpty
+          ? 'Комментарий должен содержать текст'
+          : updateState?.errorMessage
+      }>
+      <TextEditor
+        editorId={`addReplyComment-${commentId}`}
+        editorRef={editorRef}
+        htmlString={message}
+        handleCommentEdit={handleCommentEdit}
       />
     </AddForumItemForm>
   )

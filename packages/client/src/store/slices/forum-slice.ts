@@ -32,10 +32,9 @@ interface InitialState {
   categories: {
     categoryItems: Array<IForumCategory> | null
     lastTouchedCategoryId: number | null
+    fetchStates: Record<number, { update: FetchState; delete: FetchState }>
     getCategoriesState: FetchState
     addCategoryState: FetchState
-    updateCategoryState: FetchState
-    deleteCategoryState: FetchState
   }
   topicInfo: {
     topics: Record<number, TopicState>
@@ -65,8 +64,7 @@ const initialState: InitialState = {
     lastTouchedCategoryId: null,
     getCategoriesState: defaultFetchState,
     addCategoryState: defaultFetchState,
-    updateCategoryState: defaultFetchState,
-    deleteCategoryState: defaultFetchState,
+    fetchStates: {},
   },
   topicInfo: {
     topics: {},
@@ -93,8 +91,7 @@ const forumSlice = createSlice({
       state.categories.lastTouchedCategoryId = null
       state.categories.getCategoriesState = defaultFetchState
       state.categories.addCategoryState = defaultFetchState
-      state.categories.updateCategoryState = defaultFetchState
-      state.categories.deleteCategoryState = defaultFetchState
+      state.categories.fetchStates = {}
     },
     clearGetCategoriesState: state => {
       state.categories.getCategoriesState = defaultFetchState
@@ -102,8 +99,15 @@ const forumSlice = createSlice({
     clearAddCategoryState: state => {
       state.categories.addCategoryState = defaultFetchState
     },
-    clearUpdateCategoryState: state => {
-      state.categories.updateCategoryState = defaultFetchState
+    clearUpdateCategoryState: (state, action: PayloadAction<number>) => {
+      if (state.categories.fetchStates[action.payload]) {
+        state.categories.fetchStates[action.payload].update = defaultFetchState
+      }
+    },
+    clearDeleteCategoryState: (state, action: PayloadAction<number>) => {
+      if (state.categories.fetchStates[action.payload]) {
+        state.categories.fetchStates[action.payload].delete = defaultFetchState
+      }
     },
     clearForumComments: state => {
       state.commentInfo.comments = {}
@@ -185,35 +189,87 @@ const forumSlice = createSlice({
     // onUpdateForumCategory
     builder
       .addCase(onUpdateForumCategory.fulfilled, (state, action) => {
-        state.categories.updateCategoryState.isLoading = false
-        state.categories.updateCategoryState.errorMessage = null
-        state.categories.lastTouchedCategoryId = action.payload.id
+        const id = action.payload.id
+        if (!state.categories.fetchStates[id]) {
+          state.categories.fetchStates[id] = {
+            update: defaultFetchState,
+            delete: defaultFetchState,
+          }
+        } else {
+          state.categories.fetchStates[id].update = defaultFetchState
+        }
+        state.categories.lastTouchedCategoryId = id
       })
-      .addCase(onUpdateForumCategory.pending, state => {
-        state.categories.updateCategoryState.isLoading = true
-        state.categories.updateCategoryState.errorMessage = null
+      .addCase(onUpdateForumCategory.pending, (state, action) => {
+        const id = action.meta.arg.id
+        if (!state.categories.fetchStates[id]) {
+          state.categories.fetchStates[id] = {
+            update: { isLoading: true, errorMessage: null },
+            delete: defaultFetchState,
+          }
+        } else {
+          state.categories.fetchStates[id].update = {
+            isLoading: true,
+            errorMessage: null,
+          }
+        }
       })
       .addCase(onUpdateForumCategory.rejected, (state, action) => {
-        state.categories.updateCategoryState.isLoading = false
-        state.categories.updateCategoryState.errorMessage =
-          action.payload || null
+        const id = action.meta.arg.id
+        if (!state.categories.fetchStates[id]) {
+          state.categories.fetchStates[id] = {
+            update: { isLoading: false, errorMessage: action.payload || null },
+            delete: defaultFetchState,
+          }
+        } else {
+          state.categories.fetchStates[id].update = {
+            isLoading: false,
+            errorMessage: action.payload || null,
+          }
+        }
       })
 
     // onDeleteForumCategory
     builder
-      .addCase(onDeleteForumCategory.fulfilled, state => {
-        state.categories.deleteCategoryState.isLoading = false
-        state.categories.deleteCategoryState.errorMessage = null
+      .addCase(onDeleteForumCategory.fulfilled, (state, action) => {
+        const id = action.meta.arg
+        if (!state.categories.fetchStates[id]) {
+          state.categories.fetchStates[id] = {
+            update: defaultFetchState,
+            delete: defaultFetchState,
+          }
+        } else {
+          state.categories.fetchStates[id].delete = defaultFetchState
+        }
         state.categories.lastTouchedCategoryId = null
       })
-      .addCase(onDeleteForumCategory.pending, state => {
-        state.categories.deleteCategoryState.isLoading = true
-        state.categories.deleteCategoryState.errorMessage = null
+      .addCase(onDeleteForumCategory.pending, (state, action) => {
+        const id = action.meta.arg
+        if (!state.categories.fetchStates[id]) {
+          state.categories.fetchStates[id] = {
+            delete: { isLoading: true, errorMessage: null },
+            update: defaultFetchState,
+          }
+        } else {
+          state.categories.fetchStates[id].delete = {
+            isLoading: true,
+            errorMessage: null,
+          }
+        }
       })
       .addCase(onDeleteForumCategory.rejected, (state, action) => {
-        state.categories.deleteCategoryState.isLoading = false
-        state.categories.deleteCategoryState.errorMessage =
-          action.payload || null
+        const id = action.meta.arg
+        if (!state.categories.fetchStates[id]) {
+          state.categories.fetchStates[id] = {
+            delete: { isLoading: false, errorMessage: action.payload || null },
+            update: defaultFetchState,
+          }
+        } else {
+          state.categories.fetchStates[id].delete = {
+            isLoading: false,
+            errorMessage: action.payload || null,
+          }
+        }
       })
 
     // onGetForumTopics
@@ -466,6 +522,7 @@ export const {
   clearGetCategoriesState,
   clearAddCategoryState,
   clearUpdateCategoryState,
+  clearDeleteCategoryState,
   clearForumComments,
   clearAddCommentErrorState,
   clearUpdateCommentErrorState,

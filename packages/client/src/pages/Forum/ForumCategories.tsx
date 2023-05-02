@@ -20,7 +20,7 @@ import {
   selectCurrentUserId,
   selectUserRoleState,
 } from '../../store/selectors/user-selector'
-import { clearAddCategoryState } from '../../store/slices/forum-slice'
+import { clearForumCategoriesState } from '../../store/slices/forum-slice'
 
 export const ForumCategories: FC = () => {
   const dispatch = useAppDispatch()
@@ -28,10 +28,9 @@ export const ForumCategories: FC = () => {
   const { isLoading, errorMessage } = useAppSelector(
     selectGetForumCategoriesState
   )
-  const {
-    isLoading: addCategoryLoading,
-    errorMessage: addCategoryErrorMessage,
-  } = useAppSelector(selectAddForumCategoryState)
+  const { isLoading: addCategoryLoading } = useAppSelector(
+    selectAddForumCategoryState
+  )
   const userId = useAppSelector(selectCurrentUserId)
   const {
     isLoading: userIsLoading,
@@ -52,9 +51,7 @@ export const ForumCategories: FC = () => {
       if (userRoleErrorMessage) {
         dispatch(clearUserRoleErrorMessage())
       }
-      if (addCategoryErrorMessage) {
-        dispatch(clearAddCategoryState())
-      }
+      dispatch(clearForumCategoriesState())
     }
   }, [dispatch])
 

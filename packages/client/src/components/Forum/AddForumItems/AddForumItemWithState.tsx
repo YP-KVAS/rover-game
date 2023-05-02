@@ -1,10 +1,12 @@
 import styles from '../Forum.module.scss'
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Button } from '../../Button/Button'
 import { AddForumItemForm, AddForumItemFormProps } from './AddForumItemForm'
 
 interface AddForumItemWithStateProps extends AddForumItemFormProps {
   buttonLabel: string
+  displayForm: boolean
+  setDisplayForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const AddForumItemWithState: FC<AddForumItemWithStateProps> = ({
@@ -15,8 +17,9 @@ export const AddForumItemWithState: FC<AddForumItemWithStateProps> = ({
   children,
   handleFormSubmit,
   handleFormReset,
+  displayForm,
+  setDisplayForm,
 }) => {
-  const [displayForm, setDisplayForm] = useState(false)
   const displayInputs = () => setDisplayForm(true)
 
   useEffect(() => {
@@ -30,7 +33,7 @@ export const AddForumItemWithState: FC<AddForumItemWithStateProps> = ({
 
   return (
     <div className={styles.add_forum_item}>
-      <div>
+      <div className={styles.add_forum_item_button}>
         <Button clickHandler={displayInputs}>{buttonLabel}</Button>
       </div>
       {displayForm && (
