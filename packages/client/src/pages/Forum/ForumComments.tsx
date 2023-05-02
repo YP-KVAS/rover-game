@@ -73,7 +73,7 @@ export const ForumComments: FC = () => {
     <strong className={styles.message}>
       {forumCommentsState.errorMessage}
     </strong>
-  ) : !topic || currentPage > totalPages ? (
+  ) : !topic || (totalPages && currentPage > totalPages) ? (
     <Page404 />
   ) : (
     <div className={styles.area}>

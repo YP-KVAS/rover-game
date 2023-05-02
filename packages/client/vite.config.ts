@@ -12,4 +12,13 @@ export default defineConfig({
     __SERVER_PORT__: process.env.SERVER_PORT,
   },
   plugins: [react()],
+  resolve: {
+    // empty aliases needed to avoid sanitize-html errors
+    alias: {
+      path: '',
+      fs: '',
+      url: '',
+      'source-map-js': '',
+    },
+  },
 })

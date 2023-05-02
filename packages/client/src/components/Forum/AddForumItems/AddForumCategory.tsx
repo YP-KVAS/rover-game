@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { addForumCategoryTitleValidationSchema } from '../../../utils/validation'
@@ -16,6 +16,7 @@ import { FormInputNames } from '../../../utils/types/forms'
 export const AddForumCategory: FC = () => {
   const dispatch = useAppDispatch()
   const { errorMessage } = useAppSelector(selectAddForumCategoryState)
+  const [displayForm, setDisplayForm] = useState(false)
 
   const {
     handleSubmit,
@@ -51,7 +52,9 @@ export const AddForumCategory: FC = () => {
       resetButtonLabel="Отменить"
       errorMessage={errorMessage}
       handleFormSubmit={handleFormSubmit}
-      handleFormReset={handleFormReset}>
+      handleFormReset={handleFormReset}
+      displayForm={displayForm}
+      setDisplayForm={setDisplayForm}>
       <>
         <FormInput
           label="Название категории"

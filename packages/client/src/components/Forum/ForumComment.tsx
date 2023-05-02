@@ -51,7 +51,7 @@ export const ForumComment: FC<IForumComment> = ({
       <CommentHeaderAndMessage
         avatarPath={commentUserWithState?.user?.avatar}
         displayName={commentUserWithState?.user?.display_name}
-        messageText={message}
+        htmlMessage={message}
         messageDate={createdAt}
       />
       <CommentActions

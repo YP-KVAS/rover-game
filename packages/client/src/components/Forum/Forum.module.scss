@@ -38,6 +38,14 @@
   @include media-screen-large {
     font-size: var(--font-sm);
   }
+
+  &_button {
+    width: 250px;
+
+    & button {
+      width: 100%;
+    }
+  }
 }
 
 .form {
@@ -83,10 +91,6 @@
 
 .new_comment {
   padding-left: 50px;
-
-  * {
-    font-size: var(--font-sm);
-  }
 }
 
 .form_error {

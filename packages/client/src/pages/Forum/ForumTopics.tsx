@@ -63,7 +63,7 @@ export const ForumTopics: FC = () => {
           searchQuery) && <SearchTopicItems categoryId={category.id} />}
       </div>
       {!topics?.topicItems ||
-      (topics.topicItems.length === 0 && !searchQuery) ? (
+      (topics.topicItems.length === 0 && !searchQuery && !topics?.isLoading) ? (
         <strong className={styles.message}>
           В данной категории еще нет топиков. <br />
           Самое время создать первую тему.

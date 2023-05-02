@@ -4,20 +4,23 @@ import {
   BASE_YA_URL,
   RESOURCES_API_URL,
 } from '../../../utils/const-variables/api'
+import sanitizeHtml from 'sanitize-html'
 
 interface CommentHeaderAndMessageProps {
   avatarPath?: string | null
   displayName?: string | null
-  messageText?: string | null
+  htmlMessage?: string | null
   messageDate: string
 }
 
 export const CommentHeaderAndMessage: FC<CommentHeaderAndMessageProps> = ({
   avatarPath,
   displayName,
-  messageText,
+  htmlMessage,
   messageDate,
 }) => {
+  const sanitizedMessage = () => ({ __html: sanitizeHtml(htmlMessage || '') })
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.comment_header}>
@@ -35,12 +38,13 @@ export const CommentHeaderAndMessage: FC<CommentHeaderAndMessageProps> = ({
           <span>{new Date(messageDate).toLocaleString()}</span>
         </div>
       </div>
-      <p
-        className={
-          messageText ? styles.comment_message : styles.deleted_comment
-        }>
-        {messageText || 'Комментарий был удален.'}
-      </p>
+      {htmlMessage ? (
+        <p
+          className={styles.comment_message}
+          dangerouslySetInnerHTML={sanitizedMessage()}></p>
+      ) : (
+        <p className={styles.deleted_comment}>Комментарий был удален.</p>
+      )}
     </div>
   )
 }

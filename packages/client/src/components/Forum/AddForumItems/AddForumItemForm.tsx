@@ -1,11 +1,11 @@
 import styles from '../Forum.module.scss'
-import { FC, useEffect, useRef } from 'react'
+import { FC, FormEvent, useEffect, useRef } from 'react'
 import { Button } from '../../Button/Button'
 import { Form } from '../../Form/Form'
 
 export interface AddForumItemFormProps {
   children: JSX.Element
-  handleFormSubmit: () => void
+  handleFormSubmit: (e: FormEvent) => void
   handleFormReset: () => void
   errorMessage?: string | null
   submitButtonLabel?: string

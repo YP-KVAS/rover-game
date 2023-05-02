@@ -3,6 +3,7 @@ import type { CommentDTO } from '../utils/types/dto'
 import type { ICommentRepository } from '../repositories/CommentRepository'
 import { getCommentDTOFromModel } from '../utils/types/dto'
 import { CommentRepository } from '../repositories/CommentRepository'
+import sanitizeHtml from 'sanitize-html'
 
 export class CommentService {
   constructor(private _commentRepository: ICommentRepository) {}
@@ -36,7 +37,7 @@ export class CommentService {
     parentCommentId: number
   ): Promise<CommentDTO> {
     const comment = await this._commentRepository.save({
-      message,
+      message: sanitizeHtml(message),
       userId,
       topicId,
       parentCommentId,

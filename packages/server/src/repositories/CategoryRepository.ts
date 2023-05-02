@@ -7,6 +7,7 @@ export interface ICategoryRepository {
   delete(categoryId: number): Promise<void>
   getAll(): Promise<Array<CategoryModel>>
   incrementTopics(categoryId: number, transaction?: Transaction): Promise<void>
+  decrementTopics(categoryId: number, transaction?: Transaction): Promise<void>
 }
 
 export class CategoryRepository implements ICategoryRepository {
@@ -79,6 +80,22 @@ export class CategoryRepository implements ICategoryRepository {
     } catch (err) {
       throw new Error(
         `UPDATE: Failed to increment topic count for category with id ${categoryId}`
+      )
+    }
+  }
+
+  async decrementTopics(
+    categoryId: number,
+    transaction?: Transaction
+  ): Promise<void> {
+    try {
+      await CategoryModel.decrement('topicCount', {
+        where: { id: categoryId },
+        transaction,
+      })
+    } catch (err) {
+      throw new Error(
+        `UPDATE: Failed to decrement topic count for category with id ${categoryId}`
       )
     }
   }

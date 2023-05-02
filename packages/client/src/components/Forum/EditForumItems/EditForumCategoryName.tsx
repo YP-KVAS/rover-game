@@ -26,8 +26,8 @@ export const EditForumCategoryName: FC<EditForumCategoryNameProps> = ({
   currentName,
 }) => {
   const dispatch = useAppDispatch()
-  const { isLoading, errorMessage } = useAppSelector(
-    selectUpdateForumCategoryState
+  const updateCategoryState = useAppSelector(state =>
+    selectUpdateForumCategoryState(state, id)
   )
 
   const { handleSubmit, register } = useForm<{
@@ -38,7 +38,7 @@ export const EditForumCategoryName: FC<EditForumCategoryNameProps> = ({
 
   useEffect(() => {
     return () => {
-      dispatch(clearUpdateCategoryState())
+      dispatch(clearUpdateCategoryState(id))
     }
   }, [dispatch])
 
@@ -56,13 +56,13 @@ export const EditForumCategoryName: FC<EditForumCategoryNameProps> = ({
     })
   })
 
-  return isLoading ? (
+  return updateCategoryState?.isLoading ? (
     <Loader />
   ) : (
     <AddForumItemForm
       handleFormSubmit={handleFormSubmit}
       handleFormReset={handleFormReset}
-      errorMessage={errorMessage}>
+      errorMessage={updateCategoryState?.errorMessage}>
       <FormInput
         defaultValue={currentName}
         registerObj={{ ...register(FormInputNames.FORUM_CATEGORY_TITLE) }}
