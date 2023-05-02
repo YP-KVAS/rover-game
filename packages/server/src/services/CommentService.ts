@@ -36,8 +36,13 @@ export class CommentService {
     topicId: number,
     parentCommentId: number
   ): Promise<CommentDTO> {
+    const sanitizedMessage = sanitizeHtml(message, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+      allowedAttributes: { img: ['src'] },
+      allowedSchemes: ['data', 'http', 'https'],
+    })
     const comment = await this._commentRepository.save({
-      message: sanitizeHtml(message),
+      message: sanitizedMessage,
       userId,
       topicId,
       parentCommentId,

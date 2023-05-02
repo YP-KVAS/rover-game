@@ -4,7 +4,7 @@ import {
   BASE_YA_URL,
   RESOURCES_API_URL,
 } from '../../../utils/const-variables/api'
-import sanitizeHtml from 'sanitize-html'
+import { getSanitizedHtmlString } from '../../../utils/sanitizeHtml'
 
 interface CommentHeaderAndMessageProps {
   avatarPath?: string | null
@@ -19,7 +19,9 @@ export const CommentHeaderAndMessage: FC<CommentHeaderAndMessageProps> = ({
   htmlMessage,
   messageDate,
 }) => {
-  const sanitizedMessage = () => ({ __html: sanitizeHtml(htmlMessage || '') })
+  const sanitizedMessage = () => ({
+    __html: getSanitizedHtmlString(htmlMessage || ''),
+  })
 
   return (
     <div className={styles.wrapper}>

@@ -20,11 +20,11 @@ import {
 } from '../../../store/selectors/forum-selector'
 import { useIntegerParams } from '../../../hooks/useIntegerParams'
 import { EditorView } from 'prosemirror-view'
-import sanitizeHtml from 'sanitize-html'
 import { FormInputNames } from '../../../utils/types/forms'
 import { useCommentEditor } from '../../../hooks/useCommentEditor'
 import { InputError } from '../../InputError/InputError'
 import { TextEditor } from '../../TextEditor/TextEditor'
+import { getSanitizedHtmlString } from '../../../utils/sanitizeHtml'
 
 export const AddForumTopic: FC = () => {
   const dispatch = useAppDispatch()
@@ -66,7 +66,7 @@ export const AddForumTopic: FC = () => {
       dispatch(
         onAddForumTopic({
           ...data,
-          [FormInputNames.FORUM_MESSAGE]: sanitizeHtml(message),
+          [FormInputNames.FORUM_MESSAGE]: getSanitizedHtmlString(message),
           userId,
           categoryId,
         })

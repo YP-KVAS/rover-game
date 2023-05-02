@@ -7,7 +7,7 @@ import { useIntegerParams } from '../../../hooks/useIntegerParams'
 import { TextEditor } from '../../TextEditor/TextEditor'
 import { EditorView } from 'prosemirror-view'
 import { useCommentEditor } from '../../../hooks/useCommentEditor'
-import sanitizeHtml from 'sanitize-html'
+import { getSanitizedHtmlString } from '../../../utils/sanitizeHtml'
 
 interface AddForumCommentProps {
   handleFormReset: () => void
@@ -48,7 +48,7 @@ export const AddForumComment: FC<AddForumCommentProps> = ({
     if (userId && message) {
       dispatch(
         onAddForumComment({
-          message: sanitizeHtml(message),
+          message: getSanitizedHtmlString(message),
           parentCommentId,
           userId,
           topicId,
