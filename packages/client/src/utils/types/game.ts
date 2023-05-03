@@ -43,4 +43,5 @@ export interface GameStatType {
   level: number
   points: number
   hitPoints: number
+  timer: number
 }
