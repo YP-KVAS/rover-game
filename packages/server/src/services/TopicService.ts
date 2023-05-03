@@ -110,7 +110,24 @@ export class TopicService {
   }
 
   async delete(id: number): Promise<void> {
-    return await this._topicRepository.delete(id)
+    const transaction = await sequelize.transaction()
+    try {
+      const topicToDelete = await this._topicRepository.getById(id)
+      if (!topicToDelete) {
+        throw new Error(`Topic with id ${id} was not found`)
+      }
+
+      await this._topicRepository.delete(id)
+      await this._categoryRepository.decrementTopics(
+        topicToDelete.categoryId,
+        transaction
+      )
+
+      await transaction.commit()
+    } catch (err) {
+      await transaction.rollback()
+      throw new Error('DeleteTopic: Transaction rollback')
+    }
   }
 }
 
