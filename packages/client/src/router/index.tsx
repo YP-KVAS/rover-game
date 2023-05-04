@@ -1,4 +1,4 @@
-import { createBrowserRouter, Link } from 'react-router-dom'
+import { createBrowserRouter, createMemoryRouter, Link } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/MainPage/Main'
@@ -18,7 +18,7 @@ const in_work_component = (
   </main>
 )
 
-export const router = createBrowserRouter([
+const routes = [
   {
     element: <Layout />,
     children: [
@@ -64,4 +64,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]
+
+export const router = import.meta.env.SSR
+  ? createMemoryRouter(routes)
+  : createBrowserRouter(routes)

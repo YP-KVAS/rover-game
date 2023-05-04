@@ -1,6 +1,6 @@
-// import { createClientAndConnect } from './db'
+import { createClientAndConnect } from './db'
 
-// createClientAndConnect()
+createClientAndConnect()
 
 import dotenv from 'dotenv'
 import cors from 'cors'
@@ -64,19 +64,13 @@ async function startServer() {
       if (!isDev()) {
         render = (await import(ssrClientPath)).render
       } else {
-        console.log(1)
-        render = (
-          await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'), {
-            fixStacktrace: true,
-          })
-        ).render
-        console.log(2)
+        render = (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx')))
+          .render
       }
-
       const appHtml = await render()
 
       const html = template.replace(`<!--ssr-outlet-->`, appHtml)
-      console.log(html)
+
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
       if (isDev()) {

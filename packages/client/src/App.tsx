@@ -16,7 +16,7 @@ function App() {
   }
 
   const [currentThemeName, setCurrentThemeName] = useState<Theme>(
-    getDefaultTheme()
+    import.meta.env.SSR ? 'light' : getDefaultTheme()
   )
 
   useEffect(() => {

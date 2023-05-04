@@ -1,3 +1,12 @@
+const Image = import.meta.env.SSR
+  ? class {
+      public src
+      constructor() {
+        this.src = ''
+      }
+    }
+  : window.Image
+
 // background
 const sideWalk = new Image()
 sideWalk.src = './images/background/sidewalk.jpg'
