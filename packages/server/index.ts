@@ -64,8 +64,13 @@ async function startServer() {
       if (!isDev()) {
         render = (await import(ssrClientPath)).render
       } else {
-        render = (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx')))
-          .render
+        console.log(1)
+        render = (
+          await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'), {
+            fixStacktrace: true,
+          })
+        ).render
+        console.log(2)
       }
 
       const appHtml = await render()
