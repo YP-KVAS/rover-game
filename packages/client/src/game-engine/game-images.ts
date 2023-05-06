@@ -49,6 +49,8 @@ const warehouse = new Image()
 warehouse.src = './images/buildings/warehouse.png'
 const school = new Image()
 school.src = './images/buildings/school.png'
+const fastFood = new Image()
+fastFood.src = './images/buildings/fast-food.png'
 
 // dynamic vehicles
 const greenCar = new Image()
@@ -57,6 +59,8 @@ const yellowCar = new Image()
 yellowCar.src = './images/cars/car-yellow.png'
 const redCar = new Image()
 redCar.src = './images/cars/car-red.png'
+const blueCar = new Image()
+blueCar.src = './images/cars/car-blue.png'
 
 // rover moving up, down, left and right
 const roverUp = new Image()
@@ -101,6 +105,7 @@ export const tileMapImages = {
   zoo,
   warehouse,
   school,
+  fastFood,
 }
 
 export const roverImages = {
@@ -116,6 +121,7 @@ export const dynamicImages = {
   greenCar,
   yellowCar,
   redCar,
+  blueCar,
 }
 
 export const triggerImages = {
