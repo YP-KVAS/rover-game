@@ -15,6 +15,22 @@ export class Car extends GameBot {
     img: HTMLImageElement
   ) {
     super(gameMap, tileSize, coords, movingDirection, speed, img)
+    this.setWidthAndHeight()
+  }
+
+  setWidthAndHeight() {
+    switch (this.movingDirection) {
+      case MovingDirection.UP:
+      case MovingDirection.DOWN:
+        this.width = this.tileSize / 2
+        this.height = this.tileSize
+        break
+      case MovingDirection.RIGHT:
+      case MovingDirection.LEFT:
+        this.width = this.tileSize
+        this.height = this.tileSize / 2
+        break
+    }
   }
 
   needToStopOnCrosswalk(roverCoords: Coords): boolean {
@@ -125,6 +141,7 @@ export class Car extends GameBot {
               ? MovingDirection.LEFT
               : MovingDirection.RIGHT
           directionChanged = true
+          this.setWidthAndHeight()
         }
         break
 
@@ -135,6 +152,7 @@ export class Car extends GameBot {
               ? MovingDirection.RIGHT
               : MovingDirection.LEFT
           directionChanged = true
+          this.setWidthAndHeight()
         }
         break
 
@@ -147,6 +165,7 @@ export class Car extends GameBot {
               ? MovingDirection.UP
               : MovingDirection.DOWN
           directionChanged = true
+          this.setWidthAndHeight()
         }
         break
 
@@ -157,6 +176,7 @@ export class Car extends GameBot {
               ? MovingDirection.DOWN
               : MovingDirection.UP
           directionChanged = true
+          this.setWidthAndHeight()
         }
         break
     }
@@ -171,36 +191,44 @@ export class Car extends GameBot {
         if (tile === 162) {
           this.movingDirection = MovingDirection.RIGHT
           directionChanged = true
+          this.setWidthAndHeight()
         } else if (tile === 174 || tile === 223) {
           this.movingDirection = MovingDirection.LEFT
           directionChanged = true
+          this.setWidthAndHeight()
         }
         break
       case MovingDirection.DOWN:
         if (tile === 182) {
           this.movingDirection = MovingDirection.LEFT
           directionChanged = true
+          this.setWidthAndHeight()
         } else if (tile === 194 || tile === 203) {
           this.movingDirection = MovingDirection.RIGHT
           directionChanged = true
+          this.setWidthAndHeight()
         }
         break
       case MovingDirection.RIGHT:
         if (tile === 144 || tile === 184 || tile === 233) {
           this.movingDirection = MovingDirection.UP
           directionChanged = true
+          this.setWidthAndHeight()
         } else if (tile === 172) {
           this.movingDirection = MovingDirection.DOWN
           directionChanged = true
+          this.setWidthAndHeight()
         }
         break
       case MovingDirection.LEFT:
         if (tile === 164 || tile === 213) {
           this.movingDirection = MovingDirection.DOWN
           directionChanged = true
+          this.setWidthAndHeight()
         } else if (tile === 192) {
           this.movingDirection = MovingDirection.UP
           directionChanged = true
+          this.setWidthAndHeight()
         }
         break
     }
@@ -224,6 +252,7 @@ export class Car extends GameBot {
           )
           if (rightTileNotEmpty && diagTileNotEmpty) {
             this.movingDirection = MovingDirection.LEFT
+            this.setWidthAndHeight()
           }
         }
         break
@@ -238,6 +267,7 @@ export class Car extends GameBot {
           )
           if (upperTileNotEmpty && diagTileNotEmpty) {
             this.movingDirection = MovingDirection.DOWN
+            this.setWidthAndHeight()
           }
         }
         break
@@ -336,12 +366,18 @@ export class Car extends GameBot {
 
       // if next tile is crosswalk with rover, stop
       const nextCrosswalkCoords = this.getCrosswalkCoords(nextTileCoords)
-      if (
-        nextCrosswalkCoords &&
-        this.coordsAreIntersecting(nextCrosswalkCoords, roverCoords, 2, true) &&
-        this.needToStopOnCrosswalk(roverCoords)
-      ) {
-        return
+      if (nextCrosswalkCoords) {
+        const crosswalkRect = {
+          coords: nextCrosswalkCoords,
+          width: this.tileSize * 2,
+          height: this.tileSize * 2,
+        }
+        if (
+          this.collideWithRover(roverCoords, crosswalkRect) &&
+          this.needToStopOnCrosswalk(roverCoords)
+        ) {
+          return
+        }
       }
 
       this._directionChanged = false
@@ -356,12 +392,18 @@ export class Car extends GameBot {
       // if current tile is crosswalk with rover, stop
       const tileCoords = this.getCurrentTileCoords()
       const crosswalkCoords = this.getCrosswalkCoords(tileCoords)
-      if (
-        crosswalkCoords &&
-        this.coordsAreIntersecting(crosswalkCoords, roverCoords, 2, true) &&
-        this.needToStopOnCrosswalk(roverCoords)
-      ) {
-        return
+      if (crosswalkCoords) {
+        const crosswalkRect = {
+          coords: crosswalkCoords,
+          width: this.tileSize * 2,
+          height: this.tileSize * 2,
+        }
+        if (
+          this.collideWithRover(roverCoords, crosswalkRect) &&
+          this.needToStopOnCrosswalk(roverCoords)
+        ) {
+          return
+        }
       }
     }
 

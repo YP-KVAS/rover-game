@@ -3,6 +3,8 @@ import { Coords, MovingDirection } from '../../../utils/types/game'
 
 export abstract class GameBot extends DynamicGameCharacter {
   protected img: HTMLImageElement
+  protected width: number
+  protected height: number
 
   protected constructor(
     gameMap: Array<Array<Array<number>>>,
@@ -17,116 +19,56 @@ export abstract class GameBot extends DynamicGameCharacter {
     this.movingDirection = movingDirection
     this.speed = speed
     this.img = img
-  }
-
-  isIntersectingTopLeft(
-    coords: Coords,
-    objCoords: Coords,
-    sizeRatio: number,
-    includeLastPoints: boolean
-  ): boolean {
-    return (
-      coords.x <= objCoords.x &&
-      (includeLastPoints
-        ? coords.x + this.tileSize * sizeRatio >= objCoords.x
-        : coords.x + this.tileSize * sizeRatio > objCoords.x) &&
-      coords.y <= objCoords.y &&
-      (includeLastPoints
-        ? coords.y + this.tileSize * sizeRatio >= objCoords.y
-        : coords.y + this.tileSize * sizeRatio > objCoords.y)
-    )
-  }
-
-  isIntersectingTopRight(
-    coords: Coords,
-    objCoords: Coords,
-    sizeRatio: number,
-    includeLastPoints: boolean
-  ): boolean {
-    return (
-      (includeLastPoints
-        ? coords.x <= objCoords.x + this.tileSize
-        : coords.x < objCoords.x + this.tileSize) &&
-      coords.x + this.tileSize * (sizeRatio - 1) >= objCoords.x &&
-      coords.y <= objCoords.y &&
-      (includeLastPoints
-        ? coords.y + this.tileSize * sizeRatio >= objCoords.y
-        : coords.y + this.tileSize * sizeRatio > objCoords.y)
-    )
-  }
-
-  isIntersectingLeftBottom(
-    coords: Coords,
-    objCoords: Coords,
-    sizeRatio: number,
-    includeLastPoints: boolean
-  ): boolean {
-    return (
-      coords.x <= objCoords.x &&
-      (includeLastPoints
-        ? coords.x + this.tileSize * sizeRatio >= objCoords.x
-        : coords.x + this.tileSize * sizeRatio > objCoords.x) &&
-      (includeLastPoints
-        ? coords.y <= objCoords.y + this.tileSize
-        : coords.y < objCoords.y + this.tileSize) &&
-      coords.y + this.tileSize * (sizeRatio - 1) >= objCoords.y
-    )
-  }
-
-  isIntersectingRightBottom(
-    coords: Coords,
-    objCoords: Coords,
-    sizeRatio: number,
-    includeLastPoints: boolean
-  ): boolean {
-    return (
-      (includeLastPoints
-        ? coords.x <= objCoords.x + this.tileSize
-        : coords.x < objCoords.x + this.tileSize) &&
-      coords.x + this.tileSize * (sizeRatio - 1) >= objCoords.x &&
-      (includeLastPoints
-        ? coords.y <= objCoords.y + this.tileSize
-        : coords.y < objCoords.y + this.tileSize) &&
-      coords.y + this.tileSize * (sizeRatio - 1) >= objCoords.y
-    )
+    this.width = tileSize
+    this.height = tileSize
   }
 
   coordsAreIntersecting(
-    coords: Coords,
-    objCoords: Coords,
-    sizeRatio = 1,
-    includeLastPoints = false
+    rect1: { coords: Coords; width: number; height: number },
+    rect2: { coords: Coords; width: number; height: number }
   ): boolean {
+    const rect1MinX = rect1.coords.x
+    const rect1MaxX = rect1.coords.x + rect1.width - 1
+    const rect1MinY = rect1.coords.y
+    const rect1MaxY = rect1.coords.y + rect1.height - 1
+
+    const rect2MinX = rect2.coords.x
+    const rect2MaxX = rect2.coords.x + rect2.width - 1
+    const rect2MinY = rect2.coords.y
+    const rect2MaxY = rect2.coords.y + rect2.height - 1
+
     return (
-      this.isIntersectingTopLeft(
-        coords,
-        objCoords,
-        sizeRatio,
-        includeLastPoints
-      ) ||
-      this.isIntersectingTopRight(
-        coords,
-        objCoords,
-        sizeRatio,
-        includeLastPoints
-      ) ||
-      this.isIntersectingLeftBottom(
-        coords,
-        objCoords,
-        sizeRatio,
-        includeLastPoints
-      ) ||
-      this.isIntersectingRightBottom(
-        coords,
-        objCoords,
-        sizeRatio,
-        includeLastPoints
-      )
+      rect1MaxX >= rect2MinX &&
+      rect1MinX <= rect2MaxX &&
+      rect1MinY <= rect2MaxY &&
+      rect1MaxY >= rect2MinY
     )
   }
 
-  collideWithRover(roverCoords: Coords): boolean {
-    return this.coordsAreIntersecting(this.coords, roverCoords)
+  collideWithRover(
+    roverCoords: Coords,
+    rect?: { coords: Coords; width: number; height: number }
+  ): boolean {
+    const roverRect = {
+      coords: roverCoords,
+      width: this.tileSize,
+      height: this.tileSize,
+    }
+    rect ||= {
+      coords: {
+        x:
+          this.width < this.tileSize
+            ? this.coords.x + this.width / 2
+            : this.coords.x,
+        y:
+          this.height < this.tileSize
+            ? this.coords.y + this.height / 2
+            : this.coords.y,
+      },
+      width: this.width,
+      height: this.height,
+    }
+    return this.coordsAreIntersecting(rect, roverRect)
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
