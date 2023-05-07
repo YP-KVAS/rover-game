@@ -19,6 +19,7 @@ const STATIC_ASSETS = [
   '/images/buildings/shop.png',
   '/images/buildings/warehouse.png',
   '/images/buildings/zoo.png',
+  '/images/cars/car-blue.png',
   '/images/cars/car-green.png',
   '/images/cars/car-red.png',
   '/images/cars/car-yellow.png',
