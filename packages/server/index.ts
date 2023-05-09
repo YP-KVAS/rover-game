@@ -23,7 +23,6 @@ import commentRouter from './src/router/api-router/CommentRouter'
 
 const app = express()
 app.use(cookieParser())
-app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 const clientPort = Number(process.env.CLIENT_PORT) || 3000
@@ -43,18 +42,19 @@ const corsOptions = {
 }
 app.use(cors(corsOptions))
 
-// TODO: configure cookieDomainRewrite
 const proxyOptions = {
   target: BASE_YA_URL,
   changeOrigin: true,
   pathRewrite: { '^/ya-api': '' },
   secure: false,
-  cookieDomainRewrite: { '.ya-praktikum.tech': 'localhost' },
+  cookieDomainRewrite: { '*': '' },
 }
 const proxy = createProxyMiddleware(proxyOptions)
+app.use(YA_API_URL, proxy)
 
 dbConnect()
 
+app.use(express.json())
 app.get('/', (_, res) => {
   res.json('👋 Howdy from the server :)')
 })
@@ -62,7 +62,6 @@ app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
 app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
 app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
 app.use(`${API_VERSION}${USERS_URL}`, userRouter)
-app.use(YA_API_URL, proxy)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
 
 app.listen(serverPort, () => {

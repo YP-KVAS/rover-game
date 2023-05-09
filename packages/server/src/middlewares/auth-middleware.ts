@@ -10,7 +10,6 @@ export const checkAuth =
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // check auth cookies
-      // TODO: fix undefined cookies
       const userOrErr = await getUser(req.headers.cookie)
       if (instanceOfApiError(userOrErr)) {
         const { status, reason } = userOrErr as ApiError

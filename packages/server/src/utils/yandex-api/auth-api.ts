@@ -22,15 +22,13 @@ const checkResponse = (res: Response): Promise<User | ApiError> => {
 }
 
 export const getUser = async (cookies?: string): Promise<User | ApiError> => {
-  // TODO: fix cookies (not sent from client), fetch url
-  console.log('cookies', cookies)
   try {
     const res = await fetch(
-      `http://localhost:3001${YA_API_URL}${AUTH_API_URL}${AuthApiPaths.USER}`,
+      `${process.env.BASE_URL}${YA_API_URL}${AUTH_API_URL}${AuthApiPaths.USER}`,
       {
         credentials: 'include',
         headers: {
-          cookie: 'authCookie=abcd; uuid=12345',
+          cookie: cookies || '',
         },
       }
     )

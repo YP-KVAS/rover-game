@@ -1,6 +1,7 @@
-export const BASE_YA_URL = 'https://ya-praktikum.tech/api/v2'
 // TODO: make url configurable (local, dev, prod)
-export const BASE_SERVER_URL = 'http://localhost:3001/api/v1'
+const BASE_URL = 'http://localhost:3001'
+export const BASE_YA_URL = `${BASE_URL}/ya-api`
+export const BASE_SERVER_URL = `${BASE_URL}/api/v1`
 
 export const AUTH_API_URL = '/auth'
 export const USER_API_URL = '/user'
