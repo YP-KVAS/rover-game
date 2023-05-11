@@ -1,7 +1,8 @@
 import { DynamicGameCharacter } from './base-classes/DynamicGameCharacter'
-import { roverImages } from '../game-images'
 import { Coords, MovingDirection } from '../../utils/types/game'
 import { IMG_WIDTH, immunityTimeMs } from '../../utils/const-variables/game'
+import { RoverImages } from '../../utils/types/game-images'
+import { GameImages } from '../GameImages'
 
 interface FreezeMov {
   start: number
@@ -10,6 +11,7 @@ interface FreezeMov {
 
 export class Rover extends DynamicGameCharacter {
   protected img: HTMLImageElement
+  protected roverImages: RoverImages
   private _freezeMov: FreezeMov | null = null
   private _blinking = false
   private _blink = false
@@ -22,19 +24,20 @@ export class Rover extends DynamicGameCharacter {
     speed: number
   ) {
     super(gameMap, tileSize, coords, movingDirection, speed)
+    this.roverImages = GameImages.getInstance().roverImages
     this.img = this.getRoverImg()
   }
 
   getRoverImg() {
     switch (this.movingDirection) {
       case MovingDirection.UP:
-        return roverImages.roverUp
+        return this.roverImages.roverUp
       case MovingDirection.DOWN:
-        return roverImages.roverDown
+        return this.roverImages.roverDown
       case MovingDirection.RIGHT:
-        return roverImages.roverRight
+        return this.roverImages.roverRight
       case MovingDirection.LEFT:
-        return roverImages.roverLeft
+        return this.roverImages.roverLeft
     }
   }
 
@@ -47,24 +50,23 @@ export class Rover extends DynamicGameCharacter {
     switch (this.movingDirection) {
       case MovingDirection.UP:
         this.movingDirection = MovingDirection.RIGHT
-        this.img = roverImages.roverOpenRight
+        this.img = this.roverImages.roverOpenRight
         break
       case MovingDirection.DOWN:
         this.movingDirection = MovingDirection.LEFT
-        this.img = roverImages.roverOpenLeft
+        this.img = this.roverImages.roverOpenLeft
         break
       case MovingDirection.RIGHT:
-        this.img = roverImages.roverOpenRight
+        this.img = this.roverImages.roverOpenRight
         break
       case MovingDirection.LEFT:
-        this.img = roverImages.roverOpenLeft
+        this.img = this.roverImages.roverOpenLeft
         break
     }
     this._freezeMov = { start: performance.now(), duration: freezeSec }
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    console.log(this._blink)
     if (this._blink) return
 
     // vertical offset to correctly display rover in a tile

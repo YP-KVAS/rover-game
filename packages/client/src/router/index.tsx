@@ -66,6 +66,7 @@ const routes = [
   },
 ]
 
-export const router = import.meta.env.SSR
-  ? createMemoryRouter(routes)
-  : createBrowserRouter(routes)
+export const router =
+  typeof window === 'undefined'
+    ? createMemoryRouter(routes)
+    : createBrowserRouter(routes)

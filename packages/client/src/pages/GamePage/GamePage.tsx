@@ -1,22 +1,11 @@
-import React, { FC, RefObject, useRef, useState } from 'react'
+import React, { FC, RefObject, useEffect, useRef, useState } from 'react'
 import styles from './GamePage.module.scss'
-let gameManager: any = null
-let GameField: any = null
-
-if (!import.meta.env.SSR) {
-  import('../../game-engine/GameManager').then(GameManagerDefault => {
-    gameManager = GameManagerDefault
-  })
-
-  import('../../components/GameField/GameField').then(GameFieldDefault => {
-    GameField = GameFieldDefault
-  })
-}
-
 import { Button } from '../../components/Button/Button'
-
 import RequireAuth from '../../hocs/requireAuth'
+import { GameField } from '../../components/GameField/GameField'
 import { EnumPages } from '../../utils/const-variables/pages'
+import gameManager from '../../game-engine/GameManager'
+import { GameImages } from '../../game-engine/GameImages'
 
 const GamePage: FC = () => {
   const gamePageRef: RefObject<HTMLDivElement> = useRef(null)
@@ -24,11 +13,14 @@ const GamePage: FC = () => {
 
   const [level, setLevel] = useState(1)
   const [isGameOver, setGameOverState] = useState(false)
+  const [gameEnabled, setGameEnabled] = useState(false)
 
-  if (!import.meta.env.SSR) {
+  useEffect(() => {
     gameManager.useChangeLevel(setLevel)
     gameManager.useChangeGameOverState(setGameOverState)
-  }
+    GameImages.getInstance()
+    setTimeout(() => setGameEnabled(true))
+  }, [])
 
   const setFullScreen = () => {
     gamePageRef.current
@@ -43,10 +35,7 @@ const GamePage: FC = () => {
   ) : (
     <div className={styles.game}>
       <div ref={gamePageRef}>
-        {/*TODO: replace with actual game level, add game level progress, timer, etc.*/}
-        {!import.meta.env.SSR ? (
-          <GameField level={level} gameFieldRef={gameFieldRef} />
-        ) : null}
+        {gameEnabled && <GameField level={level} gameFieldRef={gameFieldRef} />}
       </div>
       <Button clickHandler={setFullScreen}>
         Перейти в полноэкранный режим
