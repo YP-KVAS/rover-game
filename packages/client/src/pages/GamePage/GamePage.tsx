@@ -6,6 +6,7 @@ import { GameField } from '../../components/GameField/GameField'
 import { EnumPages } from '../../utils/const-variables/pages'
 import gameManager from '../../game-engine/GameManager'
 import { GameImages } from '../../game-engine/GameImages'
+import { Loader } from '../../components/Loader/Loader'
 
 const GamePage: FC = () => {
   const gamePageRef: RefObject<HTMLDivElement> = useRef(null)
@@ -18,8 +19,7 @@ const GamePage: FC = () => {
   useEffect(() => {
     gameManager.useChangeLevel(setLevel)
     gameManager.useChangeGameOverState(setGameOverState)
-    GameImages.getInstance()
-    setTimeout(() => setGameEnabled(true))
+    GameImages.getInstance().useChangeAllImagesLoadedState(setGameEnabled)
   }, [])
 
   const setFullScreen = () => {
@@ -32,10 +32,12 @@ const GamePage: FC = () => {
 
   return isGameOver ? (
     <div>GAME OVER (PAGE IN WORK)</div>
+  ) : !gameEnabled ? (
+    <Loader />
   ) : (
     <div className={styles.game}>
       <div ref={gamePageRef}>
-        {gameEnabled && <GameField level={level} gameFieldRef={gameFieldRef} />}
+        <GameField level={level} gameFieldRef={gameFieldRef} />
       </div>
       <Button clickHandler={setFullScreen}>
         Перейти в полноэкранный режим

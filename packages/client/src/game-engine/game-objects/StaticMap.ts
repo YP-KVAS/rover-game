@@ -1,7 +1,7 @@
 import { BaseGameObject } from './base-classes/BaseGameObject'
 import { spriteSize } from '../../utils/const-variables/game'
 import { GameImages } from '../GameImages'
-import { TileMapImages } from '../../utils/types/game-images'
+import { TileMapImages } from '../game-images/tile-map-images'
 
 export class StaticMap extends BaseGameObject {
   tileMapImages: TileMapImages

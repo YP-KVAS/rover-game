@@ -1,8 +1,8 @@
 import { DynamicGameCharacter } from './base-classes/DynamicGameCharacter'
 import { Coords, MovingDirection } from '../../utils/types/game'
 import { IMG_WIDTH, immunityTimeMs } from '../../utils/const-variables/game'
-import { RoverImages } from '../../utils/types/game-images'
 import { GameImages } from '../GameImages'
+import { RoverImages } from '../game-images/rover-images'
 
 interface FreezeMov {
   start: number
@@ -111,7 +111,6 @@ export class Rover extends DynamicGameCharacter {
     this._blink = true
     await sleep(200)
     this._blink = false
-    console.log('blink')
   }
 
   hitting() {
