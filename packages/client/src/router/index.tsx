@@ -10,10 +10,14 @@ import { Registration } from '../pages/Registration'
 import { Leaderboard } from '../pages/Leaderboard/Leaderboard'
 import { UserSettings } from '../pages/UserSettings'
 import { Login } from '../pages/Login'
+import { AppDispatch } from '../store/store'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { onGetUser } from '../store/thunks/auth-thunk'
 
 export interface IRoute {
   path: RoutesEnum | string
   element: JSX.Element
+  loader?: (dispatch: AppDispatch) => Promise<PayloadAction<unknown>>
   children?: Array<IRoute>
 }
 
@@ -37,6 +41,9 @@ export const routes: Array<IRoute> = [
       {
         path: RoutesEnum.USER_SETTINGS,
         element: <UserSettings />,
+        loader: (dispatch: AppDispatch) => {
+          return dispatch(onGetUser())
+        },
       },
       {
         path: RoutesEnum.FORUM,
@@ -50,28 +57,46 @@ export const routes: Array<IRoute> = [
           {
             path: RoutesEnum.FORUM,
             element: <p>Categories. Coming soon...</p>,
+            loader: (dispatch: AppDispatch) => {
+              return dispatch(onGetUser())
+            },
           },
           {
             path: RoutesEnum.FORUM_CATEGORY,
             element: <p>Topics. Coming soon...</p>,
+            loader: (dispatch: AppDispatch) => {
+              return dispatch(onGetUser())
+            },
           },
           {
             path: RoutesEnum.FORUM_TOPIC,
             element: <p>Comments. Coming soon...</p>,
+            loader: (dispatch: AppDispatch) => {
+              return dispatch(onGetUser())
+            },
           },
         ],
       },
       {
         path: RoutesEnum.START,
         element: <Start />,
+        loader: (dispatch: AppDispatch) => {
+          return dispatch(onGetUser())
+        },
       },
       {
         path: RoutesEnum.GAME,
         element: <GamePage />,
+        loader: (dispatch: AppDispatch) => {
+          return dispatch(onGetUser())
+        },
       },
       {
         path: RoutesEnum.LEADERBOARD,
         element: <Leaderboard />,
+        loader: (dispatch: AppDispatch) => {
+          return dispatch(onGetUser())
+        },
       },
       {
         path: RoutesEnum.ERROR_500,

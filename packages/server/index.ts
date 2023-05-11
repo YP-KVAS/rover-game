@@ -17,6 +17,8 @@ import {
   isDev,
   serverPort,
 } from './src/utils/start-server-helper'
+import { UserRepository } from './src/repositories/UserRepository'
+import serialize from 'serialize-javascript'
 
 async function startServer() {
   const app = express()
@@ -41,22 +43,31 @@ async function startServer() {
 
     try {
       let template = getTemplate(distPath, srcPath)
-      if (isDev()) {
-        template = await vite!.transformIndexHtml(url, template)
+      if (vite) {
+        template = await vite.transformIndexHtml(url, template)
       }
 
-      const render: (...args: Array<unknown>) => Promise<string> = isDev()
-        ? (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'))).render
+      const render: (...args: Array<unknown>) => Promise<string> = vite
+        ? (await vite.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'))).render
         : (await import(ssrClientPath)).render
 
-      const appHtml = await render(url)
+      const [initialState, appHtml] = await render(
+        url,
+        new UserRepository(req.headers.cookie)
+      )
 
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml)
+      const preloadedState = `<script>window.__PRELOADED_STATE__=${serialize(
+        initialState
+      )}</script>`
+
+      const html = template
+        .replace(`<!--ssr-outlet-->`, appHtml)
+        .replace(`<!--store-outlet-->`, preloadedState)
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
-      if (isDev()) {
-        vite!.ssrFixStacktrace(e as Error)
+      if (vite) {
+        vite.ssrFixStacktrace(e as Error)
       }
       next(e)
     }

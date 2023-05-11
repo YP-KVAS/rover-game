@@ -1,14 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { User, UserSignIn, UserSignUp } from '../../utils/types/user'
-import { getUser, logout, signIn, signUp } from '../../utils/rest-api/auth-api'
+import { logout, signIn, signUp } from '../../utils/rest-api/auth-api'
+import { IThunkService } from '../services/ThunkService'
 
 export const onGetUser = createAsyncThunk<User, void, { rejectValue: string }>(
   'auth/onGetUser',
-  async (_, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
-      return await getUser()
+      const service = thunkAPI.extra as IThunkService
+      return await service.userService.getCurrentUser()
     } catch (err: unknown) {
-      return rejectWithValue((err as Error).message || 'Unable to get user')
+      return thunkAPI.rejectWithValue(
+        (err as Error).message || 'Unable to get user'
+      )
     }
   }
 )
