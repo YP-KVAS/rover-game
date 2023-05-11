@@ -1,4 +1,4 @@
-import { createBrowserRouter, createMemoryRouter, Link } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/MainPage/Main'
@@ -11,16 +11,16 @@ import { Leaderboard } from '../pages/Leaderboard/Leaderboard'
 import { UserSettings } from '../pages/UserSettings'
 import { Login } from '../pages/Login'
 
-const in_work_component = (
-  <main>
-    <h2>PAGE IN WORK</h2>
-    <Link to={RoutesEnum.MAIN}>Return</Link>
-  </main>
-)
+export interface IRoute {
+  path: RoutesEnum | string
+  element: JSX.Element
+  children?: Array<IRoute>
+}
 
-const routes = [
+export const routes: Array<IRoute> = [
   {
     element: <Layout />,
+    path: RoutesEnum.MAIN,
     children: [
       {
         path: RoutesEnum.MAIN,
@@ -40,7 +40,26 @@ const routes = [
       },
       {
         path: RoutesEnum.FORUM,
-        element: in_work_component,
+        element: (
+          <div>
+            <p>Forum. Coming soon...</p>
+            <Outlet />
+          </div>
+        ),
+        children: [
+          {
+            path: RoutesEnum.FORUM,
+            element: <p>Categories. Coming soon...</p>,
+          },
+          {
+            path: RoutesEnum.FORUM_CATEGORY,
+            element: <p>Topics. Coming soon...</p>,
+          },
+          {
+            path: RoutesEnum.FORUM_TOPIC,
+            element: <p>Comments. Coming soon...</p>,
+          },
+        ],
       },
       {
         path: RoutesEnum.START,
@@ -65,8 +84,3 @@ const routes = [
     ],
   },
 ]
-
-export const router =
-  typeof window === 'undefined'
-    ? createMemoryRouter(routes)
-    : createBrowserRouter(routes)
