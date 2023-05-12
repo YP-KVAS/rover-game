@@ -53,14 +53,16 @@ export const ForumComments: FC = () => {
       dispatch(onGetForumTopics({ categoryId, search: searchQuery || '' }))
     }
 
-    dispatch(
-      onGetForumComments({
-        parentCommentId: null,
-        topicId,
-        limit: COMMENTS_LOAD_LIMIT,
-        offset,
-      })
-    )
+    if (currentPage) {
+      dispatch(
+        onGetForumComments({
+          parentCommentId: null,
+          topicId,
+          limit: COMMENTS_LOAD_LIMIT,
+          offset,
+        })
+      )
+    }
 
     return () => {
       dispatch(clearForumComments())
