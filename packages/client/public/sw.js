@@ -9,6 +9,7 @@ const STATIC_ASSETS = [
   '/images/background/sidewalk-2.png',
   '/images/background/sidewalk.jpg',
   '/images/buildings/cafe.png',
+  '/images/buildings/fast-food.png',
   '/images/buildings/hospital.png',
   '/images/buildings/house-1.png',
   '/images/buildings/house-2.png',
