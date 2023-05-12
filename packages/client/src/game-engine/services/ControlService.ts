@@ -1,43 +1,106 @@
-import { RoverEvents } from './EventBus'
+import eventBus, { RoverEvents } from './EventBus'
 import { MovingDirection } from '../../utils/types/game'
-import eventBus from './EventBus'
 
 class ControlService {
   private _gameField: HTMLElement | null = null
-  private _focus = false
+  private _listeners: [string, EventListener][] = []
+  private _mouseFoo?: (event: MouseEvent) => void
+
+  private sensitive = 5
+  private _direction: MovingDirection | null = null
+  private _intervalId: NodeJS.Timer | null = null
 
   addListeners(el: HTMLElement) {
     this._gameField = el
-    this._gameField.addEventListener('keydown', this.move)
-    this._gameField.addEventListener('click', this.setPointerLock)
+
+    const keyDownFoo = this.handleStartMoveByKeyboard.bind(this)
+    const keyUpFoo = this.handleEndMoveByKeyboard.bind(this)
+    const pointerLockFoo = this.setPointerLock.bind(this)
+
+    this._listeners.push(['keydown', keyDownFoo as EventListener])
+    this._listeners.push(['keyup', keyUpFoo as EventListener])
+    this._listeners.push(['click', pointerLockFoo])
+
+    this._gameField.addEventListener('keydown', keyDownFoo)
+    this._gameField.addEventListener('keyup', keyUpFoo)
+    this._gameField.addEventListener('click', pointerLockFoo)
+
+    const moveFoo = this.move.bind(this)
+    this._intervalId = setInterval(moveFoo, 30)
   }
 
   removeListeners() {
-    this._gameField?.removeEventListener('keydown', this.move)
-    this._gameField?.removeEventListener('click', this.setPointerLock)
+    this._listeners.forEach(item => {
+      this._gameField?.removeEventListener(item[0], item[1])
+    })
+
+    if (this._intervalId) {
+      clearInterval(this._intervalId)
+    }
   }
 
-  move(event: KeyboardEvent) {
+  move() {
+    if (!this._direction) return
+
+    eventBus.emit(RoverEvents.MOVE, { direction: this._direction })
+  }
+
+  handleStartMoveByKeyboard(event: KeyboardEvent) {
     event.preventDefault()
-    switch (event.key) {
+
+    this.moveByKeyboard(event.code)
+  }
+
+  handleEndMoveByKeyboard(event: KeyboardEvent) {
+    event.preventDefault()
+
+    this._direction = null
+  }
+
+  handleMoveByMouse(event: MouseEvent) {
+    event.preventDefault()
+
+    if (document.pointerLockElement !== event.target) return
+
+    this._direction = null
+
+    if (event.movementX > this.sensitive) {
+      this._direction = MovingDirection.RIGHT
+      return
+    } else if (event.movementX < -this.sensitive) {
+      this._direction = MovingDirection.LEFT
+      return
+    }
+
+    if (event.movementY > this.sensitive) {
+      this._direction = MovingDirection.DOWN
+      return
+    } else if (event.movementY < -this.sensitive) {
+      this._direction = MovingDirection.UP
+      return
+    }
+  }
+
+  moveByKeyboard(code: string) {
+    switch (code) {
       case 'Down': // IE/Edge specific value
       case 'ArrowDown':
-        eventBus.emit(RoverEvents.MOVE, { direction: MovingDirection.DOWN })
+        this._direction = MovingDirection.DOWN
         break
 
       case 'Up': // IE/Edge specific value
       case 'ArrowUp':
-        eventBus.emit(RoverEvents.MOVE, { direction: MovingDirection.UP })
+        this._direction = MovingDirection.UP
         break
 
       case 'Left': // IE/Edge specific value
       case 'ArrowLeft':
-        eventBus.emit(RoverEvents.MOVE, { direction: MovingDirection.LEFT })
+        this._direction = MovingDirection.LEFT
         break
 
       case 'Right': // IE/Edge specific value
       case 'ArrowRight':
-        eventBus.emit(RoverEvents.MOVE, { direction: MovingDirection.RIGHT })
+        this._direction = MovingDirection.RIGHT
         break
       default:
         return
@@ -47,8 +110,13 @@ class ControlService {
   setPointerLock(event: Event) {
     if (document.pointerLockElement === event.target) {
       document.exitPointerLock()
+      if (this._mouseFoo) {
+        window.removeEventListener('mousemove', this._mouseFoo)
+      }
     } else {
       ;(event.target as HTMLElement).requestPointerLock()
+      this._mouseFoo = this.handleMoveByMouse.bind(this)
+      window.addEventListener('mousemove', this._mouseFoo)
     }
   }
 }
