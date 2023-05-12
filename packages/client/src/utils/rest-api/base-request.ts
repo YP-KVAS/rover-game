@@ -1,5 +1,3 @@
-import { BASE_URL } from '../const-variables/api'
-
 export enum FetchMethods {
   GET = 'GET',
   POST = 'POST',
@@ -14,6 +12,7 @@ export interface RequestInput {
 }
 
 export function request<T>(
+  baseUrl: string,
   endpoint: string,
   options: RequestInput
 ): Promise<T> {
@@ -29,14 +28,13 @@ export function request<T>(
     config.body = data instanceof FormData ? data : JSON.stringify(data)
   }
 
-  return fetch(`${BASE_URL}${endpoint}`, config).then(checkResponse)
+  return fetch(`${baseUrl}${endpoint}`, config).then(checkResponse)
 }
 
 function checkResponse(res: Response) {
   const data = res.text()
   if (res.ok) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return data.then(text => JSON.parse(text)).catch(_ => data)
+    return data.then(text => JSON.parse(text)).catch(() => data)
   }
 
   return data.then(text => {

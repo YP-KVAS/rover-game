@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.scss'
 import { Provider } from 'react-redux'
-import { store } from './store/store'
+import { BrowserRouter } from 'react-router-dom'
+import { ThunkService } from './store/services/ThunkService'
+import { UserService } from './store/services/UserService'
+import { UserRepository } from './store/repositories/UserRepository'
+import { createStore } from './store/store'
 
 const startServiceWorker = () => {
   if ('serviceWorker' in navigator) {
@@ -25,10 +29,20 @@ const startServiceWorker = () => {
 
 startServiceWorker()
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+const service = new ThunkService(new UserService(new UserRepository()))
+
+const preloadedState = window.__PRELOADED_STATE__
+delete window.__PRELOADED_STATE__
+
+const store = createStore(service, preloadedState)
+
+ReactDOM.hydrateRoot(
+  document.getElementById('root') as HTMLElement,
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 )

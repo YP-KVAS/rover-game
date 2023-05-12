@@ -6,6 +6,8 @@ import gameManager from '../../game-engine/GameManager'
 import RequireAuth from '../../hocs/requireAuth'
 import { EnumPages } from '../../utils/const-variables/pages'
 import { GameCompleted } from '../../components/GameField/GameCompleted/GameCompleted'
+import { GameImages } from '../../game-engine/GameImages'
+import { Loader } from '../../components/Loader/Loader'
 
 const GamePage: FC = () => {
   const gamePageRef: RefObject<HTMLDivElement> = useRef(null)
@@ -13,16 +15,21 @@ const GamePage: FC = () => {
 
   const [level, setLevel] = useState(gameManager.level)
   const [gameCompleted, setGameCompleted] = useState(gameManager.gameCompleted)
+  const [gameEnabled, setGameEnabled] = useState(false)
 
   useEffect(() => {
     gameManager.useChangeLevel(setLevel)
     gameManager.useChangeGameCompletedState(setGameCompleted)
+    GameImages.getInstance().useChangeAllImagesLoadedState(setGameEnabled)
 
     return () => {
-      if (gameManager.levelProgress === 'failed') {
-        gameManager.restartGame()
-      } else if (!gameManager.gameCompleted) {
+      if (gameManager.levelProgress === 'playing') {
         gameManager.restartLevel()
+      } else if (
+        gameManager.levelProgress === 'failed' ||
+        gameManager.levelProgress === 'willFail'
+      ) {
+        gameManager.restartGame()
       }
     }
   }, [])
@@ -35,7 +42,9 @@ const GamePage: FC = () => {
       .catch(() => console.warn('Fullscreen is not supported'))
   }
 
-  return gameCompleted ? (
+  return !gameEnabled ? (
+    <Loader />
+  ) : gameCompleted ? (
     <GameCompleted />
   ) : (
     <div className={styles.game}>

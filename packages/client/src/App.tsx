@@ -1,9 +1,9 @@
 import styles from './App.module.css'
-import { useEffect, useState } from 'react'
-import { RouterProvider } from 'react-router-dom'
-import { router } from './router'
+import { useEffect, useMemo, useState } from 'react'
 import { Theme, ThemeContext } from './contexts/ThemeContext'
 import { LS_THEME, ThemeColors, THEMES } from './utils/const-variables/theme'
+import { Route, Routes } from 'react-router-dom'
+import { IRoute, routes } from './router'
 
 function App() {
   const getDefaultTheme = (): Theme => {
@@ -16,7 +16,7 @@ function App() {
   }
 
   const [currentThemeName, setCurrentThemeName] = useState<Theme>(
-    getDefaultTheme()
+    typeof window === 'undefined' ? 'light' : getDefaultTheme()
   )
 
   useEffect(() => {
@@ -33,13 +33,27 @@ function App() {
   const changeTheme = () =>
     setCurrentThemeName(prevState => (prevState === 'dark' ? 'light' : 'dark'))
 
+  const appRoutes = useMemo(() => {
+    return mapRoutes(routes)
+  }, [routes])
+
   return (
     <ThemeContext.Provider value={{ themeName: currentThemeName, changeTheme }}>
       <div className={styles.app}>
-        <RouterProvider router={router} />
+        <Routes>{appRoutes}</Routes>
       </div>
     </ThemeContext.Provider>
   )
 }
 
 export default App
+
+const mapRoutes = (routes: Array<IRoute>) => {
+  return routes.map(route => {
+    return (
+      <Route path={route.path} element={route.element} key={route.path}>
+        {route.children && mapRoutes(route.children)}
+      </Route>
+    )
+  })
+}
