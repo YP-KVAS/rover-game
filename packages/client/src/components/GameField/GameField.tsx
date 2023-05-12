@@ -9,6 +9,7 @@ import { Car } from '../../game-engine/game-objects/Car'
 import { GameStat } from './GameStat/GameStat'
 import { GameControls } from './GameControls/GameControls'
 import eventBus from '../../game-engine/services/EventBus'
+import controlService from '../../game-engine/services/ControlService'
 
 interface GameFieldProps {
   level: number
@@ -62,8 +63,11 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
 
   useEffect(() => {
     eventBus.addListeners(rover)
+    if (gameFieldRef.current) controlService.addListeners(gameFieldRef.current)
+
     return () => {
       eventBus.removeListeners()
+      controlService.removeListeners()
     }
   }, [isPlaying])
 
@@ -80,33 +84,6 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
     })
   }
 
-  const handleOnKeyDown = (event: React.KeyboardEvent) => {
-    event.preventDefault()
-    switch (event.key) {
-      case 'Down': // IE/Edge specific value
-      case 'ArrowDown':
-        rover.move(MovingDirection.DOWN)
-        break
-
-      case 'Up': // IE/Edge specific value
-      case 'ArrowUp':
-        rover.move(MovingDirection.UP)
-        break
-
-      case 'Left': // IE/Edge specific value
-      case 'ArrowLeft':
-        rover.move(MovingDirection.LEFT)
-        break
-
-      case 'Right': // IE/Edge specific value
-      case 'ArrowRight':
-        rover.move(MovingDirection.RIGHT)
-        break
-      default:
-        return
-    }
-  }
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.field}>
@@ -115,7 +92,6 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
         <section
           ref={gameFieldRef}
           className={styles.section}
-          onKeyDown={handleOnKeyDown}
           tabIndex={0}
           style={{ minWidth: canvasWidth, minHeight: canvasHeight }}>
           <Canvas
