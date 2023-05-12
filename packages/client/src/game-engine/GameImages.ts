@@ -62,10 +62,6 @@ export class GameImages {
         image.onload = () => this._incrementLoadedImages()
         image.src = value as string
 
-        if (image.complete) {
-          this._incrementLoadedImages()
-        }
-
         acc[key] = image
         return acc
       },

@@ -57,7 +57,8 @@ async function startServer() {
       )
 
       const preloadedState = `<script>window.__PRELOADED_STATE__=${serialize(
-        initialState
+        initialState,
+        { isJSON: true }
       )}</script>`
 
       const html = template
