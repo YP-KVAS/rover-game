@@ -1,16 +1,19 @@
 import styles from './GameControls.module.scss'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, RefObject, useEffect, useState } from 'react'
 import gameManager from '../../../game-engine/GameManager'
 import { LevelProgress } from '../../../utils/types/game'
 import { StartLevel } from '../../StartLevel/StartLevel'
 import { GameControlTitle } from '../GameControlTitle/GameControlTitle'
+import controlService from '../../../game-engine/services/ControlService'
 
 interface GameActionsProps {
   changeIsPlayingState: (isPlaying: boolean) => void
+  gameFieldRef: RefObject<HTMLDivElement>
 }
 
 export const GameControls: FC<GameActionsProps> = ({
   changeIsPlayingState,
+  gameFieldRef,
 }) => {
   const [levelProgress, setLevelProgress] = useState<LevelProgress>(
     gameManager.levelProgress
@@ -27,6 +30,16 @@ export const GameControls: FC<GameActionsProps> = ({
       changeIsPlayingState(false)
     } else if (levelProgress === 'playing') {
       changeIsPlayingState(true)
+
+      if (gameFieldRef.current) {
+        controlService.addListeners(gameFieldRef.current)
+      }
+    } else {
+      controlService.removeListeners()
+    }
+
+    return () => {
+      controlService.removeListeners()
     }
   }, [levelProgress])
 

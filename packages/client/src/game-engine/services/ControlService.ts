@@ -3,36 +3,36 @@ import { MovingDirection } from '../../utils/types/game'
 
 class ControlService {
   private _gameField: HTMLElement | null = null
-  private _listeners: [string, EventListener][] = []
-  private _mouseFoo?: (event: MouseEvent) => void
-
   private sensitive = 5
   private _direction: MovingDirection | null = null
   private _intervalId: NodeJS.Timer | null = null
 
+  constructor() {
+    this.handleStartMoveByKeyboard = this.handleStartMoveByKeyboard.bind(this)
+    this.handleEndMoveByKeyboard = this.handleEndMoveByKeyboard.bind(this)
+    this.setPointerLock = this.setPointerLock.bind(this)
+    this.handleMoveByMouse = this.handleMoveByMouse.bind(this)
+    this.move = this.move.bind(this)
+  }
+
   addListeners(el: HTMLElement) {
     this._gameField = el
+    this._gameField.addEventListener('keydown', this.handleStartMoveByKeyboard)
+    this._gameField.addEventListener('keyup', this.handleEndMoveByKeyboard)
+    this._gameField.addEventListener('click', this.setPointerLock)
 
-    const keyDownFoo = this.handleStartMoveByKeyboard.bind(this)
-    const keyUpFoo = this.handleEndMoveByKeyboard.bind(this)
-    const pointerLockFoo = this.setPointerLock.bind(this)
-
-    this._listeners.push(['keydown', keyDownFoo as EventListener])
-    this._listeners.push(['keyup', keyUpFoo as EventListener])
-    this._listeners.push(['click', pointerLockFoo])
-
-    this._gameField.addEventListener('keydown', keyDownFoo)
-    this._gameField.addEventListener('keyup', keyUpFoo)
-    this._gameField.addEventListener('click', pointerLockFoo)
-
-    const moveFoo = this.move.bind(this)
-    this._intervalId = setInterval(moveFoo, 30)
+    this._intervalId = setInterval(this.move, 30)
   }
 
   removeListeners() {
-    this._listeners.forEach(item => {
-      this._gameField?.removeEventListener(item[0], item[1])
-    })
+    document.exitPointerLock()
+
+    this._gameField?.removeEventListener(
+      'keydown',
+      this.handleStartMoveByKeyboard
+    )
+    this._gameField?.removeEventListener('keyup', this.handleEndMoveByKeyboard)
+    this._gameField?.removeEventListener('click', this.setPointerLock)
 
     if (this._intervalId) {
       clearInterval(this._intervalId)
@@ -83,21 +83,25 @@ class ControlService {
 
   moveByKeyboard(code: string) {
     switch (code) {
+      case 'KeyS':
       case 'Down': // IE/Edge specific value
       case 'ArrowDown':
         this._direction = MovingDirection.DOWN
         break
 
+      case 'KeyW':
       case 'Up': // IE/Edge specific value
       case 'ArrowUp':
         this._direction = MovingDirection.UP
         break
 
+      case 'KeyA':
       case 'Left': // IE/Edge specific value
       case 'ArrowLeft':
         this._direction = MovingDirection.LEFT
         break
 
+      case 'KeyD':
       case 'Right': // IE/Edge specific value
       case 'ArrowRight':
         this._direction = MovingDirection.RIGHT
@@ -110,13 +114,10 @@ class ControlService {
   setPointerLock(event: Event) {
     if (document.pointerLockElement === event.target) {
       document.exitPointerLock()
-      if (this._mouseFoo) {
-        window.removeEventListener('mousemove', this._mouseFoo)
-      }
+      window.removeEventListener('mousemove', this.handleMoveByMouse)
     } else {
       ;(event.target as HTMLElement).requestPointerLock()
-      this._mouseFoo = this.handleMoveByMouse.bind(this)
-      window.addEventListener('mousemove', this._mouseFoo)
+      window.addEventListener('mousemove', this.handleMoveByMouse)
     }
   }
 }
