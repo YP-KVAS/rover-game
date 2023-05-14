@@ -3,7 +3,7 @@ import styles from './GamePage.module.scss'
 let gameManager: any = null
 let GameField: any = null
 
-if (!import.meta.env.SSR) {
+if (typeof window !== 'undefined') {
   import('../../game-engine/GameManager').then(GameManagerDefault => {
     gameManager = GameManagerDefault
   })
@@ -44,7 +44,7 @@ const GamePage: FC = () => {
     <div className={styles.game}>
       <div ref={gamePageRef}>
         {/*TODO: replace with actual game level, add game level progress, timer, etc.*/}
-        {!import.meta.env.SSR ? (
+        {typeof window !== 'undefined' ? (
           <GameField level={level} gameFieldRef={gameFieldRef} />
         ) : null}
       </div>
