@@ -25,7 +25,7 @@ const GamePage: FC = () => {
   const [level, setLevel] = useState(1)
   const [isGameOver, setGameOverState] = useState(false)
 
-  if (!import.meta.env.SSR) {
+  if (typeof window !== 'undefined') {
     gameManager.useChangeLevel(setLevel)
     gameManager.useChangeGameOverState(setGameOverState)
   }
