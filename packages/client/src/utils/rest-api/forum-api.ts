@@ -1,13 +1,13 @@
 import {
-  IAddForumComment,
-  IAddTopic,
+  IAddForumCommentQuery,
+  IAddForumTopicQuery,
   IForumCategory,
   IForumComment,
   IForumTopic,
-  IGetForumComments,
+  IGetForumCommentsQuery,
   IGetForumCommentsRes,
-  IGetForumTopics,
-  IUpdateForumTopic,
+  IGetForumTopicsQuery,
+  IUpdateForumTopicQuery,
 } from '../types/forum'
 import { FetchMethods, request } from './base-request'
 import {
@@ -53,7 +53,7 @@ export async function deleteForumCategory(id: number): Promise<void> {
 // topics
 
 export async function getForumTopics(
-  topicsQuery: IGetForumTopics
+  topicsQuery: IGetForumTopicsQuery
 ): Promise<Array<IForumTopic>> {
   const {
     categoryId,
@@ -72,7 +72,9 @@ export async function getForumTopics(
   )
 }
 
-export async function addForumTopic(topic: IAddTopic): Promise<IForumTopic> {
+export async function addForumTopic(
+  topic: IAddForumTopicQuery
+): Promise<IForumTopic> {
   const { categoryId, topicName, ...restData } = topic
   return await request(
     BASE_SERVER_URL,
@@ -85,7 +87,7 @@ export async function addForumTopic(topic: IAddTopic): Promise<IForumTopic> {
 }
 
 export async function updateForumTopic(
-  topic: IUpdateForumTopic
+  topic: IUpdateForumTopicQuery
 ): Promise<IForumTopic> {
   return await request(BASE_SERVER_URL, `${FORUM_TOPICS_API_URL}/${topic.id}`, {
     method: FetchMethods.PATCH,
@@ -102,7 +104,7 @@ export async function deleteForumTopic(id: number): Promise<void> {
 // comments
 
 export async function getForumComments(
-  commentsQuery: IGetForumComments
+  commentsQuery: IGetForumCommentsQuery
 ): Promise<IGetForumCommentsRes> {
   const { topicId, parentCommentId, offset = 0, limit } = commentsQuery
   return await request(
@@ -117,7 +119,7 @@ export async function getForumComments(
 }
 
 export async function addForumComment(
-  comment: IAddForumComment
+  comment: IAddForumCommentQuery
 ): Promise<IForumComment> {
   const { topicId, ...restData } = comment
   return await request(

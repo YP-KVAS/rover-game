@@ -6,7 +6,7 @@ export interface IForumCategory {
   topicCount: number
 }
 
-export interface IUpdateForumTopic {
+export interface IUpdateForumTopicQuery {
   id: number
   name: string
   newCategoryId: number
@@ -20,17 +20,17 @@ export interface IForumTopic {
   userId: number
 }
 
-interface GetForumItems {
+interface IGetForumItemsBaseQuery {
   offset?: number
   limit?: number
   search?: string
 }
 
-export interface IGetForumTopics extends GetForumItems {
+export interface IGetForumTopicsQuery extends IGetForumItemsBaseQuery {
   categoryId: number
 }
 
-export interface IGetForumComments extends GetForumItems {
+export interface IGetForumCommentsQuery extends IGetForumItemsBaseQuery {
   topicId: number
   parentCommentId: number | null
 }
@@ -40,14 +40,14 @@ export interface IGetForumCommentsRes {
   total: number
 }
 
-export interface IAddForumComment {
+export interface IAddForumCommentQuery {
   message: string | null
   topicId: number
   parentCommentId: number | null
   userId: number
 }
 
-export interface IForumComment extends IAddForumComment {
+export interface IForumComment extends IAddForumCommentQuery {
   id: number
   createdAt: string
   replyCount: number
@@ -58,7 +58,7 @@ export interface NewTopic extends Record<string, unknown> {
   [FormInputNames.FORUM_MESSAGE]: string
 }
 
-export interface IAddTopic extends NewTopic {
+export interface IAddForumTopicQuery extends NewTopic {
   userId: number
   categoryId: number
 }

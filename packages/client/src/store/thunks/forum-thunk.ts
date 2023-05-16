@@ -14,15 +14,15 @@ import {
   updateForumTopic,
 } from '../../utils/rest-api/forum-api'
 import {
-  IAddForumComment,
-  IAddTopic,
+  IAddForumCommentQuery,
+  IAddForumTopicQuery,
   IForumCategory,
   IForumComment,
   IForumTopic,
-  IGetForumComments,
+  IGetForumCommentsQuery,
   IGetForumCommentsRes,
-  IGetForumTopics,
-  IUpdateForumTopic,
+  IGetForumTopicsQuery,
+  IUpdateForumTopicQuery,
 } from '../../utils/types/forum'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
 import { getUserRole } from '../../utils/rest-api/user-api'
@@ -99,7 +99,7 @@ export const onDeleteForumCategory = createAsyncThunk<
 
 export const onGetForumTopics = createAsyncThunk<
   Array<IForumTopic>,
-  IGetForumTopics,
+  IGetForumTopicsQuery,
   { rejectValue: string }
 >(
   'forum/onGetForumTopics',
@@ -113,7 +113,7 @@ export const onGetForumTopics = createAsyncThunk<
     }
   },
   {
-    condition: (topicsQuery: IGetForumTopics, { getState }) => {
+    condition: (topicsQuery: IGetForumTopicsQuery, { getState }) => {
       const state = getState() as RootState
       const categoryId = topicsQuery.categoryId
       const topicsAreLoading =
@@ -131,7 +131,7 @@ export const onGetForumTopics = createAsyncThunk<
 
 export const onAddForumTopic = createAsyncThunk<
   IForumTopic,
-  IAddTopic,
+  IAddForumTopicQuery,
   { rejectValue: string }
 >('forum/onAddForumTopic', async (newTopic, { rejectWithValue }) => {
   try {
@@ -145,7 +145,7 @@ export const onAddForumTopic = createAsyncThunk<
 
 export const onUpdateForumTopic = createAsyncThunk<
   IForumTopic,
-  IUpdateForumTopic,
+  IUpdateForumTopicQuery,
   { rejectValue: string }
 >('forum/onUpdateForumTopic', async (topic, { rejectWithValue }) => {
   try {
@@ -171,7 +171,7 @@ export const onDeleteForumTopic = createAsyncThunk<
 
 export const onGetForumComments = createAsyncThunk<
   IGetForumCommentsRes,
-  IGetForumComments,
+  IGetForumCommentsQuery,
   { rejectValue: string }
 >(
   'forum/onGetForumComments',
@@ -185,7 +185,7 @@ export const onGetForumComments = createAsyncThunk<
     }
   },
   {
-    condition: (commentsQuery: IGetForumComments, { getState }) => {
+    condition: (commentsQuery: IGetForumCommentsQuery, { getState }) => {
       const state = getState() as RootState
       const parentId = commentsQuery.parentCommentId || 0
       const commentsAreLoading =
@@ -202,7 +202,7 @@ export const onGetForumComments = createAsyncThunk<
 
 export const onAddForumComment = createAsyncThunk<
   IForumComment,
-  IAddForumComment,
+  IAddForumCommentQuery,
   { rejectValue: string }
 >('forum/onAddForumComment', async (comment, { rejectWithValue }) => {
   try {
