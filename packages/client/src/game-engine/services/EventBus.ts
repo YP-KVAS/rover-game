@@ -1,11 +1,13 @@
 import { Observable } from './Observable'
 import { Rover } from '../game-objects/Rover'
 import gameManager from '../GameManager'
+import { MovingDirection } from '../../utils/types/game'
 
 export enum RoverEvents {
   TRIGGER_COLLIDE = 'trigger-collide',
   CAR_COLLIDE = 'car-collide',
   GAME_OVER = 'game-over',
+  MOVE = 'move',
 }
 
 class EventBus extends Observable {
@@ -29,6 +31,9 @@ class EventBus extends Observable {
       gameManager.roverHit(args as number)
     )
     this.on(RoverEvents.GAME_OVER, rover.setGameOver)
+    this.on(RoverEvents.MOVE, (args?: unknown) =>
+      rover.move((args as Record<string, MovingDirection>).direction)
+    )
   }
 
   removeListeners() {
