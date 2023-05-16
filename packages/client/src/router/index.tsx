@@ -1,4 +1,3 @@
-import { createBrowserRouter, Link } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/MainPage/Main'
@@ -10,21 +9,25 @@ import { Registration } from '../pages/Registration'
 import { Leaderboard } from '../pages/Leaderboard/Leaderboard'
 import { UserSettings } from '../pages/UserSettings'
 import { Login } from '../pages/Login'
+import { AppDispatch } from '../store/store'
+import { PayloadAction } from '@reduxjs/toolkit'
+import { onGetUser } from '../store/thunks/auth-thunk'
 import { ForumCategories } from '../pages/Forum/ForumCategories'
 import { ForumTopics } from '../pages/Forum/ForumTopics'
 import { ForumLayout } from '../pages/Forum/ForumLayout'
 import { ForumComments } from '../pages/Forum/ForumComments'
 
-const in_work_component = (
-  <main>
-    <h2>PAGE IN WORK</h2>
-    <Link to={RoutesEnum.MAIN}>Return</Link>
-  </main>
-)
+export interface IRoute {
+  path: RoutesEnum | string
+  element: JSX.Element
+  loader?: (dispatch: AppDispatch) => Promise<PayloadAction<unknown>>
+  children?: Array<IRoute>
+}
 
-export const router = createBrowserRouter([
+export const routes: Array<IRoute> = [
   {
     element: <Layout />,
+    path: RoutesEnum.MAIN,
     children: [
       {
         path: RoutesEnum.MAIN,
@@ -41,6 +44,9 @@ export const router = createBrowserRouter([
       {
         path: RoutesEnum.USER_SETTINGS,
         element: <UserSettings />,
+        loader: (dispatch: AppDispatch) => {
+          return dispatch(onGetUser())
+        },
       },
       {
         path: RoutesEnum.FORUM,
@@ -49,28 +55,46 @@ export const router = createBrowserRouter([
           {
             path: RoutesEnum.FORUM,
             element: <ForumCategories />,
+            loader: (dispatch: AppDispatch) => {
+              return dispatch(onGetUser())
+            },
           },
           {
             path: RoutesEnum.FORUM_CATEGORY,
             element: <ForumTopics />,
+            loader: (dispatch: AppDispatch) => {
+              return dispatch(onGetUser())
+            },
           },
           {
             path: RoutesEnum.FORUM_TOPIC,
             element: <ForumComments />,
+            loader: (dispatch: AppDispatch) => {
+              return dispatch(onGetUser())
+            },
           },
         ],
       },
       {
         path: RoutesEnum.START,
         element: <Start />,
+        loader: (dispatch: AppDispatch) => {
+          return dispatch(onGetUser())
+        },
       },
       {
         path: RoutesEnum.GAME,
         element: <GamePage />,
+        loader: (dispatch: AppDispatch) => {
+          return dispatch(onGetUser())
+        },
       },
       {
         path: RoutesEnum.LEADERBOARD,
         element: <Leaderboard />,
+        loader: (dispatch: AppDispatch) => {
+          return dispatch(onGetUser())
+        },
       },
       {
         path: RoutesEnum.ERROR_500,
@@ -82,4 +106,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]

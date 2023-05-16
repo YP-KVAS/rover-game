@@ -1,14 +1,24 @@
+import type { User } from '../utils/types/user'
+import type { ApiError } from '../utils/types/api'
 import { UserModel } from '../models/UserModel'
 import { RoleModel } from '../models/RoleModel'
+import { getUser } from '../utils/yandex-api/auth-api'
 
 export interface IUserRepository {
   save(user: UserModel): Promise<void>
   update(user: UserModel): Promise<void>
   delete(userId: number): Promise<void>
   getById(userId: number): Promise<UserModel | null>
+  getCurrentUser(): Promise<User | ApiError>
 }
 
 export class UserRepository implements IUserRepository {
+  constructor(private _cookie?: string) {}
+
+  async getCurrentUser() {
+    return await getUser(this._cookie)
+  }
+
   async save(user: UserModel): Promise<void> {
     try {
       await UserModel.create({ id: user.id, roleId: user.roleId })

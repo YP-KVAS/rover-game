@@ -1,6 +1,6 @@
 import styles from './GameStat.module.scss'
 import gameManager from '../../game-engine/GameManager'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GameStatType } from '../../utils/types/game'
 import { initialHitPoints } from '../../utils/const-variables/game'
 
@@ -11,7 +11,9 @@ export function GameStat() {
     hitPoints: initialHitPoints,
   })
 
-  gameManager.useStat(setStat)
+  useEffect(() => {
+    gameManager.useStat(setStat)
+  }, [])
 
   return (
     <div className={styles.body}>

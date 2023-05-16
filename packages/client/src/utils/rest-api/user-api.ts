@@ -1,12 +1,12 @@
 import { FetchMethods, request } from './base-request'
 import {
-  BASE_SERVER_URL,
-  BASE_YA_URL,
   USER_API_URL,
   UserApiPaths,
+  BASE_YA_URL,
+  BASE_SERVER_URL,
   USERS_API_URL,
 } from '../const-variables/api'
-import { IUserPassword, User, UserSettings } from '../types/user'
+import { User, IUserPassword, UserSettings } from '../types/user'
 import { UserRolesEnum } from '../const-variables/user-roles'
 
 export async function changeProfileSettings(data: UserSettings): Promise<User> {

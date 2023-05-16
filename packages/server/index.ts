@@ -1,14 +1,14 @@
 import dotenv from 'dotenv'
 import cors from 'cors'
+import type { ViteDevServer } from 'vite'
+
 dotenv.config()
+import { dbConnect } from './db'
+dbConnect()
 
 import express from 'express'
-import cookieParser from 'cookie-parser'
 import swaggerUi from 'swagger-ui-express'
 import swaggerDoc from './swagger.json'
-import { createProxyMiddleware } from 'http-proxy-middleware'
-import { dbConnect } from './db'
-import { BASE_YA_URL, YA_API_URL } from './src/utils/const-variables/api-yandex'
 import {
   API_VERSION,
   CATEGORIES_URL,
@@ -20,50 +20,84 @@ import categoryRouter from './src/router/api-router/CategoryRouter'
 import userRouter from './src/router/api-router/UserRouter'
 import topicRouter from './src/router/api-router/TopicRouter'
 import commentRouter from './src/router/api-router/CommentRouter'
+import * as path from 'path'
+import { YA_API_URL } from './src/utils/const-variables/api-yandex'
+import proxy from './src/middlewares/proxy-middleware'
+import {
+  corsOptions,
+  getTemplate,
+  getViteDevServer,
+  isDev,
+  serverPort,
+} from './src/utils/start-server-helper'
+import { UserRepository } from './src/repositories/UserRepository'
+import serialize from 'serialize-javascript'
 
-const app = express()
-app.use(cookieParser())
-app.use(express.urlencoded({ extended: false }))
+async function startServer() {
+  const app = express()
+  app.use(cors(corsOptions))
+  app.use(YA_API_URL, proxy)
 
-const clientPort = Number(process.env.CLIENT_PORT) || 3000
-const serverPort = Number(process.env.SERVER_PORT) || 3001
+  let vite: ViteDevServer | undefined
+  const distPath = path.dirname(require.resolve('client/dist/index.html'))
+  const srcPath = path.dirname(require.resolve('client'))
+  const ssrClientPath = require.resolve('client/dist-ssr/client.cjs')
 
-// TODO: configure cors origin
-const corsOptions = {
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-  origin: [
-    `http://127.0.0.1:${clientPort}`,
-    `http://localhost:${clientPort}`,
-    `http://127.0.0.1:${serverPort}`,
-    `http://localhost:${serverPort}`,
-    BASE_YA_URL,
-  ],
+  if (isDev()) {
+    vite = await getViteDevServer(srcPath)
+    app.use(vite.middlewares)
+  } else {
+    app.use('/assets', express.static(path.resolve(distPath, 'assets')))
+    app.use('/images', express.static(path.resolve(distPath, 'images')))
+  }
+
+  app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
+  app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
+  app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
+  app.use(`${API_VERSION}${USERS_URL}`, userRouter)
+  if (isDev()) {
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
+  }
+
+  app.use('*', async (req, res, next) => {
+    const url = req.originalUrl
+
+    try {
+      let template = getTemplate(distPath, srcPath)
+      if (vite) {
+        template = await vite.transformIndexHtml(url, template)
+      }
+
+      const render: (...args: Array<unknown>) => Promise<string> = vite
+        ? (await vite.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'))).render
+        : (await import(ssrClientPath)).render
+
+      const [initialState, appHtml] = await render(
+        url,
+        new UserRepository(req.headers.cookie)
+      )
+
+      const preloadedState = `<script>window.__PRELOADED_STATE__=${serialize(
+        initialState,
+        { isJSON: true }
+      )}</script>`
+
+      const html = template
+        .replace(`<!--ssr-outlet-->`, appHtml)
+        .replace(`<!--store-outlet-->`, preloadedState)
+
+      res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+    } catch (e) {
+      if (vite) {
+        vite.ssrFixStacktrace(e as Error)
+      }
+      next(e)
+    }
+  })
+
+  app.listen(serverPort, () => {
+    console.log(`  ➜ 🎸 Server is listening on port: ${serverPort}`)
+  })
 }
-app.use(cors(corsOptions))
 
-const proxyOptions = {
-  target: BASE_YA_URL,
-  changeOrigin: true,
-  pathRewrite: { '^/ya-api': '' },
-  secure: false,
-  cookieDomainRewrite: { '*': '' },
-}
-const proxy = createProxyMiddleware(proxyOptions)
-app.use(YA_API_URL, proxy)
-
-dbConnect()
-
-app.use(express.json())
-app.get('/', (_, res) => {
-  res.json('👋 Howdy from the server :)')
-})
-app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
-app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
-app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
-app.use(`${API_VERSION}${USERS_URL}`, userRouter)
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
-
-app.listen(serverPort, () => {
-  console.log(`  ➜ 🎸 Server is listening on port: ${serverPort}`)
-})
+startServer()

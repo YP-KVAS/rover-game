@@ -7,8 +7,6 @@ interface ModalProps {
   children: ReactNode
 }
 
-const MODAL_ROOT: HTMLElement = document.getElementById('modal')!
-
 export const Modal: FC<ModalProps> = ({ children, onClose }) => {
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) =>
@@ -29,6 +27,6 @@ export const Modal: FC<ModalProps> = ({ children, onClose }) => {
         <div className={styles.modal_info}>{children}</div>
       </div>
     </div>,
-    MODAL_ROOT
+    document.getElementById('modal')!
   )
 }
