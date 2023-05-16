@@ -15,7 +15,7 @@ export class GameImages {
   private readonly _carsImages: CarImages
   private readonly _triggerImages: TriggerImages
 
-  private _changeAllImagesLoadedStateFoo?: React.Dispatch<
+  private _changeAllImagesLoadedState?: React.Dispatch<
     React.SetStateAction<boolean>
   >
   private readonly _imagesCount: number
@@ -35,21 +35,21 @@ export class GameImages {
   }
 
   useChangeAllImagesLoadedState(
-    foo: React.Dispatch<React.SetStateAction<boolean>>
+    changeStateHandler: React.Dispatch<React.SetStateAction<boolean>>
   ) {
-    this._changeAllImagesLoadedStateFoo = foo
+    this._changeAllImagesLoadedState = changeStateHandler
     if (this._imagesCount === this._loadedImagesCount) {
-      this._changeAllImagesLoadedStateFoo(true)
+      this._changeAllImagesLoadedState(true)
     }
   }
 
   private _incrementLoadedImages() {
     this._loadedImagesCount++
     if (
-      this._changeAllImagesLoadedStateFoo &&
+      this._changeAllImagesLoadedState &&
       this._imagesCount === this._loadedImagesCount
     ) {
-      this._changeAllImagesLoadedStateFoo(true)
+      this._changeAllImagesLoadedState(true)
     }
   }
 

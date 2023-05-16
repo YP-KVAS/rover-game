@@ -34,7 +34,7 @@ function App() {
     setCurrentThemeName(prevState => (prevState === 'dark' ? 'light' : 'dark'))
 
   const appRoutes = useMemo(() => {
-    return mapRoutes(routes)
+    return mapRoutesRecursive(routes)
   }, [routes])
 
   return (
@@ -48,11 +48,11 @@ function App() {
 
 export default App
 
-const mapRoutes = (routes: Array<IRoute>) => {
+const mapRoutesRecursive = (routes: Array<IRoute>) => {
   return routes.map(route => {
     return (
       <Route path={route.path} element={route.element} key={route.path}>
-        {route.children && mapRoutes(route.children)}
+        {route.children && mapRoutesRecursive(route.children)}
       </Route>
     )
   })
