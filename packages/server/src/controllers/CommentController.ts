@@ -18,6 +18,7 @@ export class CommentController {
       const comments = await commentService.findAll(
         topicId,
         parentCommentId,
+        req.headers.cookie,
         limit,
         offset
       )

@@ -53,9 +53,6 @@ export const updateCategoryValidationSchema = idParamsValidationSchema.concat(
   createCategoryValidationSchema
 )
 
-// users
-export const getUserValidationSchema = idParamsValidationSchema
-
 // topics
 export const getTopicsValidationSchema = Yup.object()
   .shape({

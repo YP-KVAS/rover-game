@@ -4,6 +4,10 @@ import type { ICommentRepository } from '../repositories/CommentRepository'
 import { getCommentDTOFromModel } from '../utils/types/dto'
 import { CommentRepository } from '../repositories/CommentRepository'
 import sanitizeHtml from 'sanitize-html'
+import { getUserById } from '../utils/yandex-api/user-api'
+import type { User } from '../utils/types/user'
+import type { ApiError } from '../utils/types/api'
+import { instanceOfApiError } from '../utils/types/api'
 
 export class CommentService {
   constructor(private _commentRepository: ICommentRepository) {}
@@ -11,6 +15,7 @@ export class CommentService {
   async findAll(
     topicId: number,
     parentCommentId: number | null,
+    cookies?: string,
     limit?: number,
     offset?: number
   ): Promise<Comments> {
@@ -20,9 +25,27 @@ export class CommentService {
       limit,
       offset
     )
+    const commentUsers: Record<number, User> = {}
+
     const commentsData = comments.map(async comment => {
       const replyCount = await this._commentRepository.countReplies(comment.id)
-      return getCommentDTOFromModel(comment, replyCount)
+      const commentDTO = getCommentDTOFromModel(comment, replyCount)
+
+      let user: User | ApiError | undefined = commentUsers[comment.userId]
+      if (!user) {
+        user = await getUserById(comment.userId, cookies)
+        if (!user || instanceOfApiError(user)) {
+          throw new Error(`User with id ${comment.userId} was not found`)
+        }
+        commentUsers[comment.userId] = user as User
+      }
+
+      const author = {
+        name: (user as User).display_name,
+        avatar: (user as User).avatar,
+      }
+
+      return { ...commentDTO, author }
     })
 
     const total = await this._commentRepository.countTotalByTopicId(topicId)

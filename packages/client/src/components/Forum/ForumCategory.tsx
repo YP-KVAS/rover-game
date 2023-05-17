@@ -15,14 +15,14 @@ import {
   onDeleteForumCategory,
   onGetForumCategories,
 } from '../../store/thunks/forum-thunk'
-import { selectUserRoleState } from '../../store/selectors/user-selector'
 import { ConfirmModal } from '../Modal/ConfirmModal'
 import { UpdateDeleteIcons } from './CrudIcons/UpdateDeleteIcons'
+import { selectCurrentUser } from '../../store/selectors/user-selector'
 
 export const ForumCategory: FC<IForumCategory> = ({ id, name, topicCount }) => {
   const ref = useRef<HTMLDivElement | null>(null)
   const dispatch = useAppDispatch()
-  const { userRole } = useAppSelector(selectUserRoleState)
+  const user = useAppSelector(selectCurrentUser)
   const lastTouchedCategoryId = useAppSelector(selectForumLastTouchedCategoryId)
   const deleteCategoryState = useAppSelector(state =>
     selectDeleteForumCategoryState(state, id)
@@ -75,7 +75,7 @@ export const ForumCategory: FC<IForumCategory> = ({ id, name, topicCount }) => {
             />
           )}
         </div>
-        {userRole === UserRolesEnum.ADMIN && (
+        {user?.role === UserRolesEnum.ADMIN && (
           <UpdateDeleteIcons
             editHandler={enableCategoryEdit}
             deleteHandler={openModal}

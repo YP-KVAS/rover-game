@@ -1,13 +1,6 @@
 import { FetchMethods, request } from './base-request'
-import {
-  USER_API_URL,
-  UserApiPaths,
-  BASE_YA_URL,
-  BASE_SERVER_URL,
-  USERS_API_URL,
-} from '../const-variables/api'
+import { USER_API_URL, UserApiPaths, BASE_YA_URL } from '../const-variables/api'
 import { User, IUserPassword, UserSettings } from '../types/user'
-import { UserRolesEnum } from '../const-variables/user-roles'
 
 export async function changeProfileSettings(data: UserSettings): Promise<User> {
   return await request(
@@ -42,22 +35,4 @@ export async function changePassword(data: IUserPassword): Promise<void> {
       data,
     }
   )
-}
-
-export async function getUserById(id: number): Promise<User> {
-  return await request(
-    BASE_YA_URL,
-    `${USER_API_URL}${UserApiPaths.GET_USER}${id}`,
-    {
-      method: FetchMethods.GET,
-    }
-  )
-}
-
-export async function getUserRole(
-  userId: number
-): Promise<{ role: UserRolesEnum }> {
-  return await request(BASE_SERVER_URL, `${USERS_API_URL}/${userId}`, {
-    method: FetchMethods.GET,
-  })
 }

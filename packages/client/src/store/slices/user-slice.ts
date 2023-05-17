@@ -1,31 +1,19 @@
 import { FetchState } from './slices-types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '../../utils/types/user'
+import { User, UserWithRole } from '../../utils/types/user'
 import {
   onAvatarChange,
-  onGetUserById,
   onPasswordChange,
   onProfileSettingsChange,
 } from '../thunks/user-thunk'
 import { onGetUser, onLogout } from '../thunks/auth-thunk'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
-import { onGetUserRole } from '../thunks/forum-thunk'
-
-interface UserRoleState extends FetchState {
-  userRole: UserRolesEnum | null
-}
-
-interface UserWithState extends FetchState {
-  user: User | null
-}
 
 interface InitialState {
-  user: User | null
-  userRoleState: UserRoleState
+  user: UserWithRole | null
   changeSettings: FetchState
   changeAvatar: FetchState
   changePassword: FetchState
-  allUsers: Record<number, UserWithState>
 }
 
 const defaultFetchState = {
@@ -35,11 +23,9 @@ const defaultFetchState = {
 
 const initialState: InitialState = {
   user: null,
-  userRoleState: { ...defaultFetchState, userRole: null },
   changeSettings: defaultFetchState,
   changeAvatar: defaultFetchState,
   changePassword: defaultFetchState,
-  allUsers: {},
 }
 
 const userSlice = createSlice({
@@ -55,9 +41,6 @@ const userSlice = createSlice({
     clearChangePasswordError: state => {
       state.changePassword.errorMessage = null
     },
-    clearUserRoleErrorMessage: state => {
-      state.userRoleState.errorMessage = null
-    },
   },
   extraReducers: builder => {
     // onProfileSettingsChange
@@ -66,7 +49,11 @@ const userSlice = createSlice({
         onProfileSettingsChange.fulfilled,
         (state, action: PayloadAction<User>) => {
           state.changeSettings = defaultFetchState
-          state.user = action.payload
+          const role = state.user?.role
+          state.user = {
+            ...action.payload,
+            role: role || UserRolesEnum.REGULAR,
+          }
         }
       )
       .addCase(onProfileSettingsChange.pending, state => {
@@ -82,7 +69,8 @@ const userSlice = createSlice({
     builder
       .addCase(onAvatarChange.fulfilled, (state, action) => {
         state.changeAvatar = defaultFetchState
-        state.user = action.payload
+        const role = state.user?.role
+        state.user = { ...action.payload, role: role || UserRolesEnum.REGULAR }
       })
       .addCase(onAvatarChange.pending, state => {
         state.changeAvatar.isLoading = true
@@ -107,66 +95,14 @@ const userSlice = createSlice({
         state.changePassword.errorMessage = action.payload || null
       })
 
-    // onGetUserById
-    builder
-      .addCase(onGetUserById.fulfilled, (state, action) => {
-        state.allUsers[action.meta.arg] = {
-          isLoading: false,
-          errorMessage: null,
-          user: action.payload,
-        }
-      })
-      .addCase(onGetUserById.pending, (state, action) => {
-        const id = action.meta.arg
-        if (!state.allUsers[id]) {
-          state.allUsers[id] = {
-            isLoading: true,
-            errorMessage: null,
-            user: null,
-          }
-        } else {
-          state.allUsers[id].isLoading = true
-          state.allUsers[id].errorMessage = null
-        }
-      })
-      .addCase(onGetUserById.rejected, (state, action) => {
-        const id = action.meta.arg
-        if (!state.allUsers[id]) {
-          state.allUsers[id] = {
-            isLoading: false,
-            errorMessage: null,
-            user: null,
-          }
-        } else {
-          state.allUsers[id].isLoading = false
-          state.allUsers[id].errorMessage = action.payload || null
-        }
-      })
-
-    // onGetUserRole
-    builder
-      .addCase(
-        onGetUserRole.fulfilled,
-        (state, action: PayloadAction<{ role: UserRolesEnum }>) => {
-          state.userRoleState.isLoading = false
-          state.userRoleState.errorMessage = null
-          state.userRoleState.userRole = action.payload.role
-        }
-      )
-      .addCase(onGetUserRole.pending, state => {
-        state.userRoleState.isLoading = true
-        state.userRoleState.errorMessage = null
-      })
-      .addCase(onGetUserRole.rejected, (state, action) => {
-        state.userRoleState.isLoading = false
-        state.userRoleState.errorMessage = action.payload || null
-      })
-
     // external auth-slice
     builder
-      .addCase(onGetUser.fulfilled, (state, action: PayloadAction<User>) => {
-        state.user = action.payload
-      })
+      .addCase(
+        onGetUser.fulfilled,
+        (state, action: PayloadAction<UserWithRole>) => {
+          state.user = action.payload
+        }
+      )
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .addCase(onLogout.fulfilled, _ => {
         return initialState
@@ -179,5 +115,4 @@ export const {
   clearChangeSettingsError,
   clearChangeAvatarError,
   clearChangePasswordError,
-  clearUserRoleErrorMessage,
 } = userSlice.actions

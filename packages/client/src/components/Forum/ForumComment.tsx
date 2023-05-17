@@ -1,9 +1,7 @@
 import styles from './Forum.module.scss'
-import { FC, useEffect, useState } from 'react'
-import { IForumComment } from '../../utils/types/forum'
+import { FC, useState } from 'react'
+import { IForumCommentWithAuthor } from '../../utils/types/forum'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
-import { selectUserStateById } from '../../store/selectors/user-selector'
-import { onGetUserById } from '../../store/thunks/user-thunk'
 import { onGetForumComments } from '../../store/thunks/forum-thunk'
 import { selectForumCommentsByParentId } from '../../store/selectors/forum-selector'
 import { Loader } from '../Loader/Loader'
@@ -11,26 +9,17 @@ import { CommentHeaderAndMessage } from './CommentHeaderAndMessage/CommentHeader
 import { CommentActions } from './CommentActions/CommentActions'
 import { useIntegerParams } from '../../hooks/useIntegerParams'
 
-export const ForumComment: FC<IForumComment> = ({
+export const ForumComment: FC<IForumCommentWithAuthor> = ({
   id,
   parentCommentId,
   userId,
+  author,
   createdAt,
   message,
   replyCount,
 }) => {
   const dispatch = useAppDispatch()
   const topicId = useIntegerParams('topicId')
-
-  const commentUserWithState = useAppSelector(state =>
-    selectUserStateById(state, userId)
-  )
-
-  useEffect(() => {
-    if (!commentUserWithState) {
-      dispatch(onGetUserById(userId))
-    }
-  }, [dispatch, userId])
 
   const [repliesDisplayed, setRepliesDisplayed] = useState(false)
 
@@ -49,8 +38,8 @@ export const ForumComment: FC<IForumComment> = ({
   return (
     <div className={styles.comment}>
       <CommentHeaderAndMessage
-        avatarPath={commentUserWithState?.user?.avatar}
-        displayName={commentUserWithState?.user?.display_name}
+        avatarPath={author.avatar}
+        displayName={author.name}
         htmlMessage={message}
         messageDate={createdAt}
       />

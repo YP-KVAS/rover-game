@@ -1,15 +1,18 @@
 import { FetchMethods, request } from './base-request'
-import { AUTH_API_URL, AuthApiPaths, BASE_YA_URL } from '../const-variables/api'
-import { User, UserSignIn, UserSignUp } from '../types/user'
+import {
+  AUTH_API_URL,
+  AuthApiPaths,
+  BASE_SERVER_URL,
+  BASE_YA_URL,
+  USER_API_URL,
+} from '../const-variables/api'
+import { UserSignIn, UserSignUp } from '../types/user'
+import { UserWithRole } from '../types/user'
 
-export async function getUser(): Promise<User> {
-  return await request<User>(
-    BASE_YA_URL,
-    `${AUTH_API_URL}${AuthApiPaths.USER}`,
-    {
-      method: FetchMethods.GET,
-    }
-  )
+export async function getUser(): Promise<UserWithRole> {
+  return await request(BASE_SERVER_URL, USER_API_URL, {
+    method: FetchMethods.GET,
+  })
 }
 
 export async function signIn(data: UserSignIn): Promise<void> {

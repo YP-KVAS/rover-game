@@ -21,8 +21,6 @@ import {
   IGetForumTopicsQuery,
   IUpdateForumTopicQuery,
 } from '../../utils/types/forum'
-import { UserRolesEnum } from '../../utils/const-variables/user-roles'
-import { getUserRole } from '../../utils/rest-api/user-api'
 import { RootState } from '../store'
 import { IThunkService } from '../services/ThunkService'
 
@@ -242,20 +240,6 @@ export const onDeleteForumComment = createAsyncThunk<
   } catch (err: unknown) {
     return rejectWithValue(
       (err as Error).message || 'При удалении комментария возникла ошибка'
-    )
-  }
-})
-
-export const onGetUserRole = createAsyncThunk<
-  { role: UserRolesEnum },
-  number,
-  { rejectValue: string }
->('forum/onGetUserRole', async (userId, { rejectWithValue }) => {
-  try {
-    return await getUserRole(userId)
-  } catch (err: unknown) {
-    return rejectWithValue(
-      (err as Error).message || 'Не удалось получить роль пользователя'
     )
   }
 })

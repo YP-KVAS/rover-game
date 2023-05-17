@@ -1,10 +1,13 @@
 import { CommentModel } from '../models/CommentModel'
 import type { Transaction } from 'sequelize'
-import type { CreateComment } from '../utils/types/dto'
+import type { CreateCommentInfo } from '../utils/types/dto'
 import { Op } from 'sequelize'
 
 export interface ICommentRepository {
-  save(comment: CreateComment, transaction?: Transaction): Promise<CommentModel>
+  save(
+    comment: CreateCommentInfo,
+    transaction?: Transaction
+  ): Promise<CommentModel>
   getAll(
     topicId: number,
     parentCommentId: number | null,
@@ -20,7 +23,7 @@ export interface ICommentRepository {
 
 export class CommentRepository implements ICommentRepository {
   async save(
-    comment: CreateComment,
+    comment: CreateCommentInfo,
     transaction?: Transaction
   ): Promise<CommentModel> {
     const { message, parentCommentId, userId, topicId } = comment

@@ -1,6 +1,6 @@
 import type { User } from '../utils/types/user'
 import type { ApiError } from '../utils/types/api'
-import { getUser } from '../utils/yandex-api/auth-api'
+import { userService } from '../services/UserService'
 
 interface IThunkUserRepository {
   getCurrentUser(): Promise<User | ApiError>
@@ -10,6 +10,6 @@ export class ThunkUserRepository implements IThunkUserRepository {
   constructor(private _cookie?: string) {}
 
   async getCurrentUser() {
-    return await getUser(this._cookie)
+    return await userService.findUserWithRole(this._cookie)
   }
 }

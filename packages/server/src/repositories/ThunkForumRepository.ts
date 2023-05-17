@@ -14,8 +14,9 @@ interface IThunkForumRepository {
 
 export class ThunkForumRepository implements IThunkForumRepository {
   thunkUserRepository
-  constructor(_cookie?: string) {
-    this.thunkUserRepository = new ThunkUserRepository(_cookie)
+
+  constructor(private _cookie?: string) {
+    this.thunkUserRepository = new ThunkUserRepository(this._cookie)
   }
 
   async getCategories(): Promise<Array<CategoryDTO>> {
@@ -45,6 +46,7 @@ export class ThunkForumRepository implements IThunkForumRepository {
       return await commentService.findAll(
         topicId,
         parentCommentId,
+        this._cookie,
         limit,
         offset
       )

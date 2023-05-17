@@ -12,6 +12,10 @@
   ],
   "tags": [
     {
+      "name": "user",
+      "description": "User operations"
+    },
+    {
       "name": "categories",
       "description": "Categories operations"
     },
@@ -25,6 +29,48 @@
     }
   ],
   "paths": {
+    "/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get current user",
+        "description": "Get user",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "tags": [
@@ -1017,6 +1063,30 @@
           }
         }
       },
+      "Avatar": {
+        "required": [
+          "avatar"
+        ],
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "example": "/path/to/avatar.jpg"
+          }
+        }
+      },
+      "UserName": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "UserName"
+          }
+        }
+      },
       "FieldName": {
         "required": [
           "name"
@@ -1183,6 +1253,80 @@
           }
         ]
       },
+      "Author": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserName"
+          },
+          {
+            "$ref": "#/components/schemas/Avatar"
+          }
+        ]
+      },
+      "CommentWithAuthor": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Comment"
+          },
+          {
+            "required": [
+              "author"
+            ],
+            "type": "object",
+            "properties": {
+              "author": {
+                "$ref": "#/components/schemas/Author"
+              }
+            }
+          }
+        ]
+      },
+      "User": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/Avatar"
+          },
+          {
+            "required": [
+              "user"
+            ],
+            "type": "object",
+            "properties": {
+              "first_name": {
+                "type": "string",
+                "example": "Petya"
+              },
+              "second_name": {
+                "type": "string",
+                "example": "Pupkin"
+              },
+              "display_name": {
+                "type": "string",
+                "example": "Petya Pupkin"
+              },
+              "login": {
+                "type": "string",
+                "example": "userLogin"
+              },
+              "email": {
+                "type": "string",
+                "example": "my@email.com"
+              },
+              "phone": {
+                "type": "string",
+                "example": 89223332211
+              },
+              "role": {
+                "type": "string",
+                "example": "regular"
+              }
+            }
+          }
+        ]
+      },
       "GetComments": {
         "required": [
           "comments",
@@ -1193,7 +1337,7 @@
           "comments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Comment"
+              "$ref": "#/components/schemas/CommentWithAuthor"
             }
           },
           "total": {

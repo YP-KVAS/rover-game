@@ -2,7 +2,7 @@ import { FetchState } from './slices-types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
   IForumCategory,
-  IForumComment,
+  IForumCommentWithAuthor,
   IForumTopic,
 } from '../../utils/types/forum'
 import {
@@ -25,7 +25,7 @@ interface TopicState extends FetchState {
 }
 
 interface CommentState extends FetchState {
-  commentItems: Array<IForumComment> | null
+  commentItems: Array<IForumCommentWithAuthor> | null
 }
 
 interface InitialState {

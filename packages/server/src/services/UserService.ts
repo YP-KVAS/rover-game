@@ -1,8 +1,10 @@
 import { IRoleRepository, RoleRepository } from '../repositories/RoleRepository'
-import { RolesEnum } from '../utils/types/api'
+import { ApiError, instanceOfApiError, RolesEnum } from '../utils/types/api'
 import { UserModel } from '../models/UserModel'
 import { IUserRepository, UserRepository } from '../repositories/UserRepository'
 import { RoleModel } from '../models/RoleModel'
+import type { User, UserWithRole } from '../utils/types/user'
+import { getUser } from '../utils/yandex-api/user-api'
 
 export class UserService {
   constructor(
@@ -36,9 +38,56 @@ export class UserService {
     return user
   }
 
-  async findRoleById(id: number): Promise<RolesEnum | null> {
+  async findUserRole(id: number): Promise<RolesEnum | null> {
     const user = await this._getUser(id)
     return user.role.name
+  }
+
+  async findUserWithRole(
+    cookies?: string,
+    user?: User,
+    role?: RolesEnum
+  ): Promise<UserWithRole> {
+    let yaUser: User | ApiError | undefined = user
+    if (!user) {
+      yaUser = await getUser(cookies)
+    }
+
+    if (yaUser && instanceOfApiError(yaUser)) {
+      throw new Error((yaUser as ApiError).reason)
+    }
+
+    const userId = (yaUser as User).id
+
+    let userRole: RolesEnum | null | undefined = role
+    if (!userRole) {
+      userRole = await this.findUserRole(userId)
+      if (!userRole) {
+        throw new Error(`Unable to get role for user with id ${userId}`)
+      }
+    }
+
+    const {
+      id,
+      login,
+      first_name,
+      second_name,
+      email,
+      phone,
+      display_name,
+      avatar,
+    } = yaUser as User
+    return {
+      id,
+      login,
+      first_name,
+      second_name,
+      email,
+      phone,
+      display_name,
+      avatar,
+      role: userRole,
+    }
   }
 }
 

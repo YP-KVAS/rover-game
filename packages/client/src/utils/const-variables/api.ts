@@ -9,7 +9,6 @@ export const RESOURCES_API_URL = '/resources'
 export const LEADERBOARD_API_URL = '/leaderboard'
 export const TEAM_NAME = 'kvas'
 
-export const USERS_API_URL = '/users'
 export const FORUM_CATEGORIES_API_URL = '/categories'
 export const FORUM_TOPICS_API_URL = '/topics'
 export const FORUM_COMMENTS_API_URL = '/comments'

@@ -43,16 +43,23 @@ export const getTopicDTOFromModel = (model: TopicModel): TopicDTO => {
   }
 }
 
-export interface CreateComment {
+export interface CreateCommentInfo {
   message: string | null
   userId: number
   topicId: number
   parentCommentId: number | null
 }
 
-export interface CommentDTO extends Timestamp, CreateComment {
+export interface CommentDTO extends Timestamp, CreateCommentInfo {
   id: number
   replyCount: number
+}
+
+export interface CommentWithAuthorDTO extends CommentDTO {
+  author: {
+    name: string | null
+    avatar: string | null
+  }
 }
 
 export const getCommentDTOFromModel = (
@@ -81,6 +88,6 @@ export const getCommentDTOFromModel = (
 }
 
 export interface Comments {
-  comments: Array<CommentDTO>
+  comments: Array<CommentWithAuthorDTO>
   total: number
 }

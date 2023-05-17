@@ -16,9 +16,3 @@ export const selectChangePasswordState = (state: RootState) =>
 
 export const selectChangeAvatarState = (state: RootState) =>
   state.user.changeAvatar
-
-export const selectUserStateById = (state: RootState, id: number) =>
-  state.user.allUsers[id]
-
-export const selectUserRoleState = (state: RootState) =>
-  state.user.userRoleState

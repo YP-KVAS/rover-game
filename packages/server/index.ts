@@ -14,7 +14,7 @@ import {
   CATEGORIES_URL,
   COMMENTS_URL,
   TOPICS_URL,
-  USERS_URL,
+  USER_URL,
 } from './src/utils/const-variables/api'
 import categoryRouter from './src/router/api-router/CategoryRouter'
 import userRouter from './src/router/api-router/UserRouter'
@@ -55,7 +55,7 @@ async function startServer() {
   app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
   app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
   app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
-  app.use(`${API_VERSION}${USERS_URL}`, userRouter)
+  app.use(`${API_VERSION}${USER_URL}`, userRouter)
   if (isDev()) {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
   }

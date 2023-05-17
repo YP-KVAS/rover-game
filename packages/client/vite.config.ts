@@ -20,6 +20,7 @@ export default defineConfig({
       fs: path.resolve(__dirname, './src/assets/empty.ts'),
       url: path.resolve(__dirname, './src/assets/empty.ts'),
       'source-map-js': path.resolve(__dirname, './src/assets/empty.ts'),
+      $fonts: path.resolve(__dirname, './src/fonts/Play'),
     },
   },
 })

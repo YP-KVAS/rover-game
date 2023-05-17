@@ -36,7 +36,7 @@ export interface IGetForumCommentsQuery extends IGetForumItemsBaseQuery {
 }
 
 export interface IForumComments {
-  comments: Array<IForumComment>
+  comments: Array<IForumCommentWithAuthor>
   total: number
 }
 
@@ -51,6 +51,13 @@ export interface IForumComment extends IAddForumCommentQuery {
   id: number
   createdAt: string
   replyCount: number
+}
+
+export interface IForumCommentWithAuthor extends IForumComment {
+  author: {
+    name: string | null
+    avatar: string | null
+  }
 }
 
 export interface NewTopic extends Record<string, unknown> {
