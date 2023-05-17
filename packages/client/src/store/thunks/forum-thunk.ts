@@ -6,9 +6,6 @@ import {
   deleteForumCategory,
   deleteForumComment,
   deleteForumTopic,
-  getForumCategories,
-  getForumComments,
-  getForumTopics,
   updateForumCategory,
   updateForumComment,
   updateForumTopic,
@@ -20,13 +17,14 @@ import {
   IForumComment,
   IForumTopic,
   IGetForumCommentsQuery,
-  IGetForumCommentsRes,
+  IForumComments,
   IGetForumTopicsQuery,
   IUpdateForumTopicQuery,
 } from '../../utils/types/forum'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
 import { getUserRole } from '../../utils/rest-api/user-api'
 import { RootState } from '../store'
+import { IThunkService } from '../services/ThunkService'
 
 export const onGetForumCategories = createAsyncThunk<
   Array<IForumCategory>,
@@ -34,11 +32,12 @@ export const onGetForumCategories = createAsyncThunk<
   { rejectValue: string }
 >(
   'forum/onGetForumCategories',
-  async (_, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
-      return await getForumCategories()
+      const service = thunkAPI.extra as IThunkService
+      return await service.forumService.getCategories()
     } catch (err: unknown) {
-      return rejectWithValue(
+      return thunkAPI.rejectWithValue(
         (err as Error).message || 'Ошибка при загрузке категорий'
       )
     }
@@ -103,11 +102,12 @@ export const onGetForumTopics = createAsyncThunk<
   { rejectValue: string }
 >(
   'forum/onGetForumTopics',
-  async (topicsQuery, { rejectWithValue }) => {
+  async (topicsQuery, thunkAPI) => {
     try {
-      return await getForumTopics(topicsQuery)
+      const service = thunkAPI.extra as IThunkService
+      return await service.forumService.getTopics(topicsQuery)
     } catch (err: unknown) {
-      return rejectWithValue(
+      return thunkAPI.rejectWithValue(
         (err as Error).message || 'Не удалось загрузить топики'
       )
     }
@@ -170,16 +170,17 @@ export const onDeleteForumTopic = createAsyncThunk<
 })
 
 export const onGetForumComments = createAsyncThunk<
-  IGetForumCommentsRes,
+  IForumComments,
   IGetForumCommentsQuery,
   { rejectValue: string }
 >(
   'forum/onGetForumComments',
-  async (commentsQuery, { rejectWithValue }) => {
+  async (commentsQuery, thunkAPI) => {
     try {
-      return await getForumComments(commentsQuery)
+      const service = thunkAPI.extra as IThunkService
+      return await service.forumService.getComments(commentsQuery)
     } catch (err: unknown) {
-      return rejectWithValue(
+      return thunkAPI.rejectWithValue(
         (err as Error).message || 'Не удалось загрузить комментарии'
       )
     }

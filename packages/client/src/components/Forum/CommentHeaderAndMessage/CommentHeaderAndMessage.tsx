@@ -1,5 +1,5 @@
 import styles from './CommentHeaderAndMessage.module.scss'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import {
   BASE_YA_URL,
   RESOURCES_API_URL,
@@ -23,6 +23,11 @@ export const CommentHeaderAndMessage: FC<CommentHeaderAndMessageProps> = ({
     __html: getSanitizedHtmlString(htmlMessage || ''),
   })
 
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.comment_header}>
@@ -40,7 +45,7 @@ export const CommentHeaderAndMessage: FC<CommentHeaderAndMessageProps> = ({
           <span>{new Date(messageDate).toLocaleString()}</span>
         </div>
       </div>
-      {htmlMessage ? (
+      {isMounted && htmlMessage ? (
         <p
           className={styles.comment_message}
           dangerouslySetInnerHTML={sanitizedMessage()}></p>

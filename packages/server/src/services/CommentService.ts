@@ -1,5 +1,5 @@
 import { CommentModel } from '../models/CommentModel'
-import type { CommentDTO } from '../utils/types/dto'
+import type { CommentDTO, Comments } from '../utils/types/dto'
 import type { ICommentRepository } from '../repositories/CommentRepository'
 import { getCommentDTOFromModel } from '../utils/types/dto'
 import { CommentRepository } from '../repositories/CommentRepository'
@@ -13,7 +13,7 @@ export class CommentService {
     parentCommentId: number | null,
     limit?: number,
     offset?: number
-  ): Promise<{ comments: Array<CommentDTO>; total: number }> {
+  ): Promise<Comments> {
     const comments = await this._commentRepository.getAll(
       topicId,
       parentCommentId,

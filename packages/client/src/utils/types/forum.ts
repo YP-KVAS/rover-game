@@ -35,7 +35,7 @@ export interface IGetForumCommentsQuery extends IGetForumItemsBaseQuery {
   parentCommentId: number | null
 }
 
-export interface IGetForumCommentsRes {
+export interface IForumComments {
   comments: Array<IForumComment>
   total: number
 }

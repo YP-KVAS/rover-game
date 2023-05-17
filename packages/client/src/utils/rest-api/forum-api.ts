@@ -5,7 +5,7 @@ import {
   IForumComment,
   IForumTopic,
   IGetForumCommentsQuery,
-  IGetForumCommentsRes,
+  IForumComments,
   IGetForumTopicsQuery,
   IUpdateForumTopicQuery,
 } from '../types/forum'
@@ -105,7 +105,7 @@ export async function deleteForumTopic(id: number): Promise<void> {
 
 export async function getForumComments(
   commentsQuery: IGetForumCommentsQuery
-): Promise<IGetForumCommentsRes> {
+): Promise<IForumComments> {
   const { topicId, parentCommentId, offset = 0, limit } = commentsQuery
   return await request(
     BASE_SERVER_URL,
