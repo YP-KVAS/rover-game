@@ -13,8 +13,8 @@ import {
 
 export async function getAllLeaderboards(
   data: LeaderboardRequest
-): Promise<Array<LeaderboardItem>> {
-  return await request<Array<LeaderboardItem>>(
+): Promise<LeaderboardItem[]> {
+  return await request<LeaderboardItem[]>(
     BASE_YA_URL,
     `${LEADERBOARD_API_URL}${LeaderboardApiPaths.GET_ALL_LEADERBOARDS}`,
     {
@@ -27,8 +27,8 @@ export async function getAllLeaderboards(
 export async function getLeaderboardByTeamName(
   data: LeaderboardRequest,
   teamName: string = TEAM_NAME
-): Promise<Array<LeaderboardItem>> {
-  return await request<Array<LeaderboardItem>>(
+): Promise<LeaderboardItem[]> {
+  return await request<LeaderboardItem[]>(
     BASE_YA_URL,
     `${LEADERBOARD_API_URL}/${teamName}`,
     {

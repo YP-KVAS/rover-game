@@ -8,7 +8,7 @@ interface OptionProps {
 }
 
 interface DropdownProps {
-  options: Array<OptionProps>
+  options: OptionProps[]
   defaultOption?: OptionProps
   onSelect: (id: number) => void
 }

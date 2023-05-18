@@ -1,8 +1,8 @@
 export type TListener = (args?: unknown) => void
 
 export class Observable {
-  listeners: Record<string, Array<TListener>>
-  constructor(listeners: Record<string, Array<TListener>> = {}) {
+  listeners: Record<string, TListener[]>
+  constructor(listeners: Record<string, TListener[]> = {}) {
     this.listeners = listeners
   }
 
@@ -22,7 +22,7 @@ export class Observable {
     )
   }
 
-  emit(event: string, ...args: Array<unknown>) {
+  emit(event: string, ...args: unknown[]) {
     if (!this.listeners[event]) {
       throw new Error(`Emitting event with the unknown name: ${event}`)
     }

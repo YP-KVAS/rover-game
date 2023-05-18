@@ -88,6 +88,6 @@ export const getCommentDTOFromModel = (
 }
 
 export interface Comments {
-  comments: Array<CommentWithAuthorDTO>
+  comments: CommentWithAuthorDTO[]
   total: number
 }

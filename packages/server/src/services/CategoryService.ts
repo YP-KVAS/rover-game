@@ -7,7 +7,7 @@ import { getCategoryDTOFromModel } from '../utils/types/dto'
 export class CategoryService {
   constructor(private _categoryRepository: ICategoryRepository) {}
 
-  async findAll(): Promise<Array<CategoryDTO>> {
+  async findAll(): Promise<CategoryDTO[]> {
     const categories = await this._categoryRepository.getAll()
     return categories.map(category => getCategoryDTOFromModel(category))
   }

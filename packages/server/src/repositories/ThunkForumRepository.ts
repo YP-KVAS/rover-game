@@ -7,8 +7,8 @@ import { ThunkUserRepository } from './ThunkUserRepository'
 import { instanceOfApiError } from '../utils/types/api'
 
 interface IThunkForumRepository {
-  getCategories(): Promise<Array<CategoryDTO>>
-  getTopics(topicsQuery: ForumTopicsQuery): Promise<Array<TopicDTO>>
+  getCategories(): Promise<CategoryDTO[]>
+  getTopics(topicsQuery: ForumTopicsQuery): Promise<TopicDTO[]>
   getComments(commentsQuery: ForumCommentsQuery): Promise<Comments>
 }
 
@@ -19,7 +19,7 @@ export class ThunkForumRepository implements IThunkForumRepository {
     this.thunkUserRepository = new ThunkUserRepository(this._cookie)
   }
 
-  async getCategories(): Promise<Array<CategoryDTO>> {
+  async getCategories(): Promise<CategoryDTO[]> {
     const userOrErr = await this.thunkUserRepository.getCurrentUser()
 
     if (!instanceOfApiError(userOrErr)) {
@@ -28,7 +28,7 @@ export class ThunkForumRepository implements IThunkForumRepository {
     return []
   }
 
-  async getTopics(topicsQuery: ForumTopicsQuery): Promise<Array<TopicDTO>> {
+  async getTopics(topicsQuery: ForumTopicsQuery): Promise<TopicDTO[]> {
     const userOrErr = await this.thunkUserRepository.getCurrentUser()
 
     if (!instanceOfApiError(userOrErr)) {

@@ -12,7 +12,7 @@ export interface FormInput {
   rows?: number
 }
 
-const USER_FORM_DATA: Array<FormInput> = [
+const USER_FORM_DATA: FormInput[] = [
   {
     label: 'Имя',
     placeholder: 'Иван',
@@ -45,7 +45,7 @@ const USER_FORM_DATA: Array<FormInput> = [
   },
 ]
 
-export const LOGIN_FORM_INPUTS: Array<FormInput> = [
+export const LOGIN_FORM_INPUTS: FormInput[] = [
   {
     label: 'Логин',
     placeholder: 'Логин',
@@ -60,7 +60,7 @@ export const LOGIN_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
-export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
+export const REGISTRATION_FORM_INPUTS: FormInput[] = [
   ...USER_FORM_DATA,
   {
     label: 'Пароль',
@@ -76,7 +76,7 @@ export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
-export const USER_SETTINGS_FORM_INPUTS: Array<FormInput> = [
+export const USER_SETTINGS_FORM_INPUTS: FormInput[] = [
   ...USER_FORM_DATA,
   {
     label: 'Никнейм',
@@ -86,7 +86,7 @@ export const USER_SETTINGS_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
-export const USER_CHANGE_PASSWORD_FORM_INPUTS: Array<FormInput> = [
+export const USER_CHANGE_PASSWORD_FORM_INPUTS: FormInput[] = [
   {
     label: 'Старый пароль',
     type: 'password',
@@ -107,7 +107,7 @@ export const USER_CHANGE_PASSWORD_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
-export const USER_SETTINGS_TABS: Array<Tab> = [
+export const USER_SETTINGS_TABS: Tab[] = [
   {
     label: 'Учётные данные',
     component: UserData,

@@ -15,7 +15,7 @@ import { ForumService } from './src/store/services/ForumService'
 import { IForumRepository } from './src/store/repositories/ForumRepository'
 import { PayloadAction } from '@reduxjs/toolkit'
 
-const findRoute = (pathname: string, routes: Array<IRoute>) => {
+const findRoute = (pathname: string, routes: IRoute[]) => {
   for (let i = 0; i < routes.length; i++) {
     if (routes[i].children) {
       const route = findRoute(pathname, routes[i].children)
@@ -47,7 +47,7 @@ export async function render(
   const searchParams = Object.fromEntries(new URLSearchParams(searchStr))
 
   if (currentRoute?.loader) {
-    const actions: Array<Promise<PayloadAction<unknown>>> = currentRoute.loader(
+    const actions: Promise<PayloadAction<unknown>>[] = currentRoute.loader(
       store.dispatch,
       currentPath,
       searchParams

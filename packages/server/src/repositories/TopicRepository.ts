@@ -14,7 +14,7 @@ export interface ITopicRepository {
     limit?: number,
     offset?: number,
     search?: string
-  ): Promise<Array<TopicModel>>
+  ): Promise<TopicModel[]>
   getById(topicId: number): Promise<TopicModel | null>
   update(topic: TopicModel): Promise<TopicModel>
   delete(topicId: number): Promise<void>
@@ -42,7 +42,7 @@ export class TopicRepository implements ITopicRepository {
     limit?: number,
     offset?: number,
     search = ''
-  ): Promise<Array<TopicModel>> {
+  ): Promise<TopicModel[]> {
     try {
       return await TopicModel.findAll({
         where: {

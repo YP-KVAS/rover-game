@@ -6,7 +6,7 @@ import { INTERNAL_SERVER_ERROR } from '../utils/const-variables/api'
 import { userService } from '../services/UserService'
 
 export const checkAuth =
-  (roles?: Array<RolesEnum>) =>
+  (roles?: RolesEnum[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // check auth cookies

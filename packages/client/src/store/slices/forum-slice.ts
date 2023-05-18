@@ -21,16 +21,16 @@ import {
 } from '../thunks/forum-thunk'
 
 interface TopicState extends FetchState {
-  topicItems: Array<IForumTopic> | null
+  topicItems: IForumTopic[] | null
 }
 
 interface CommentState extends FetchState {
-  commentItems: Array<IForumCommentWithAuthor> | null
+  commentItems: IForumCommentWithAuthor[] | null
 }
 
 interface InitialState {
   categories: {
-    categoryItems: Array<IForumCategory> | null
+    categoryItems: IForumCategory[] | null
     lastTouchedCategoryId: number | null
     fetchStates: Record<number, { update: FetchState; delete: FetchState }>
     getCategoriesState: FetchState
@@ -154,7 +154,7 @@ const forumSlice = createSlice({
     builder
       .addCase(
         onGetForumCategories.fulfilled,
-        (state, action: PayloadAction<Array<IForumCategory>>) => {
+        (state, action: PayloadAction<IForumCategory[]>) => {
           state.categories.getCategoriesState.isLoading = false
           state.categories.getCategoriesState.errorMessage = null
           state.categories.categoryItems = action.payload

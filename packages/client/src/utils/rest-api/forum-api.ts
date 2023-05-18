@@ -21,7 +21,7 @@ import { stringifyQuery } from '../stringify-query'
 
 // categories
 
-export async function getForumCategories(): Promise<Array<IForumCategory>> {
+export async function getForumCategories(): Promise<IForumCategory[]> {
   return await request(BASE_SERVER_URL, FORUM_CATEGORIES_API_URL, {
     method: FetchMethods.GET,
   })
@@ -54,7 +54,7 @@ export async function deleteForumCategory(id: number): Promise<void> {
 
 export async function getForumTopics(
   topicsQuery: IGetForumTopicsQuery
-): Promise<Array<IForumTopic>> {
+): Promise<IForumTopic[]> {
   const {
     categoryId,
     offset = 0,

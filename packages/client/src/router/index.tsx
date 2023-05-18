@@ -29,11 +29,11 @@ export interface IRoute {
     dispatch: AppDispatch,
     pathname: string,
     searchParams: Record<string, unknown>
-  ) => Array<Promise<PayloadAction<unknown>>>
-  children?: Array<IRoute>
+  ) => Promise<PayloadAction<unknown>>[]
+  children?: IRoute[]
 }
 
-export const routes: Array<IRoute> = [
+export const routes: IRoute[] = [
   {
     element: <Layout />,
     path: RoutesEnum.MAIN,
@@ -72,7 +72,7 @@ export const routes: Array<IRoute> = [
             path: RoutesEnum.FORUM_CATEGORY,
             element: <ForumTopics />,
             loader: (dispatch: AppDispatch, pathname: string) => {
-              const actions: Array<Promise<PayloadAction<unknown>>> = [
+              const actions: Promise<PayloadAction<unknown>>[] = [
                 dispatch(onGetUser()),
                 dispatch(onGetForumCategories()),
               ]
@@ -96,7 +96,7 @@ export const routes: Array<IRoute> = [
               pathname: string,
               searchParams: Record<string, unknown>
             ) => {
-              const actions: Array<Promise<PayloadAction<unknown>>> = [
+              const actions: Promise<PayloadAction<unknown>>[] = [
                 dispatch(onGetUser()),
                 dispatch(onGetForumCategories()),
               ]

@@ -5,7 +5,7 @@ export interface ICategoryRepository {
   save(categoryName: string): Promise<CategoryModel>
   update(category: CategoryModel): Promise<CategoryModel>
   delete(categoryId: number): Promise<void>
-  getAll(): Promise<Array<CategoryModel>>
+  getAll(): Promise<CategoryModel[]>
   incrementTopics(categoryId: number, transaction?: Transaction): Promise<void>
   decrementTopics(categoryId: number, transaction?: Transaction): Promise<void>
 }
@@ -58,7 +58,7 @@ export class CategoryRepository implements ICategoryRepository {
     }
   }
 
-  async getAll(): Promise<Array<CategoryModel>> {
+  async getAll(): Promise<CategoryModel[]> {
     try {
       return await CategoryModel.findAll({
         order: [['updatedAt', 'DESC']],

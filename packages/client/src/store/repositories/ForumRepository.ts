@@ -12,19 +12,17 @@ import {
 } from '../../utils/rest-api/forum-api'
 
 export interface IForumRepository {
-  getCategories(): Promise<Array<IForumCategory>>
-  getTopics(topicsQuery: IGetForumTopicsQuery): Promise<Array<IForumTopic>>
+  getCategories(): Promise<IForumCategory[]>
+  getTopics(topicsQuery: IGetForumTopicsQuery): Promise<IForumTopic[]>
   getComments(commentsQuery: IGetForumCommentsQuery): Promise<IForumComments>
 }
 
 export class ForumRepository implements IForumRepository {
-  async getCategories(): Promise<Array<IForumCategory>> {
+  async getCategories(): Promise<IForumCategory[]> {
     return await getForumCategories()
   }
 
-  async getTopics(
-    topicsQuery: IGetForumTopicsQuery
-  ): Promise<Array<IForumTopic>> {
+  async getTopics(topicsQuery: IGetForumTopicsQuery): Promise<IForumTopic[]> {
     return await getForumTopics(topicsQuery)
   }
 

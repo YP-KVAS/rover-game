@@ -23,5 +23,5 @@ export class CategoryModel extends Model {
   topicCount: number
 
   @HasMany(() => TopicModel, 'category_id')
-  topicModels: Array<TopicModel>
+  topicModels: TopicModel[]
 }

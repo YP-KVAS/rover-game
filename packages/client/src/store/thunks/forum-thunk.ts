@@ -25,7 +25,7 @@ import { RootState } from '../store'
 import { IThunkService } from '../services/ThunkService'
 
 export const onGetForumCategories = createAsyncThunk<
-  Array<IForumCategory>,
+  IForumCategory[],
   void,
   { rejectValue: string }
 >(
@@ -95,7 +95,7 @@ export const onDeleteForumCategory = createAsyncThunk<
 })
 
 export const onGetForumTopics = createAsyncThunk<
-  Array<IForumTopic>,
+  IForumTopic[],
   IGetForumTopicsQuery,
   { rejectValue: string }
 >(

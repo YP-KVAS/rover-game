@@ -18,5 +18,5 @@ export class RoleModel extends Model {
   name: RolesEnum
 
   @HasMany(() => UserModel, 'role_id')
-  userModels: Array<UserModel>
+  userModels: UserModel[]
 }

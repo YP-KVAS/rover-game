@@ -8,8 +8,8 @@ import {
 } from '../../utils/types/forum'
 
 export interface IForumService {
-  getCategories(): Promise<Array<IForumCategory>>
-  getTopics(topicsQuery: IGetForumTopicsQuery): Promise<Array<IForumTopic>>
+  getCategories(): Promise<IForumCategory[]>
+  getTopics(topicsQuery: IGetForumTopicsQuery): Promise<IForumTopic[]>
   getComments(commentsQuery: IGetForumCommentsQuery): Promise<IForumComments>
 }
 

@@ -1,11 +1,8 @@
 export abstract class BaseGameObject {
-  protected gameMap: Array<Array<Array<number>>>
+  protected gameMap: number[][][]
   protected tileSize: number
 
-  protected constructor(
-    gameMap: Array<Array<Array<number>>>,
-    tileSize: number
-  ) {
+  protected constructor(gameMap: number[][][], tileSize: number) {
     this.gameMap = gameMap
     this.tileSize = tileSize
   }

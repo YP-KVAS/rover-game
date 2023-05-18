@@ -48,7 +48,7 @@ function App() {
 
 export default App
 
-const mapRoutesRecursive = (routes: Array<IRoute>) => {
+const mapRoutesRecursive = (routes: IRoute[]) => {
   return routes.map(route => {
     return (
       <Route path={route.path} element={route.element} key={route.path}>

@@ -13,7 +13,7 @@ export interface ICommentRepository {
     parentCommentId: number | null,
     limit?: number,
     offset?: number
-  ): Promise<Array<CommentModel>>
+  ): Promise<CommentModel[]>
   countReplies(parentCommentId: number): Promise<number>
   countTotalByTopicId(topicId: number): Promise<number>
   update(comment: CommentModel): Promise<CommentModel>
@@ -57,7 +57,7 @@ export class CommentRepository implements ICommentRepository {
     parentCommentId: number | null,
     limit?: number,
     offset?: number
-  ): Promise<Array<CommentModel>> {
+  ): Promise<CommentModel[]> {
     try {
       return await CommentModel.findAll({
         where: { [Op.and]: [{ topicId }, { parentCommentId }] },

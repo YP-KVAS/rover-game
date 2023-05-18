@@ -23,8 +23,8 @@ export class UserModel extends Model {
   role: RoleModel
 
   @HasMany(() => TopicModel, 'user_id')
-  topicModels: Array<TopicModel>
+  topicModels: TopicModel[]
 
   @HasMany(() => CommentModel, 'user_id')
-  commentModels: Array<CommentModel>
+  commentModels: CommentModel[]
 }

@@ -6,7 +6,7 @@ import { TileMapImages } from '../game-images/tile-map-images'
 export class StaticMap extends BaseGameObject {
   tileMapImages: TileMapImages
 
-  constructor(gameMap: Array<Array<Array<number>>>, tileSize: number) {
+  constructor(gameMap: number[][][], tileSize: number) {
     super(gameMap, tileSize)
     this.tileMapImages = GameImages.getInstance().tileMapImages
   }

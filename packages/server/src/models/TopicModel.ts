@@ -44,5 +44,5 @@ export class TopicModel extends Model {
   user: UserModel
 
   @HasMany(() => CommentModel, 'topic_id')
-  commentModels: Array<CommentModel>
+  commentModels: CommentModel[]
 }

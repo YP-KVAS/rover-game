@@ -69,7 +69,7 @@ async function startServer() {
         template = await vite.transformIndexHtml(url, template)
       }
 
-      const render: (...args: Array<unknown>) => Promise<string> = vite
+      const render: (...args: unknown[]) => Promise<string> = vite
         ? (await vite.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'))).render
         : (await import(ssrClientPath)).render
 

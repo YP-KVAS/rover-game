@@ -27,7 +27,7 @@ export class TopicService {
     limit?: number,
     offset?: number,
     search?: string
-  ): Promise<Array<TopicDTO>> {
+  ): Promise<TopicDTO[]> {
     const topics = await this._topicRepository.getAll(id, limit, offset, search)
     return topics.map(topic => getTopicDTOFromModel(topic))
   }

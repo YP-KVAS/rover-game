@@ -36,7 +36,7 @@ export interface IGetForumCommentsQuery extends IGetForumItemsBaseQuery {
 }
 
 export interface IForumComments {
-  comments: Array<IForumCommentWithAuthor>
+  comments: IForumCommentWithAuthor[]
   total: number
 }
 

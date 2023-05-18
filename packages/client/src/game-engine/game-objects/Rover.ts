@@ -18,7 +18,7 @@ export class Rover extends DynamicGameCharacter {
   private _isGameOver = false
 
   constructor(
-    gameMap: Array<Array<Array<number>>>,
+    gameMap: number[][][],
     tileSize: number,
     coords: Coords,
     movingDirection: MovingDirection,

@@ -1,8 +1,8 @@
 export const getPaginationItems = (
   current: number,
   max: number
-): Array<number | null> => {
-  const items: Array<number | null> = [1]
+): (number | null)[] => {
+  const items: (number | null)[] = [1]
 
   if (current === 1 && max === 1) {
     return items
