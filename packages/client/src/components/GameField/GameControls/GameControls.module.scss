@@ -27,7 +27,7 @@
     background: var(--bg-gradient);
     -webkit-text-stroke: 3px var(--color-text-on-light);
     -webkit-text-fill-color: transparent;
-    background-clip: text;
+    -webkit-background-clip: text;
     animation: wave 1s infinite;
     animation-delay: calc(0.1s * var(--i));
   }
