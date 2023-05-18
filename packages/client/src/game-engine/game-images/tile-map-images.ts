@@ -23,6 +23,7 @@ const market = './images/buildings/market.png'
 const shop = './images/buildings/shop.png'
 const hospital = './images/buildings/hospital.png'
 const cafe = './images/buildings/cafe.png'
+const fastFood = './images/buildings/fast-food.png'
 const zoo = './images/buildings/zoo.png'
 const warehouse = './images/buildings/warehouse.png'
 const school = './images/buildings/school.png'
@@ -48,6 +49,7 @@ export const tileMapImagesPaths = {
   shop,
   hospital,
   cafe,
+  fastFood,
   zoo,
   warehouse,
   school,

@@ -1,11 +1,10 @@
-import { Outlet } from 'react-router-dom'
 import { Page404 } from '../pages/Page404'
+import { Outlet } from 'react-router-dom'
 import { Page500 } from '../pages/Page500'
 import { Main } from '../pages/MainPage/Main'
 import { RoutesEnum } from '../utils/const-variables/routes'
 import { GamePage } from '../pages/GamePage/GamePage'
 import { Layout } from '../components/Layout/Layout'
-import { Start } from '../pages/Start/Start'
 import { Registration } from '../pages/Registration'
 import { Leaderboard } from '../pages/Leaderboard/Leaderboard'
 import { UserSettings } from '../pages/UserSettings'
@@ -76,13 +75,6 @@ export const routes: Array<IRoute> = [
             },
           },
         ],
-      },
-      {
-        path: RoutesEnum.START,
-        element: <Start />,
-        loader: (dispatch: AppDispatch) => {
-          return dispatch(onGetUser())
-        },
       },
       {
         path: RoutesEnum.GAME,

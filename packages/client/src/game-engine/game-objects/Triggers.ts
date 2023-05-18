@@ -1,7 +1,6 @@
 import { BaseTrigger } from './base-classes/BaseTrigger'
 import { TriggerInfo } from '../../utils/types/game'
-import gameManager from '../GameManager'
-import { Rover } from './Rover'
+import eventBus, { RoverEvents } from '../services/EventBus'
 
 class SwingTrigger extends BaseTrigger {
   rotateDegree = 0
@@ -37,10 +36,9 @@ export class CargoTrigger extends SwingTrigger {
     super(gameMap, tileSize, triggerInfo)
   }
 
-  onTriggered(rover: Rover) {
-    rover.openRover(500)
+  onTriggered() {
     this.disable()
-    gameManager.addPoints(1000)
+    eventBus.emit(RoverEvents.TRIGGER_COLLIDE, { freezeMs: 500, points: 1000 })
   }
 }
 
@@ -53,9 +51,8 @@ export class DeliveryTrigger extends SwingTrigger {
     super(gameMap, tileSize, triggerInfo)
   }
 
-  onTriggered(rover: Rover) {
-    rover.openRover(500)
+  onTriggered() {
     this.disable()
-    gameManager.addPoints(3000)
+    eventBus.emit(RoverEvents.TRIGGER_COLLIDE, { freezeMs: 500, points: 3000 })
   }
 }

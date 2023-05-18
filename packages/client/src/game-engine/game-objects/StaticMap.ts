@@ -338,6 +338,18 @@ export class StaticMap extends BaseGameObject {
             case 534:
               this.drawTile(ctx, this.tileMapImages.cafe, canvasX, canvasY, 0, spriteSize, spriteSize, spriteSize)
               break
+            case 541:
+              this.drawTile(ctx, this.tileMapImages.fastFood, canvasX, canvasY, 0, 0, spriteSize, spriteSize)
+              break
+            case 542:
+              this.drawTile(ctx, this.tileMapImages.fastFood, canvasX, canvasY, spriteSize, 0, spriteSize, spriteSize)
+              break
+            case 543:
+              this.drawTile(ctx, this.tileMapImages.fastFood, canvasX, canvasY, spriteSize, spriteSize, spriteSize, spriteSize)
+              break
+            case 544:
+              this.drawTile(ctx, this.tileMapImages.fastFood, canvasX, canvasY, 0, spriteSize, spriteSize, spriteSize)
+              break
           }
           // ctx.strokeStyle = 'blue'
           // ctx.strokeRect(column * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize)
