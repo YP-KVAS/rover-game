@@ -1,10 +1,11 @@
 import React, { FC, RefObject, useEffect, useRef, useState } from 'react'
 import styles from './GamePage.module.scss'
-import { Button } from '../../components/Button/Button'
-import RequireAuth from '../../hocs/requireAuth'
 import { GameField } from '../../components/GameField/GameField'
-import { EnumPages } from '../../utils/const-variables/pages'
+import { Button } from '../../components/Button/Button'
 import gameManager from '../../game-engine/GameManager'
+import RequireAuth from '../../hocs/requireAuth'
+import { EnumPages } from '../../utils/const-variables/pages'
+import { GameCompleted } from '../../components/GameField/GameCompleted/GameCompleted'
 import { GameImages } from '../../game-engine/GameImages'
 import { Loader } from '../../components/Loader/Loader'
 
@@ -12,14 +13,25 @@ const GamePage: FC = () => {
   const gamePageRef: RefObject<HTMLDivElement> = useRef(null)
   const gameFieldRef: RefObject<HTMLDivElement> = useRef(null)
 
-  const [level, setLevel] = useState(1)
-  const [isGameOver, setGameOverState] = useState(false)
+  const [level, setLevel] = useState(gameManager.level)
+  const [gameCompleted, setGameCompleted] = useState(gameManager.gameCompleted)
   const [gameEnabled, setGameEnabled] = useState(false)
 
   useEffect(() => {
     gameManager.useChangeLevel(setLevel)
-    gameManager.useChangeGameOverState(setGameOverState)
+    gameManager.useChangeGameCompletedState(setGameCompleted)
     GameImages.getInstance().useChangeAllImagesLoadedState(setGameEnabled)
+
+    return () => {
+      if (gameManager.levelProgress === 'playing') {
+        gameManager.restartLevel()
+      } else if (
+        gameManager.levelProgress === 'failed' ||
+        gameManager.levelProgress === 'willFail'
+      ) {
+        gameManager.restartGame()
+      }
+    }
   }, [])
 
   const setFullScreen = () => {
@@ -30,10 +42,10 @@ const GamePage: FC = () => {
       .catch(() => console.warn('Fullscreen is not supported'))
   }
 
-  return isGameOver ? (
-    <div>GAME OVER (PAGE IN WORK)</div>
-  ) : !gameEnabled ? (
+  return !gameEnabled ? (
     <Loader />
+  ) : gameCompleted ? (
+    <GameCompleted />
   ) : (
     <div className={styles.game}>
       <div ref={gamePageRef}>

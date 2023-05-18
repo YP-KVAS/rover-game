@@ -11,6 +11,26 @@ import { createStore } from './store/store'
 import { ForumService } from './store/services/ForumService'
 import { ForumRepository } from './store/repositories/ForumRepository'
 
+const startServiceWorker = () => {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then(registration => {
+          console.log(
+            'ServiceWorker успешно зарегистрирован: ',
+            registration.scope
+          )
+        })
+        .catch((error: string) => {
+          console.log('Регистрация ServiceWorker завершилась ошибкой: ', error)
+        })
+    })
+  }
+}
+
+startServiceWorker()
+
 const service = new ThunkService(
   new UserService(new UserRepository()),
   new ForumService(new ForumRepository())

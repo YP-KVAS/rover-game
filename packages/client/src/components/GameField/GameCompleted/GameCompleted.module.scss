@@ -1,0 +1,62 @@
+.paragraph {
+  font-size: var(--font-lg) !important;
+}
+
+.link {
+  color: var(--color-text-on-dark);
+  cursor: pointer;
+
+  &:hover,
+  &.active {
+    color: var(--color-secondary);
+    transition: 0.4s;
+  }
+}
+
+$width: 1200;
+$height: 600;
+
+// Array of colours to randomly populate the particle colours.
+$colors: var(--color-primary), var(--color-secondary), var(--color-accent), var(--color-text-on-dark);
+
+@function random-color() {
+  @return nth($colors, random(4));
+}
+
+// stylelint-disable scss/no-global-function-names
+$box-shadow: ();
+
+@for $i from 0 through 100 {
+  $box-shadow: $box-shadow,
+  random($width) - calc($width / 2) + px
+  random($height) - calc($height / 1.2) + px
+  #{random-color()};
+}
+// stylelint-enable scss/no-global-function-names
+
+.confetti {
+  position: absolute;
+  left: 50%;
+  top:50%;
+
+  &::before {
+    position: absolute;
+    content: '';
+    width: 4px;
+    height: 7px;
+    animation: 1.5s explode ease-out 5 backwards, 1.5s gravity ease-in 5 backwards;
+  }
+}
+
+@keyframes explode {
+  to {
+    box-shadow: $box-shadow;
+  }
+}
+
+@keyframes gravity {
+  to {
+    transform: translateY(75px);
+    opacity: 0;
+  }
+}
