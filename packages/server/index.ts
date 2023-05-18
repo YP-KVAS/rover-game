@@ -50,6 +50,7 @@ async function startServer() {
   } else {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
     app.use('/images', express.static(path.resolve(distPath, 'images')))
+    app.use('/sw.js', express.static(path.resolve(distPath, 'sw.js')))
   }
 
   app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
