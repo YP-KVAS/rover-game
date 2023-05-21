@@ -38,10 +38,11 @@ async function startServer() {
   app.use(YA_API_URL, proxy)
 
   let vite: ViteDevServer | undefined
-  const distPath = path.dirname(
-    path.join(__dirname, '../../client/dist/index.html')
+
+  const distPath = path.dirname(require.resolve('client/dist/index.html'))
+  const srcPath = path.dirname(
+    path.dirname(require.resolve('client/package.json'))
   )
-  const srcPath = path.dirname(path.join(__dirname, '../../client'))
   const ssrClientPath = require.resolve('client/dist-ssr/client.cjs')
 
   if (isDev()) {
