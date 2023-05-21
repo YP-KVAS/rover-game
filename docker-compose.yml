@@ -28,6 +28,7 @@ services:
             - "${SERVER_PORT}:${SERVER_PORT}"
         environment:
           SERVER_PORT: ${SERVER_PORT}
+          DIALECT: ${DIALECT}
 
     postgres:
         image: postgres:15.2-alpine

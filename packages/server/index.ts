@@ -7,8 +7,6 @@ import { dbConnect } from './db'
 dbConnect()
 
 import express from 'express'
-import swaggerUi from 'swagger-ui-express'
-import swaggerDoc from './swagger.json'
 import {
   API_VERSION,
   CATEGORIES_URL,
@@ -58,6 +56,8 @@ async function startServer() {
   app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
   app.use(`${API_VERSION}${USER_URL}`, userRouter)
   if (isDev()) {
+    const swaggerUi = await import('swagger-ui-express')
+    const swaggerDoc = await import('./swagger.json')
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
   }
 
