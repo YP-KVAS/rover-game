@@ -17,6 +17,10 @@ RUN yarn lerna bootstrap
 RUN yarn build
 
 FROM node:$NODE_VERSION-buster-slim as production
+
+RUN apt-get update && apt-get install -y curl
+CMD /bin/bash
+
 WORKDIR /app
 
 COPY --from=builder /app/packages/client/dist /app/packages/client/dist
