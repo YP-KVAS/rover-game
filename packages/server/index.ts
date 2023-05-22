@@ -39,6 +39,15 @@ async function startServer() {
   app.use(cors(corsOptions))
   app.use(YA_API_URL, proxy)
 
+  app.use(express.json())
+  app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
+  app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
+  app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
+  app.use(`${API_VERSION}${USER_URL}`, userRouter)
+  if (isDev()) {
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
+  }
+
   let vite: ViteDevServer | undefined
   const distPath = path.dirname(require.resolve('client/dist/index.html'))
   const srcPath = path.dirname(require.resolve('client'))
@@ -51,14 +60,6 @@ async function startServer() {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
     app.use('/images', express.static(path.resolve(distPath, 'images')))
     app.use('/sw.js', express.static(path.resolve(distPath, 'sw.js')))
-  }
-
-  app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
-  app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
-  app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
-  app.use(`${API_VERSION}${USER_URL}`, userRouter)
-  if (isDev()) {
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
   }
 
   app.use('*', async (req, res, next) => {
