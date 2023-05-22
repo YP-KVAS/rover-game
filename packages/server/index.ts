@@ -51,9 +51,8 @@ async function startServer() {
   let vite: ViteDevServer | undefined
 
   const distPath = path.dirname(require.resolve('client/dist/index.html'))
-  const srcPath = path.dirname(
-    path.dirname(require.resolve('client/package.json'))
-  )
+  const srcPath = path.dirname(require.resolve('client/package.json'))
+
   const ssrClientPath = require.resolve('client/dist-ssr/client.cjs')
 
   if (isDev()) {
