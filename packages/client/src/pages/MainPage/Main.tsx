@@ -1,8 +1,32 @@
 import styles from './MainPage.module.scss'
 import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
+import { useEffect } from 'react'
+import { OAUTH_REDIRECT_URI } from '../../utils/const-variables/api';
+import { signInOAuth } from '../../utils/rest-api/oauth-api';
 
 export function Main() {
+  useEffect(() => {
+    let oauthCode: string | null = null;
+
+  // Получаем код только при работе в браузере
+  if (typeof window !== 'undefined') {
+    oauthCode = new URLSearchParams(window.location.search).get('code');
+
+    if (oauthCode) {
+      // Меняем url страницы на чистый, без code
+      window.history.pushState({}, '', OAUTH_REDIRECT_URI);
+
+      // Отправляем запрос на oauth авторизацию
+      const user = signInOAuth({ code: oauthCode, redirect_uri: OAUTH_REDIRECT_URI })
+        // .then(() => authAPI.me().catch(() => null))
+        // .catch(() => null);
+      // return { user };
+    console.log(user);
+    }
+  }
+}, []);
+
   return (
     <>
       <div className={styles.animate_wrapper}>

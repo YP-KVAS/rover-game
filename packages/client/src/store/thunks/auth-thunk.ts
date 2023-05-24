@@ -30,6 +30,7 @@ export const onSignIn = createAsyncThunk<
   UserSignIn,
   { rejectValue: string }
 >('auth/onSignIn', async (data, { dispatch, rejectWithValue }) => {
+  console.log('auth/onSignIn')
   try {
     return await signIn(data)
   } catch (err: unknown) {

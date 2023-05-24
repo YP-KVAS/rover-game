@@ -18,6 +18,7 @@ import { FC, useEffect } from 'react'
 import { clearAuthError } from '../store/slices/auth-slice'
 import RequireAuth from '../hocs/requireAuth'
 import { EnumPages } from '../utils/const-variables/pages'
+import { OAuth } from '../components/OAuth/OAuth'
 
 const Login: FC = () => {
   const {
@@ -46,6 +47,7 @@ const Login: FC = () => {
     <Loader />
   ) : (
     <Form onSubmit={onSubmit}>
+      <OAuth />
       <Title text="Авторизация" />
       <>
         {LOGIN_FORM_INPUTS.map(input => (

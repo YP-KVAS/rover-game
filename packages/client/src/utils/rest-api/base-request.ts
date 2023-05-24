@@ -29,6 +29,7 @@ export function request<T>(
     config.body = data instanceof FormData ? data : JSON.stringify(data)
   }
 
+  console.log('config', config);
   return fetch(`${BASE_URL}${endpoint}`, config).then(checkResponse)
 }
 
