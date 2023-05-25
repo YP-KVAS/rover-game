@@ -9,8 +9,8 @@ CREATE TABLE categories (
 INSERT INTO categories (name) VALUES ('Предложения и идеи'), ('Секреты прохождения'), ('Ваши вопросы'), ('Off Topic');
 
 CREATE TABLE roles (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL
 );
 
 INSERT INTO roles (name) VALUES ('admin'), ('regular');
@@ -18,6 +18,21 @@ INSERT INTO roles (name) VALUES ('admin'), ('regular');
 CREATE TABLE users (
    id INTEGER PRIMARY KEY,
    role_id INTEGER NOT NULL
+);
+
+CREATE TABLE topics (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
+    name VARCHAR(120) NOT NULL
+);
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    topic_id INTEGER NOT NULL,
+    parent_comment_id INTEGER,
+    message TEXT
 );
 
 -- test admin user id

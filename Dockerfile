@@ -1,6 +1,5 @@
 ARG NODE_VERSION=16
 ARG SERVER_PORT=3001
-ARG DIALECT=postgres
 
 FROM node:${NODE_VERSION}-buster as base
 
