@@ -2,8 +2,29 @@ import styles from './MainPage.module.scss'
 import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { AnimatedFrame } from '../../components/AnimatedFrame/AnimatedFrame'
+import { OAUTH_REDIRECT_URI } from '../../utils/const-variables/api';
+import { signInOAuth } from '../../utils/rest-api/oauth-api';
+import { useEffect } from 'react';
 
 export function Main() {
+  useEffect(() => {
+    let oauthCode: string | null = null;
+
+  // Получаем код только при работе в браузере
+  if (typeof window !== 'undefined') {
+    oauthCode = new URLSearchParams(window.location.search).get('code');
+
+    if (oauthCode) {
+      // Меняем url страницы на чистый, без code
+      window.history.pushState({}, '', OAUTH_REDIRECT_URI);
+
+      // Отправляем POST запрос на oauth авторизацию
+      signInOAuth({ code: oauthCode, redirect_uri: OAUTH_REDIRECT_URI })
+      return
+    }
+  }
+  }, []);
+
   return (
     <AnimatedFrame>
       <p>
