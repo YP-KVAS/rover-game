@@ -1,10 +1,13 @@
 import { FetchState } from './slices-types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { onGetAllLeaderboards, onGetLeaderboardByTeamName } from '../thunks/leaderboard-thunk'
+import {
+  onGetAllLeaderboards,
+  onGetLeaderboardByTeamName,
+} from '../thunks/leaderboard-thunk'
 import { LeaderboardItem } from '../../utils/types/leaderboard'
 
 interface InitialState extends FetchState {
-  leaderboardItems: Array<LeaderboardItem>
+  leaderboardItems: LeaderboardItem[]
 }
 
 const initialState: InitialState = {
@@ -20,11 +23,14 @@ const leaderboardSlice = createSlice({
   extraReducers: builder => {
     // onGetAllLeaderboards
     builder
-      .addCase(onGetAllLeaderboards.fulfilled, (state, action: PayloadAction<Array<LeaderboardItem>>) => {
-        state.isLoading = false
-        state.errorMessage = null
-        state.leaderboardItems = action.payload
-      })
+      .addCase(
+        onGetAllLeaderboards.fulfilled,
+        (state, action: PayloadAction<LeaderboardItem[]>) => {
+          state.isLoading = false
+          state.errorMessage = null
+          state.leaderboardItems = action.payload
+        }
+      )
       .addCase(onGetAllLeaderboards.pending, state => {
         state.isLoading = true
         state.errorMessage = null
@@ -38,11 +44,14 @@ const leaderboardSlice = createSlice({
 
     // onGetLeaderboardByTeamName
     builder
-      .addCase(onGetLeaderboardByTeamName.fulfilled, (state, action: PayloadAction<Array<LeaderboardItem>>) => {
-        state.isLoading = false
-        state.errorMessage = null
-        state.leaderboardItems = action.payload
-      })
+      .addCase(
+        onGetLeaderboardByTeamName.fulfilled,
+        (state, action: PayloadAction<LeaderboardItem[]>) => {
+          state.isLoading = false
+          state.errorMessage = null
+          state.leaderboardItems = action.payload
+        }
+      )
       .addCase(onGetLeaderboardByTeamName.pending, state => {
         state.isLoading = true
         state.errorMessage = null
@@ -53,7 +62,7 @@ const leaderboardSlice = createSlice({
         state.errorMessage = action.payload || null
         state.leaderboardItems = []
       })
-    },
-  })
+  },
+})
 
-  export const leaderboardReducer = leaderboardSlice.reducer
+export const leaderboardReducer = leaderboardSlice.reducer

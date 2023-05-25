@@ -33,6 +33,7 @@ export const UserData: FC = () => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<UserSettings>({
     resolver: yupResolver(changeUserProfileDataValidationSchema),
     values: userData || undefined,
@@ -52,6 +53,7 @@ export const UserData: FC = () => {
 
   const handleFormReset = () => {
     setEditDisabled(true)
+    reset()
     if (errorMessage) {
       dispatch(clearChangeSettingsError())
     }

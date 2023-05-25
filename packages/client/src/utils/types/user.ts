@@ -1,4 +1,5 @@
 import { FormInputNames } from './forms'
+import { UserRolesEnum } from '../const-variables/user-roles'
 
 export interface UserSignIn extends Record<string, unknown> {
   [FormInputNames.LOGIN]: string
@@ -19,6 +20,10 @@ export interface UserSettings extends Omit<UserSignUp, 'password'> {
 export interface User extends UserSettings {
   id: number
   [FormInputNames.AVATAR]: string | null
+}
+
+export interface UserWithRole extends User {
+  role: UserRolesEnum
 }
 
 export interface IUserPassword extends Record<string, unknown> {

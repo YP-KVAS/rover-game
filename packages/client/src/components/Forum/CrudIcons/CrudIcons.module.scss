@@ -1,0 +1,12 @@
+.svg_icons {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.svg_icon {
+  width: 30px;
+  height: 30px;
+  fill: var(--color-accent);
+  cursor: pointer;
+}

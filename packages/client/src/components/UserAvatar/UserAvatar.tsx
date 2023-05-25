@@ -9,7 +9,7 @@ import { Loader } from '../Loader/Loader'
 import { useForm } from 'react-hook-form'
 import { FormInputNames } from '../../utils/types/forms'
 import { onAvatarChange } from '../../store/thunks/user-thunk'
-import { BASE_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
+import { BASE_YA_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
 import { FormInput } from '../FormInput/FormInput'
 import { clearChangeAvatarError } from '../../store/slices/user-slice'
 import { FormWithEdit } from '../FormWithEdit/FormWithEdit'
@@ -74,7 +74,7 @@ export const UserAvatar: FC = () => {
           className={styles.avatar}
           src={
             avatarPath
-              ? `${BASE_URL}${RESOURCES_API_URL}${avatarPath}`
+              ? `${BASE_YA_URL}${RESOURCES_API_URL}${avatarPath}`
               : './images/user/empty-avatar.webp'
           }
         />
