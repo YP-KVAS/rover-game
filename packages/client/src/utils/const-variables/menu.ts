@@ -5,7 +5,7 @@ interface MenuItem {
   route: RoutesEnum
 }
 
-export const MENU: Array<MenuItem> = [
+export const MENU: MenuItem[] = [
   {
     label: 'Главная страница',
     route: RoutesEnum.MAIN,

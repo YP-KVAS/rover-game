@@ -11,7 +11,7 @@ export abstract class BaseTrigger extends BaseGameObject {
   protected enabled?: boolean
   protected readonly logic?: () => unknown
   protected constructor(
-    gameMap: Array<Array<Array<number>>>,
+    gameMap: number[][][],
     tileSize: number,
     triggerInfo: TriggerInfo
   ) {

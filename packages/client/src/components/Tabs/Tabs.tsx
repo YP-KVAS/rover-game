@@ -7,7 +7,7 @@ export interface Tab {
 }
 
 interface TabsProps {
-  tabs: Array<Tab>
+  tabs: Tab[]
   activeIndex?: number
 }
 

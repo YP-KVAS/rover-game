@@ -7,7 +7,7 @@ export abstract class GameBot extends DynamicGameCharacter {
   protected height: number
 
   protected constructor(
-    gameMap: Array<Array<Array<number>>>,
+    gameMap: number[][][],
     tileSize: number,
     coords: Coords,
     movingDirection: MovingDirection,
@@ -88,5 +88,5 @@ export abstract class GameBot extends DynamicGameCharacter {
     }
   }
 
-  abstract move(roverCoords: Coords, otherBotsCoords: Array<Coords>): void
+  abstract move(roverCoords: Coords, otherBotsCoords: Coords[]): void
 }

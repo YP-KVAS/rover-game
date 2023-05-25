@@ -1,3 +1,5 @@
+import type { RolesEnum } from './api'
+
 export interface User {
   id: number
   login: string
@@ -7,4 +9,8 @@ export interface User {
   phone: string
   display_name: string
   avatar: string
+}
+
+export interface UserWithRole extends User {
+  role: RolesEnum
 }

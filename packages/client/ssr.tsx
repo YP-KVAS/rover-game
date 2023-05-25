@@ -11,8 +11,11 @@ import { ThunkService } from './src/store/services/ThunkService'
 import { UserService } from './src/store/services/UserService'
 import { IUserRepository } from './src/store/repositories/UserRepository'
 import { createStore } from './src/store/store'
+import { ForumService } from './src/store/services/ForumService'
+import { IForumRepository } from './src/store/repositories/ForumRepository'
+import { PayloadAction } from '@reduxjs/toolkit'
 
-const findRoute = (pathname: string, routes: Array<IRoute>) => {
+const findRoute = (pathname: string, routes: IRoute[]) => {
   for (let i = 0; i < routes.length; i++) {
     if (routes[i].children) {
       const route = findRoute(pathname, routes[i].children)
@@ -26,15 +29,30 @@ const findRoute = (pathname: string, routes: Array<IRoute>) => {
   }
 }
 
-export async function render(url: string, userRepository: IUserRepository) {
-  const service = new ThunkService(new UserService(userRepository))
+export async function render(
+  url: string,
+  userRepository: IUserRepository,
+  forumRepository: IForumRepository
+) {
+  const service = new ThunkService(
+    new UserService(userRepository),
+    new ForumService(forumRepository)
+  )
   const store = createStore(service)
 
-  const pathname = url.replace(/\/$/, '').split('?')[0] || '/'
-  const currentRoute = findRoute(pathname, routes)
+  const [pathname, searchStr] = url.replace(/\/$/, '').split('?')
+  const currentPath = pathname || '/'
+  const currentRoute = findRoute(currentPath, routes)
+
+  const searchParams = Object.fromEntries(new URLSearchParams(searchStr))
 
   if (currentRoute?.loader) {
-    await currentRoute.loader(store.dispatch)
+    const actions: Promise<PayloadAction<unknown>>[] = currentRoute.loader(
+      store.dispatch,
+      currentPath,
+      searchParams
+    )
+    await Promise.all(actions)
   }
 
   const initialState = store.getState()

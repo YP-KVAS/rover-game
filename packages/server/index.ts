@@ -3,10 +3,23 @@ import cors from 'cors'
 import type { ViteDevServer } from 'vite'
 
 dotenv.config()
-import { createClientAndConnect } from './db'
-createClientAndConnect()
+import { dbConnect } from './db'
+dbConnect()
 
 import express from 'express'
+import swaggerUi from 'swagger-ui-express'
+import swaggerDoc from './swagger.json'
+import {
+  API_VERSION,
+  CATEGORIES_URL,
+  COMMENTS_URL,
+  TOPICS_URL,
+  USER_URL,
+} from './src/utils/const-variables/api'
+import categoryRouter from './src/router/api-router/CategoryRouter'
+import userRouter from './src/router/api-router/UserRouter'
+import topicRouter from './src/router/api-router/TopicRouter'
+import commentRouter from './src/router/api-router/CommentRouter'
 import * as path from 'path'
 import { YA_API_URL } from './src/utils/const-variables/api-yandex'
 import proxy from './src/middlewares/proxy-middleware'
@@ -17,13 +30,23 @@ import {
   isDev,
   serverPort,
 } from './src/utils/start-server-helper'
-import { UserRepository } from './src/repositories/UserRepository'
+import { ThunkUserRepository } from './src/repositories/ThunkUserRepository'
+import { ThunkForumRepository } from './src/repositories/ThunkForumRepository'
 import serialize from 'serialize-javascript'
 
 async function startServer() {
   const app = express()
   app.use(cors(corsOptions))
   app.use(YA_API_URL, proxy)
+
+  app.use(express.json())
+  app.use(`${API_VERSION}${CATEGORIES_URL}`, categoryRouter)
+  app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
+  app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
+  app.use(`${API_VERSION}${USER_URL}`, userRouter)
+  if (isDev()) {
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc))
+  }
 
   let vite: ViteDevServer | undefined
   const distPath = path.dirname(require.resolve('client/dist/index.html'))
@@ -36,6 +59,7 @@ async function startServer() {
   } else {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
     app.use('/images', express.static(path.resolve(distPath, 'images')))
+    app.use('/sw.js', express.static(path.resolve(distPath, 'sw.js')))
   }
 
   app.use('*', async (req, res, next) => {
@@ -47,13 +71,14 @@ async function startServer() {
         template = await vite.transformIndexHtml(url, template)
       }
 
-      const render: (...args: Array<unknown>) => Promise<string> = vite
+      const render: (...args: unknown[]) => Promise<string> = vite
         ? (await vite.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx'))).render
         : (await import(ssrClientPath)).render
 
       const [initialState, appHtml] = await render(
         url,
-        new UserRepository(req.headers.cookie)
+        new ThunkUserRepository(req.headers.cookie),
+        new ThunkForumRepository(req.headers.cookie)
       )
 
       const preloadedState = `<script>window.__PRELOADED_STATE__=${serialize(

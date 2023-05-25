@@ -3,6 +3,7 @@ export enum FetchMethods {
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
+  PATCH = 'PATCH',
 }
 
 export interface RequestInput {

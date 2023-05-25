@@ -2,6 +2,7 @@ import fetch from 'cross-fetch'
 import {
   AUTH_API_URL,
   AuthApiPaths,
+  USER_API_URL,
   YA_API_URL,
 } from '../const-variables/api-yandex'
 import type { ApiError } from '../types/api'
@@ -27,5 +28,22 @@ export const getUser = async (cookies?: string): Promise<User | ApiError> => {
       },
     }
   )
+  return checkResponse(res)
+}
+
+export const getUserById = async (
+  id: number,
+  cookies?: string
+): Promise<User | ApiError> => {
+  const res = await fetch(
+    `${process.env.BASE_URL}${YA_API_URL}${USER_API_URL}/${id}`,
+    {
+      credentials: 'include',
+      headers: {
+        cookie: cookies || '',
+      },
+    }
+  )
+
   return checkResponse(res)
 }

@@ -22,7 +22,7 @@ export const LeaderboardTable = () => {
 
   if (leaderboardItems.length === 0) {
     return (
-      <div className={styles.leaderboardTable}>
+      <div className={styles.leaderboard_table}>
         <p>Нет данных</p>
       </div>
     )
@@ -59,7 +59,7 @@ export const LeaderboardTable = () => {
   })
 
   return (
-    <div className={styles.leaderboardTable}>
+    <div className={styles.leaderboard_table}>
       <ul>{items}</ul>
     </div>
   )

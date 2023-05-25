@@ -1,0 +1,14 @@
+.inputs {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: 100%;
+}
+
+.text_input_wrapper {
+  flex: 1;
+}
+
+.dropdown_wrapper {
+  width: 30%;
+}

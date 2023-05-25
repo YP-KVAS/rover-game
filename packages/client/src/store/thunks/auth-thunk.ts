@@ -1,9 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { User, UserSignIn, UserSignUp } from '../../utils/types/user'
+import { UserSignIn, UserSignUp } from '../../utils/types/user'
 import { logout, signIn, signUp } from '../../utils/rest-api/auth-api'
 import { IThunkService } from '../services/ThunkService'
+import { RootState } from '../store'
+import { UserWithRole } from '../../utils/types/user'
 
-export const onGetUser = createAsyncThunk<User, void, { rejectValue: string }>(
+export const onGetUser = createAsyncThunk<
+  UserWithRole,
+  void,
+  { rejectValue: string }
+>(
   'auth/onGetUser',
   async (_, thunkAPI) => {
     try {
@@ -14,6 +20,15 @@ export const onGetUser = createAsyncThunk<User, void, { rejectValue: string }>(
         (err as Error).message || 'Unable to get user'
       )
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState() as RootState
+      const userIsLoading = state.auth.isLoading
+      if (userIsLoading) {
+        return false
+      }
+    },
   }
 )
 

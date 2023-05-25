@@ -89,3 +89,18 @@ export const signinValidationSchema = Yup.object().shape({
   [FormInputNames.LOGIN]: loginValidation,
   [FormInputNames.PASSWORD]: passwordValidation,
 })
+
+// Forum validation
+const titleValidation = Yup.string()
+  .required(REQUIRED_MESSAGE)
+  .min(3, 'Длина названия должна быть от 3-х до 120-ти символов')
+  .max(120, 'Длина названия должна быть от 3-х до 120-ти символов')
+  .matches(/^\s*\S[\s\S]*$/, 'Поле не может содержать только пробелы')
+
+export const addForumTopicTitleValidationSchema = Yup.object().shape({
+  [FormInputNames.FORUM_TOPIC_TITLE]: titleValidation,
+})
+
+export const addForumCategoryTitleValidationSchema = Yup.object().shape({
+  [FormInputNames.FORUM_CATEGORY_TITLE]: titleValidation,
+})

@@ -237,7 +237,7 @@ export class Car extends GameBot {
 
   changeDirectionIfCrossBusy(
     tile: number,
-    otherCarsCoords: Array<Coords>,
+    otherCarsCoords: Coords[],
     nextTileCoords: Coords
   ) {
     switch (this.movingDirection) {
@@ -296,7 +296,7 @@ export class Car extends GameBot {
     return { x: column * this.tileSize, y: row * this.tileSize }
   }
 
-  move(roverCoords: Coords, allCarsCoords: Array<Coords>) {
+  move(roverCoords: Coords, allCarsCoords: Coords[]) {
     if (this._isOutOfField) {
       return
     }

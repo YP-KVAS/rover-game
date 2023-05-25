@@ -26,6 +26,7 @@ class ControlService {
 
   removeListeners() {
     document.exitPointerLock()
+    this._direction = null
 
     this._gameField?.removeEventListener(
       'keydown',

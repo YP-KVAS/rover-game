@@ -10,3 +10,5 @@ export enum RoutesEnum {
   LEADERBOARD = '/leaderboard',
   ERROR_500 = '/500',
 }
+
+export const PAGE_QUERY = 'page'

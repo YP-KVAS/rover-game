@@ -2,12 +2,14 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { authReducer } from './slices/auth-slice'
 import { userReducer } from './slices/user-slice'
 import { leaderboardReducer } from './slices/leaderboard-slice'
+import { forumReducer } from './slices/forum-slice'
 import { IThunkService } from './services/ThunkService'
 
 const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   leaderboard: leaderboardReducer,
+  forum: forumReducer,
 })
 
 export const createStore = (
