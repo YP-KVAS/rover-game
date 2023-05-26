@@ -48,6 +48,8 @@ services:
         image: dpage/pgadmin4:7
         env_file:
           - .pgadmin.env
+        environment:
+          PGADMIN_LISTEN_PORT: 80
         volumes:
           - ./tmp/pgadmin:/var/lib/pgadmin
         ports:
