@@ -18,6 +18,7 @@ import { FC, useEffect } from 'react'
 import { clearAuthError } from '../store/slices/auth-slice'
 import RequireAuth from '../hocs/requireAuth'
 import { EnumPages } from '../utils/const-variables/pages'
+import { OAuth } from '../components/OAuth/OAuth'
 
 const Login: FC = () => {
   const {
@@ -66,6 +67,7 @@ const Login: FC = () => {
         <Link to={RoutesEnum.REGISTRATION} className={formStyles.link}>
           Еще нет аккаунта? Зарегистрироваться
         </Link>
+        <OAuth />
       </div>
       <>
         {errorMessage && (

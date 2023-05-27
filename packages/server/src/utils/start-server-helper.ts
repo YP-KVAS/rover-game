@@ -5,7 +5,7 @@ import { BASE_YA_URL } from './const-variables/api-yandex'
 export const isDev = () => process.env.NODE_ENV === 'development'
 
 export const clientPort = Number(process.env.CLIENT_PORT) || 3000
-export const serverPort = Number(process.env.SERVER_PORT) || 3001
+export const serverPort = Number(process.env.SERVER_PORT) || 5000
 
 export function getTemplate(distPath: string, srcPath: string) {
   return isDev()
