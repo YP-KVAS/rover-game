@@ -21,4 +21,4 @@ CREATE TABLE users (
 );
 
 -- test admin user id
-INSERT INTO users (id, role_id) VALUES (613761, 1);
+INSERT INTO users (id, role_id) VALUES (1234, 1);
