@@ -166,47 +166,42 @@ export const CommentActions: FC<CommentActionsProps> = ({
 
       switch((e.currentTarget as HTMLDivElement).id) {
         case EmojiEnum.HAPPY_FACE:
-          data.emojiHappyFace = data.emojiHappyFace+1
+          data.emojiHappyFace = data.emojiHappyFace + 1
           break
         case EmojiEnum.SAD_FACE:
-          data.emojiSadFace = data.emojiSadFace+1
+          data.emojiSadFace = data.emojiSadFace + 1
           break
         case EmojiEnum.ANGRY_FACE:
-          data.emojiAngryFace = data.emojiAngryFace+1
+          data.emojiAngryFace = data.emojiAngryFace + 1
           break
         case EmojiEnum.LIKE:
-          data.emojiLike = data.emojiLike+1
+          data.emojiLike = data.emojiLike + 1
           break
         case EmojiEnum.DISLIKE:
-          data.emojiDislike = data.emojiDislike+1
+          data.emojiDislike = data.emojiDislike + 1
           break
       }
 
-      console.log(e.currentTarget)
-      //console.log(e.target)
-      //console.log(e)
-    //  console.log(typeof e.target)
+      dispatch(
+        onUpdateForumComment(data)
+      ).then(res => {
+        if (res.type.endsWith('fulfilled')) {
+          const limit = parentCommentId ? undefined : COMMENTS_LOAD_LIMIT
+          const offset = parentCommentId
+            ? 0
+            : (currentPage - 1) * COMMENTS_LOAD_LIMIT
 
-    dispatch(
-      onUpdateForumComment(data)
-    ).then(res => {
-      if (res.type.endsWith('fulfilled')) {
-        const limit = parentCommentId ? undefined : COMMENTS_LOAD_LIMIT
-        const offset = parentCommentId
-          ? 0
-          : (currentPage - 1) * COMMENTS_LOAD_LIMIT
-
-        dispatch(
-          onGetForumComments({
-            parentCommentId,
-            topicId,
-            limit,
-            offset,
-          })
-        )
-      }
-    })
-  }
+          dispatch(
+            onGetForumComments({
+              parentCommentId,
+              topicId,
+              limit,
+              offset,
+            })
+          )
+        }
+      })
+    }
   }
 
   return (
