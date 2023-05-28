@@ -34,6 +34,11 @@ export class CommentRepository implements ICommentRepository {
           userId,
           topicId,
           parentCommentId: parentCommentId || null,
+          emojiHappyFace: 0,
+          emojiSadFace: 0,
+          emojiAngryFace: 0,
+          emojiLike: 0,
+          emojiDislike: 0,
         },
         { transaction }
       )
@@ -85,6 +90,12 @@ export class CommentRepository implements ICommentRepository {
       }
 
       commentToUpdate.message = comment.message
+      commentToUpdate.emojiHappyFace = comment.emojiHappyFace
+      commentToUpdate.emojiSadFace = comment.emojiSadFace
+      commentToUpdate.emojiAngryFace = comment.emojiAngryFace
+      commentToUpdate.emojiLike = comment.emojiLike
+      commentToUpdate.emojiDislike = comment.emojiDislike
+
       return await commentToUpdate.save()
     } catch (err) {
       throw new Error(`UPDATE: Failed to update comment with id ${comment.id}`)

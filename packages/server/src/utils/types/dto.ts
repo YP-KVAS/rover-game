@@ -48,6 +48,11 @@ export interface CreateCommentInfo {
   userId: number
   topicId: number
   parentCommentId: number | null
+  emojiHappyFace: number
+  emojiSadFace: number
+  emojiAngryFace: number
+  emojiLike: number
+  emojiDislike: number
 }
 
 export interface CommentDTO extends Timestamp, CreateCommentInfo {
@@ -74,6 +79,11 @@ export const getCommentDTOFromModel = (
     userId,
     createdAt,
     updatedAt,
+    emojiHappyFace,
+    emojiSadFace,
+    emojiAngryFace,
+    emojiLike,
+    emojiDislike,
   } = model
   return {
     id,
@@ -84,6 +94,11 @@ export const getCommentDTOFromModel = (
     createdAt: createdAt.toString(),
     updatedAt: updatedAt.toString(),
     replyCount,
+    emojiHappyFace,
+    emojiSadFace,
+    emojiAngryFace,
+    emojiLike,
+    emojiDislike,
   }
 }
 

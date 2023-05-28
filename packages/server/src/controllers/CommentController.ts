@@ -51,7 +51,7 @@ export class CommentController {
   async update(req: Request, res: Response) {
     try {
       const id = parseInt(req.params['id'])
-      const comment = await commentService.update(id, req.body.message)
+      const comment = await commentService.update(id, req.body.message, req.body.emojiHappyFace, req.body.emojiSadFace, req.body.emojiAngryFace, req.body.emojiLike, req.body.emojiDislike)
 
       return res.status(200).json(comment)
     } catch (err) {

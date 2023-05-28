@@ -17,6 +17,11 @@ export const ForumComment: FC<IForumCommentWithAuthor> = ({
   createdAt,
   message,
   replyCount,
+  emojiHappyFace,
+  emojiSadFace,
+  emojiAngryFace,
+  emojiLike,
+  emojiDislike,
 }) => {
   const dispatch = useAppDispatch()
   const topicId = useIntegerParams('topicId')
@@ -49,6 +54,11 @@ export const ForumComment: FC<IForumCommentWithAuthor> = ({
         parentCommentId={parentCommentId}
         userId={userId}
         loadReplies={loadReplies}
+        emojiHappyFace={emojiHappyFace}
+        emojiSadFace={emojiSadFace}
+        emojiAngryFace={emojiAngryFace}
+        emojiLike={emojiLike}
+        emojiDislike={emojiDislike}
       />
       {replyCount > 0 &&
         !repliesDisplayed &&

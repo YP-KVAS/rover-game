@@ -59,6 +59,11 @@ export const EditForumComment: FC<EditForumCommentProps> = ({
         onUpdateForumComment({
           id: commentId,
           message: getSanitizedHtmlString(message),
+          emojiHappyFace: 0,
+          emojiSadFace: 0,
+          emojiAngryFace: 0,
+          emojiLike: 0,
+          emojiDislike: 0,
         })
       ).then(res => {
         if (res.type.endsWith('fulfilled')) {

@@ -52,7 +52,7 @@ export class TopicService {
       )
       await this._categoryRepository.incrementTopics(categoryId, transaction)
       await this._commentRepository.save(
-        { message, userId, topicId: topic.id, parentCommentId: null },
+        { message, userId, topicId: topic.id, parentCommentId: null, emojiHappyFace: 0, emojiSadFace: 0, emojiAngryFace: 0, emojiLike: 0, emojiDislike: 0 },
         transaction
       )
 

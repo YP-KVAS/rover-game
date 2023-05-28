@@ -51,6 +51,11 @@ export interface IForumComment extends IAddForumCommentQuery {
   id: number
   createdAt: string
   replyCount: number
+  emojiHappyFace: number
+  emojiSadFace: number
+  emojiAngryFace: number
+  emojiLike: number
+  emojiDislike: number
 }
 
 export interface IForumCommentWithAuthor extends IForumComment {

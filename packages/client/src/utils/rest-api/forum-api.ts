@@ -134,11 +134,16 @@ export async function addForumComment(
 
 export async function updateForumComment(
   id: number,
-  message: string
+  message: string,
+  emojiHappyFace: number,
+  emojiSadFace: number,
+  emojiAngryFace: number,
+  emojiLike: number,
+  emojiDislike: number
 ): Promise<IForumComment> {
   return await request(BASE_SERVER_URL, `${FORUM_COMMENTS_API_URL}/${id}`, {
     method: FetchMethods.PATCH,
-    data: { message },
+    data: { message, emojiHappyFace, emojiSadFace, emojiAngryFace, emojiLike, emojiDislike },
   })
 }
 

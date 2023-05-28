@@ -9,4 +9,15 @@
   height: 30px;
   fill: var(--color-accent);
   cursor: pointer;
+
+  &:hover {
+    fill: var(--color-text-on-dark);
+  }
+}
+
+.svg_emoji {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  margin-left: auto;
 }

@@ -40,4 +40,24 @@ export class CommentModel extends Model {
 
   @BelongsTo(() => TopicModel, 'topic_id')
   topic: TopicModel
+
+  @AllowNull(false)
+  @Column({ type: DataType.INTEGER, field: 'emoji_happy_face' })
+  emojiHappyFace: number
+
+  @AllowNull(false)
+  @Column({ type: DataType.INTEGER, field: 'emoji_sad_face' })
+  emojiSadFace: number
+
+  @AllowNull(false)
+  @Column({ type: DataType.INTEGER, field: 'emoji_angry_face' })
+  emojiAngryFace: number
+
+  @AllowNull(false)
+  @Column({ type: DataType.INTEGER, field: 'emoji_like' })
+  emojiLike: number
+
+  @AllowNull(false)
+  @Column({ type: DataType.INTEGER, field: 'emoji_dislike' })
+  emojiDislike: number
 }

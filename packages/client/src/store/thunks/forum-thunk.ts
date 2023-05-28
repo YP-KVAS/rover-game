@@ -215,13 +215,13 @@ export const onAddForumComment = createAsyncThunk<
 
 export const onUpdateForumComment = createAsyncThunk<
   IForumComment,
-  { id: number; message: string },
+  { id: number; message: string, emojiHappyFace: number, emojiSadFace: number, emojiAngryFace: number, emojiLike: number, emojiDislike: number },
   { rejectValue: string }
 >(
   'forum/onUpdateForumComment',
-  async ({ id, message }, { rejectWithValue }) => {
+  async ({ id, message, emojiHappyFace, emojiSadFace, emojiAngryFace, emojiLike, emojiDislike }, { rejectWithValue }) => {
     try {
-      return await updateForumComment(id, message)
+      return await updateForumComment(id, message, emojiHappyFace, emojiSadFace, emojiAngryFace, emojiLike, emojiDislike)
     } catch (err: unknown) {
       return rejectWithValue(
         (err as Error).message || 'Ошибка при изменении комментария'

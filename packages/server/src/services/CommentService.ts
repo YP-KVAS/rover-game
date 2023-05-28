@@ -69,15 +69,25 @@ export class CommentService {
       userId,
       topicId,
       parentCommentId,
+      emojiHappyFace: 0,
+      emojiSadFace: 0,
+      emojiAngryFace: 0,
+      emojiLike: 0,
+      emojiDislike: 0,
     })
 
     return getCommentDTOFromModel(comment, 0)
   }
 
-  async update(id: number, message: string): Promise<CommentDTO> {
+  async update(id: number, message: string, emojiHappyFace: number, emojiSadFace: number, emojiAngryFace: number,  emojiLike: number, emojiDislike: number): Promise<CommentDTO> {
     const commentToUpdate = new CommentModel()
     commentToUpdate.id = id
     commentToUpdate.message = message
+    commentToUpdate.emojiHappyFace = emojiHappyFace,
+    commentToUpdate.emojiSadFace = emojiSadFace
+    commentToUpdate.emojiAngryFace = emojiAngryFace
+    commentToUpdate.emojiLike = emojiLike
+    commentToUpdate.emojiDislike = emojiDislike
 
     const comment = await this._commentRepository.update(commentToUpdate)
     const replyCount = await this._commentRepository.countReplies(comment.id)
