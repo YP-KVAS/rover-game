@@ -154,7 +154,7 @@ export const CommentActions: FC<CommentActionsProps> = ({
 
   const handleEmojiIcons = (e: MouseEvent) => {
     if (message) {
-      let data = {
+      const data = {
         id: commentId,
         message: message,
         emojiHappyFace: emojiHappyFace,
