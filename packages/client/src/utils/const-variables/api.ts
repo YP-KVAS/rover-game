@@ -1,5 +1,8 @@
 // TODO: make url configurable (local, dev, prod)
-const BASE_URL = 'http://localhost:3001'
+
+import * as process from 'process'
+
+const BASE_URL = process.env?.VITE_BASE_URL || 'http://localhost:3001'
 export const BASE_YA_URL = `${BASE_URL}/ya-api`
 export const BASE_SERVER_URL = `${BASE_URL}/api/v1`
 

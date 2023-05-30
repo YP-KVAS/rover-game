@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { createServer } from 'vite'
 import { BASE_YA_URL } from './const-variables/api-yandex'
 
 export const isDev = () => process.env.NODE_ENV === 'development'
@@ -15,6 +14,7 @@ export function getTemplate(distPath: string, srcPath: string) {
 }
 
 export async function getViteDevServer(srcPath: string) {
+  const { createServer } = await import('vite')
   return await createServer({
     server: { middlewareMode: true },
     root: srcPath,
