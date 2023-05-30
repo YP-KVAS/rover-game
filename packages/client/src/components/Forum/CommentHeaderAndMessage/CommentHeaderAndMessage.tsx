@@ -42,7 +42,7 @@ export const CommentHeaderAndMessage: FC<CommentHeaderAndMessageProps> = ({
         />
         <div className={styles.comment_user}>
           <span>{displayName || 'Неизвестный пользователь'}</span>
-          <span>{new Date(messageDate).toLocaleString()}</span>
+          {isMounted && <span>{new Date(messageDate).toLocaleString()}</span>}
         </div>
       </div>
       {isMounted && htmlMessage ? (

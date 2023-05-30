@@ -33,6 +33,7 @@ export class UserService {
       user.roleId = role?.id
 
       await this._userRepository.save(user)
+      user = (await this._userRepository.getById(id)) as UserModel
     }
 
     return user
