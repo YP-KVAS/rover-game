@@ -67,7 +67,10 @@ const putInCache = async (request, response) => {
 }
 
 const cacheFirst = async ({ request, fallbackUrl }) => {
-  if (request.cache === 'no-cache') {
+  const noCache = request.cache === 'no-cache'
+  const noGet = request.method !== 'GET'
+
+  if (noCache || noGet) {
     return await fetch(request)
   }
 
