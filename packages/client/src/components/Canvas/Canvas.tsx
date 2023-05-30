@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef } from 'react'
+import gameManager from '../../game-engine/GameManager'
 
 interface CanvasProps {
   draw: (ctx: CanvasRenderingContext2D) => void
@@ -34,7 +35,8 @@ export const Canvas: FC<CanvasProps> = ({
         lastTime = time
         context.clearRect(0, 0, canvas.width, canvas.height)
         draw(context)
-        if (isStatic) {
+
+        if (isStatic || gameManager.levelProgress === 'failed') {
           window.cancelAnimationFrame(animationFrameId)
           return
         }

@@ -4,14 +4,15 @@ import { UserData } from '../../components/UserData/UserData'
 import { UserAvatar } from '../../components/UserAvatar/UserAvatar'
 import { UserPassword } from '../../components/UserPassword/UserPassword'
 
-interface FormInput {
+export interface FormInput {
   label: string
   placeholder: string
   type: InputType
   name: FormInputNames
+  rows?: number
 }
 
-const USER_FORM_DATA: Array<FormInput> = [
+const USER_FORM_DATA: FormInput[] = [
   {
     label: 'Имя',
     placeholder: 'Иван',
@@ -44,7 +45,7 @@ const USER_FORM_DATA: Array<FormInput> = [
   },
 ]
 
-export const LOGIN_FORM_INPUTS: Array<FormInput> = [
+export const LOGIN_FORM_INPUTS: FormInput[] = [
   {
     label: 'Логин',
     placeholder: 'Логин',
@@ -59,7 +60,7 @@ export const LOGIN_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
-export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
+export const REGISTRATION_FORM_INPUTS: FormInput[] = [
   ...USER_FORM_DATA,
   {
     label: 'Пароль',
@@ -75,7 +76,7 @@ export const REGISTRATION_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
-export const USER_SETTINGS_FORM_INPUTS: Array<FormInput> = [
+export const USER_SETTINGS_FORM_INPUTS: FormInput[] = [
   ...USER_FORM_DATA,
   {
     label: 'Никнейм',
@@ -85,7 +86,7 @@ export const USER_SETTINGS_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
-export const USER_CHANGE_PASSWORD_FORM_INPUTS: Array<FormInput> = [
+export const USER_CHANGE_PASSWORD_FORM_INPUTS: FormInput[] = [
   {
     label: 'Старый пароль',
     type: 'password',
@@ -106,7 +107,7 @@ export const USER_CHANGE_PASSWORD_FORM_INPUTS: Array<FormInput> = [
   },
 ]
 
-export const USER_SETTINGS_TABS: Array<Tab> = [
+export const USER_SETTINGS_TABS: Tab[] = [
   {
     label: 'Учётные данные',
     component: UserData,
@@ -120,3 +121,10 @@ export const USER_SETTINGS_TABS: Array<Tab> = [
     component: UserPassword,
   },
 ]
+
+export const ADD_FORUM_TOPIC_FORM_INPUT: FormInput = {
+  label: 'Название темы',
+  type: 'text',
+  placeholder: 'Топик',
+  name: FormInputNames.FORUM_TOPIC_TITLE,
+}

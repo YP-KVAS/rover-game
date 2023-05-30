@@ -1,4 +1,6 @@
-.leaderboardTable {
+@import '../../index';
+
+.leaderboard_table {
   background: var(--color-secondary);
   border: 2px solid var(--color-text-on-dark);
   border-radius: 15px;
@@ -16,24 +18,15 @@
     gap: 15px;
     margin: 25px;
     padding: 5px;
- }
+  }
 
- & li p:last-of-type {
+  & li p:last-of-type {
     margin-left: auto;
- }
+  }
 
- & img {
-   border-radius: 50%;
- }
+  & img {
+    border-radius: 50%;
+  }
 
- &::-webkit-scrollbar {
-   width: 20px;
- }
-
- &::-webkit-scrollbar-thumb {
-   border: 6px solid rgba(0,0,0,0);
-   background-clip: padding-box;
-   border-radius: 100px;
-   background-color: var(--color-primary);
- }
+  @include custom-scroll
 }

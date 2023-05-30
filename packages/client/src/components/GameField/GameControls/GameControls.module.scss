@@ -1,0 +1,44 @@
+.controls {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  max-width: 800px;
+}
+
+.game_over {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.wave_text {
+  font-size: 70px;
+  text-align: center;
+  text-transform: uppercase;
+  -webkit-box-reflect: below -20px linear-gradient(transparent, rgb(0 0 0 / 50%));
+  display: flex;
+  justify-content: center;
+
+  & span {
+    min-width: 20px;
+    background: var(--bg-gradient);
+    -webkit-text-stroke: 3px var(--color-text-on-light);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    animation: wave 1s infinite;
+    animation-delay: calc(0.1s * var(--i));
+  }
+}
+
+@keyframes wave {
+  0%, 40%, 100% {
+    transform: translateY(0)
+  }
+
+  20% {
+    transform: translateY(-20px)
+  }
+}

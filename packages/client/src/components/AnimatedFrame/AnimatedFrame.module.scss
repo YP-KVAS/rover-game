@@ -1,0 +1,131 @@
+.animate_wrapper {
+  display: grid;
+  grid-template: 80px calc(80px * 5) 80px / 80px calc(80px * 7) 80px;
+  grid-template-areas:
+    'corner_1 straight_ht corner_2'
+    'straight_vl links straight_vr'
+    'corner_4 straight_hb corner_3';
+  position: relative;
+}
+
+@mixin cross($number) {
+  grid-area: corner_#{$number};
+  transform: rotate(calc(90deg * $number));
+}
+
+@mixin straight($rotate, $selector, $direction: row) {
+  transform: rotate($rotate);
+
+  &_wrapper {
+    display: flex;
+    flex-direction: $direction;
+    grid-area: straight_#{$selector};
+  }
+}
+
+.cross_1 {
+  @include cross(1);
+}
+
+.cross_2 {
+  @include cross(2);
+}
+
+.cross_3 {
+  @include cross(3);
+}
+
+.cross_4 {
+  @include cross(4);
+}
+
+.straight_ht {
+  @include straight(90deg, ht);
+}
+
+.straight_hb {
+  @include straight(90deg, hb);
+}
+
+.straight_vl {
+  @include straight(0g, vl, column);
+}
+
+.straight_vr {
+  @include straight(0g, vr, column);
+}
+
+@keyframes marathon {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(calc(80px * 8), 0);
+  }
+
+  50% {
+    transform: translate(calc(80px * 8), calc(80px * 6));
+  }
+
+  75% {
+    transform: translate(0, calc(80px * 6));
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes change-image {
+  0% {
+    --img: url('/images/rover/rover-right.png');
+  }
+
+  25% {
+    --img: url('/images/rover/rover-down.png');
+  }
+
+  50% {
+    --img: url('/images/rover/rover-left.png');
+  }
+
+  75% {
+    --img: url('/images/rover/rover-up.png');
+  }
+
+  100% {
+    --img: url('/images/rover/rover-right.png');
+  }
+}
+
+.rover {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  animation: infinite marathon 5s linear, infinite change-image 5s step-end;
+  background: var(--img) no-repeat;
+  background-size: contain;
+}
+
+.body {
+  grid-area: links;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & h2 {
+    font-size: var(--font-2xl);
+    color: var(--color-text-on-light);
+  }
+
+  & p {
+    margin: 15px 0;
+    font-size: var(--font-xl);
+    color: var(--color-text-on-light);
+    text-align: center;
+  }
+}

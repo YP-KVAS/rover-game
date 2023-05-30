@@ -1,4 +1,4 @@
-@import 'src/index';
+@import '../../index';
 
 .layout,
 .main_content {
@@ -15,5 +15,4 @@
 .main_content {
   align-items: center;
   height: 100%;
-  min-width: fit-content;
 }

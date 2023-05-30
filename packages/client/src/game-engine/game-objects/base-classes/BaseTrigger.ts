@@ -11,7 +11,7 @@ export abstract class BaseTrigger extends BaseGameObject {
   protected enabled?: boolean
   protected readonly logic?: () => unknown
   protected constructor(
-    gameMap: Array<Array<Array<number>>>,
+    gameMap: number[][][],
     tileSize: number,
     triggerInfo: TriggerInfo
   ) {
@@ -58,7 +58,7 @@ export abstract class BaseTrigger extends BaseGameObject {
 
     if (this.collideWithRover(rover.coords)) {
       rover.openRover()
-      this._onTriggered(rover)
+      this._onTriggered()
     }
   }
 
@@ -70,12 +70,12 @@ export abstract class BaseTrigger extends BaseGameObject {
     return xIntersection && yIntersection
   }
 
-  private _onTriggered(rover: Rover) {
-    this.onTriggered(rover)
+  private _onTriggered() {
+    this.onTriggered()
     if (this.logic) this.logic()
   }
 
-  protected onTriggered(rover: Rover) {
+  protected onTriggered() {
     return
   }
   draw(ctx: CanvasRenderingContext2D) {

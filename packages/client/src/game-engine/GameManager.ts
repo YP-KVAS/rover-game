@@ -1,59 +1,70 @@
 import React from 'react'
-import { levels } from './level-information'
+import { levels, maxLevel } from './level-information'
 import { BaseTrigger } from './game-objects/base-classes/BaseTrigger'
-import { GameStatType } from '../utils/types/game'
+import { GameStatType, LevelProgress } from '../utils/types/game'
 import { immunityTimeMs, initialHitPoints } from '../utils/const-variables/game'
+import eventBus, { RoverEvents } from './services/EventBus'
 
 class GameManager {
   private _level = 1
+  private _levelProgress: LevelProgress = 'notStarted'
   private _timer = 0
   private _timerId: number | undefined = undefined
-  private _points = 0
+  private _levelPoints = 0
+  private _totalPoints = 0
   private _hitPoints = initialHitPoints
   private _immunity = false
+  private _gameCompleted = false
 
   private _changeLevelFoo?: React.Dispatch<React.SetStateAction<number>>
-  private _changeGameOverStateFoo?: React.Dispatch<
-    React.SetStateAction<boolean>
+  private _changeLevelProgressFoo?: React.Dispatch<
+    React.SetStateAction<LevelProgress>
   >
   private _changeStatFoo?: React.Dispatch<React.SetStateAction<GameStatType>>
+  private _changeGameCompletedFoo?: React.Dispatch<
+    React.SetStateAction<boolean>
+  >
 
   useChangeLevel(foo: React.Dispatch<React.SetStateAction<number>>) {
     this._changeLevelFoo = foo
-
     this._timer = levels[this._level].timer
-    this.startTimer()
   }
 
-  useChangeGameOverState(foo: React.Dispatch<React.SetStateAction<boolean>>) {
-    this._changeGameOverStateFoo = foo
+  useChangeLevelProgress(
+    foo: React.Dispatch<React.SetStateAction<LevelProgress>>
+  ) {
+    this._changeLevelProgressFoo = foo
+  }
+
+  useChangeGameCompletedState(
+    foo: React.Dispatch<React.SetStateAction<boolean>>
+  ) {
+    this._changeGameCompletedFoo = foo
   }
 
   useStat(foo: React.Dispatch<React.SetStateAction<GameStatType>>) {
     this._changeStatFoo = foo
   }
 
-  setLevel(val: number) {
-    if (!Object.keys(levels).includes(String(val))) {
-      console.error(`Level ${val} not exist`)
-      return
-    }
-    if (!this._changeLevelFoo) {
-      console.error('Function of changing level is not registered')
+  startPlaying() {
+    this.updateLevelProgress('playing')
+    this.startTimer()
+  }
+
+  private _setNextLevel(level?: number) {
+    this._levelPoints = 0
+    const nextLevel = level || this._level + 1
+
+    if (!Object.keys(levels).includes(String(nextLevel))) {
+      console.error(`Level ${nextLevel} doesn't exist`)
       return
     }
 
     BaseTrigger.removeTriggers()
 
-    this.stopTimer()
-    this.startTimer()
-
-    this._level = val
-    this._timer = levels[this._level].timer
-
+    this.updateLevel(nextLevel)
+    this.updateLevelProgress('notStarted')
     this.updateStat()
-
-    this._changeLevelFoo(val)
   }
 
   updateStat() {
@@ -64,33 +75,91 @@ class GameManager {
 
     this._changeStatFoo({
       level: this._level,
-      points: this._points,
+      points: this._totalPoints,
       hitPoints: this._hitPoints,
       timer: this._timer,
     })
+  }
+
+  resetStat() {
+    this._timerId = undefined
+    this._totalPoints = 0
+    this._levelPoints = 0
+    this._hitPoints = initialHitPoints
+    this._immunity = false
+  }
+
+  updateLevel(level: number) {
+    this._level = level
+    this._timer = levels[this._level].timer
+
+    if (!this._changeLevelFoo) {
+      console.error('Function of changing level is not registered')
+      return
+    }
+
+    this._changeLevelFoo(level)
+  }
+
+  updateLevelProgress(progress: LevelProgress) {
+    this._levelProgress = progress
+
+    if (!this._changeLevelProgressFoo) {
+      console.error('Function of changing level progress is not registered')
+      return
+    }
+
+    this._changeLevelProgressFoo(progress)
+  }
+
+  updateGameCompletedState(isCompleted: boolean) {
+    this._gameCompleted = isCompleted
+
+    if (!this._changeGameCompletedFoo) {
+      console.error(
+        'Function of changing game completed state is not registered'
+      )
+      return
+    }
+
+    this._changeGameCompletedFoo(isCompleted)
+  }
+
+  getStat(): GameStatType {
+    return {
+      level: this._level,
+      points: this._totalPoints,
+      hitPoints: this._hitPoints,
+      timer: this._timer,
+    }
   }
 
   startTimer() {
     if (this._timerId) return
 
     this._timerId = setInterval(() => {
-      this.updateStat()
       this._timer -= 1
+      this.updateStat()
       if (this._timer <= 0) {
         clearInterval(this._timerId)
-        this.endGame()
+        eventBus.emit(RoverEvents.GAME_OVER)
+        setTimeout(() => this.failLevel())
       }
     }, 1000) as unknown as number
   }
 
   stopTimer() {
-    this._points += this._timer * 100
+    if (this._levelProgress === 'completed') {
+      this.addPoints(this._timer * 100)
+    }
+
     clearInterval(this._timerId)
     this._timerId = undefined
   }
 
   private _addPoints(val: number) {
-    this._points += val
+    this._totalPoints += val
+    this._levelPoints += val
     this.updateStat()
   }
 
@@ -102,20 +171,51 @@ class GameManager {
     return this._level
   }
 
-  get points() {
-    return this._points
+  get totalPoints() {
+    return this._totalPoints
   }
-  endGame() {
+
+  get levelProgress() {
+    return this._levelProgress
+  }
+
+  get gameCompleted() {
+    return this._gameCompleted
+  }
+
+  completeLevel() {
+    this.updateLevelProgress('completed')
     this.stopTimer()
 
-    console.warn('End game with', this._points, 'points')
-
-    if (this._changeGameOverStateFoo) {
-      this._level = 1
-      this._hitPoints = initialHitPoints
-      this._points = 0
-      this._changeGameOverStateFoo(true)
+    if (this._level === maxLevel) {
+      this._addPoints(this._hitPoints * 1000)
+      this.updateGameCompletedState(true)
+    } else {
+      this._setNextLevel()
     }
+
+    console.warn(`End level with ${this._totalPoints} points`)
+  }
+
+  failLevel() {
+    this.updateLevelProgress('failed')
+    this.stopTimer()
+
+    console.warn(`Game over with ${this._totalPoints} points`)
+  }
+
+  restartGame() {
+    if (this._gameCompleted) {
+      this.updateGameCompletedState(false)
+    }
+    this.resetStat()
+    this._setNextLevel(1)
+  }
+
+  restartLevel() {
+    this.stopTimer()
+    this._totalPoints -= this._levelPoints
+    this._setNextLevel(this._level)
   }
 
   roverHit(hit = 1) {
@@ -129,8 +229,10 @@ class GameManager {
       }, immunityTimeMs)
     }
 
-    if (this._hitPoints <= 0) {
-      this.endGame()
+    if (this._hitPoints <= 0 && this._levelProgress === 'playing') {
+      this._levelProgress = 'willFail'
+      eventBus.emit(RoverEvents.GAME_OVER)
+      setTimeout(() => this.failLevel())
     }
   }
 }

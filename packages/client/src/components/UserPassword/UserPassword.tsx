@@ -43,6 +43,7 @@ export const UserPassword: FC = () => {
 
   const handleFormReset = () => {
     setEditDisabled(true)
+    reset()
     if (errorMessage) {
       dispatch(clearChangePasswordError())
     }

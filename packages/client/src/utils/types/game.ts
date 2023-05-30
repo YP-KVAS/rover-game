@@ -29,7 +29,7 @@ export interface TriggerInfo {
   img: HTMLImageElement
   class: {
     new (
-      gameMap: Array<Array<Array<number>>>,
+      gameMap: number[][][],
       tileSize: number,
       triggerInfo: TriggerInfo
     ): BaseTrigger
@@ -45,3 +45,10 @@ export interface GameStatType {
   hitPoints: number
   timer: number
 }
+
+export type LevelProgress =
+  | 'notStarted'
+  | 'playing'
+  | 'completed'
+  | 'willFail'
+  | 'failed'
