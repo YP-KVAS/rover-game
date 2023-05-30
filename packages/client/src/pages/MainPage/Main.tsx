@@ -2,8 +2,30 @@ import styles from './MainPage.module.scss'
 import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { AnimatedFrame } from '../../components/AnimatedFrame/AnimatedFrame'
+import { OAUTH_REDIRECT_URI } from '../../utils/const-variables/api'
+import { useEffect } from 'react'
+import { useAppDispatch } from '../../hooks/useStore'
+import { signInOAuth } from '../../utils/rest-api/oauth-api'
+import { onGetUser } from '../../store/thunks/auth-thunk'
 
 export function Main() {
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const oauthCode: string | null = new URLSearchParams(
+      window.location.search
+    ).get('code')
+
+    if (oauthCode) {
+      // Меняем url страницы на чистый, без code
+      window.history.replaceState({}, '', OAUTH_REDIRECT_URI)
+
+      signInOAuth({ code: oauthCode, redirect_uri: OAUTH_REDIRECT_URI }).then(
+        () => dispatch(onGetUser())
+      )
+    }
+  }, [])
+
   return (
     <AnimatedFrame>
       <p>

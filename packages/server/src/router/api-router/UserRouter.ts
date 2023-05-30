@@ -10,7 +10,7 @@ class UserRouter extends BaseRouter {
   }
 
   routes(): void {
-    this.router.get('', [checkAuth()], userController.findUserById)
+    this.router.get('', [checkAuth()], userController.findUser)
   }
 }
 

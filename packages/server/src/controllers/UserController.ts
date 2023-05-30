@@ -3,7 +3,7 @@ import { INTERNAL_SERVER_ERROR } from '../utils/const-variables/api'
 import { userService } from '../services/UserService'
 
 export class UserController {
-  async findUserById(req: Request, res: Response) {
+  async findUser(req: Request, res: Response) {
     try {
       const user = await userService.findUserWithRole(
         req.headers.cookie,

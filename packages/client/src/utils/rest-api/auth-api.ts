@@ -10,6 +10,8 @@ import { UserSignIn, UserSignUp } from '../types/user'
 import { UserWithRole } from '../types/user'
 
 export async function getUser(): Promise<UserWithRole> {
+  // Почему тут изменился путь? Было: `${AUTH_API_URL}${AuthApiPaths.USER}` = /auth/user
+  // Стало /user
   return await request(BASE_SERVER_URL, USER_API_URL, {
     method: FetchMethods.GET,
   })
