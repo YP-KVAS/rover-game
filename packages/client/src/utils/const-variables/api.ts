@@ -1,12 +1,7 @@
-// TODO: make url configurable (local, dev, prod)
-
-import * as process from 'process'
-
 const BASE_URL = process.env?.VITE_BASE_URL || 'http://localhost:5000'
 export const BASE_YA_URL = `${BASE_URL}/ya-api`
 export const BASE_SERVER_URL = `${BASE_URL}/api/v1`
 
-export const OAUTH_REDIRECT_PROJECT_URI = 'https://rover-game-client.vercel.app'
 export const OAUTH_REDIRECT_URI = BASE_URL
 export const YA_OAUTH_URL =
   'https://oauth.yandex.ru/authorize?response_type=code'

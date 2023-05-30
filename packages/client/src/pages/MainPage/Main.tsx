@@ -5,7 +5,8 @@ import { AnimatedFrame } from '../../components/AnimatedFrame/AnimatedFrame'
 import { OAUTH_REDIRECT_URI } from '../../utils/const-variables/api'
 import { useEffect } from 'react'
 import { useAppDispatch } from '../../hooks/useStore'
-import { onOAuthSignIn } from '../../store/thunks/oauth-thunk'
+import { signInOAuth } from '../../utils/rest-api/oauth-api'
+import { onGetUser } from '../../store/thunks/auth-thunk'
 
 export function Main() {
   const dispatch = useAppDispatch()
@@ -17,11 +18,10 @@ export function Main() {
 
     if (oauthCode) {
       // Меняем url страницы на чистый, без code
-      window.history.pushState({}, '', OAUTH_REDIRECT_URI)
+      window.history.replaceState({}, '', OAUTH_REDIRECT_URI)
 
-      // Отправляем запрос на oauth авторизацию
-      dispatch(
-        onOAuthSignIn({ code: oauthCode, redirect_uri: OAUTH_REDIRECT_URI })
+      signInOAuth({ code: oauthCode, redirect_uri: OAUTH_REDIRECT_URI }).then(
+        () => dispatch(onGetUser())
       )
     }
   }, [])

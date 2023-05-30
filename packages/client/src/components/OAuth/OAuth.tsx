@@ -6,7 +6,7 @@ import { OAUTH_REDIRECT_URI } from '../../utils/const-variables/api'
 export const OAuth: FC = () => {
   const onRedirectToOAuth = async () => {
     const { service_id: serviceId } = await getServiceId(OAUTH_REDIRECT_URI)
-    const oauthUrl = getOAuthUrl(serviceId)
+    const oauthUrl = getOAuthUrl(serviceId, OAUTH_REDIRECT_URI)
 
     window.location.href = oauthUrl
   }

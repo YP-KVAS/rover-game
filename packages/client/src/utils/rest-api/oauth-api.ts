@@ -1,7 +1,6 @@
 import {
   BASE_YA_URL,
   OAUTH_API_URL,
-  OAUTH_REDIRECT_URI,
   OAUTH_SERVICE_ID,
   YA_OAUTH_URL,
 } from '../const-variables/api'
@@ -27,6 +26,6 @@ export async function signInOAuth(data: OAuthPostRequestData) {
   })
 }
 
-export function getOAuthUrl(serviceId: string): string {
-  return `${YA_OAUTH_URL}&client_id=${serviceId}&redirect_uri=${OAUTH_REDIRECT_URI}`
+export function getOAuthUrl(serviceId: string, redirectUri: string): string {
+  return `${YA_OAUTH_URL}&client_id=${serviceId}&redirect_uri=${redirectUri}`
 }
