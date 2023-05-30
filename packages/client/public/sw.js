@@ -67,6 +67,10 @@ const putInCache = async (request, response) => {
 }
 
 const cacheFirst = async ({ request, fallbackUrl }) => {
+  if (request.cache === 'no-cache') {
+    return await fetch(request)
+  }
+
   const responseFromCache = await caches.match(request)
   if (responseFromCache) {
     return responseFromCache

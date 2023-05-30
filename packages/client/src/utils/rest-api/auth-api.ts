@@ -14,6 +14,7 @@ export async function getUser(): Promise<UserWithRole> {
   // Стало /user
   return await request(BASE_SERVER_URL, USER_API_URL, {
     method: FetchMethods.GET,
+    noCached: true,
   })
 }
 
@@ -21,6 +22,7 @@ export async function signIn(data: UserSignIn): Promise<void> {
   return await request(BASE_YA_URL, `${AUTH_API_URL}${AuthApiPaths.SIGN_IN}`, {
     method: FetchMethods.POST,
     data,
+    noCached: true,
   })
 }
 
@@ -28,11 +30,13 @@ export async function signUp(data: UserSignUp): Promise<{ id: number }> {
   return await request(BASE_YA_URL, `${AUTH_API_URL}${AuthApiPaths.SIGN_UP}`, {
     method: FetchMethods.POST,
     data,
+    noCached: true,
   })
 }
 
 export async function logout(): Promise<void> {
   return await request(BASE_YA_URL, `${AUTH_API_URL}${AuthApiPaths.LOGOUT}`, {
     method: FetchMethods.POST,
+    noCached: true,
   })
 }
