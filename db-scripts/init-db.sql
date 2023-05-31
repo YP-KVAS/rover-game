@@ -17,9 +17,9 @@ INSERT INTO roles (name) VALUES ('admin'), ('regular');
 
 CREATE TABLE users (
    id INTEGER PRIMARY KEY,
-   role_id INTEGER NOT NULL
+   role_id INTEGER NOT NULL,
+   score INTEGER NOT NULL default 0
 );
 
 -- test admin user id
-INSERT INTO users (id, role_id) VALUES (1234, 1);
-
+INSERT INTO users (id, role_id, score) VALUES (1234, 1, 35);

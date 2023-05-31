@@ -6,6 +6,7 @@ export interface IUserRepository {
   update(user: UserModel): Promise<void>
   delete(userId: number): Promise<void>
   getById(userId: number): Promise<UserModel | null>
+  getAll(): Promise<UserModel[]>
 }
 
 export class UserRepository implements IUserRepository {
@@ -30,6 +31,8 @@ export class UserRepository implements IUserRepository {
       }
 
       userToUpdate.roleId = user.roleId
+      userToUpdate.score = user.score
+
       await userToUpdate.save()
     } catch (err) {
       throw new Error(`UPDATE: Failed to update user with id ${user.id}`)
@@ -64,6 +67,16 @@ export class UserRepository implements IUserRepository {
       })
     } catch (err) {
       throw new Error(`GET: Failed to get user by id ${userId}`)
+    }
+  }
+
+  async getAll(): Promise<UserModel[]> {
+    try {
+      return await UserModel.findAll({
+        order: [['score', 'DESC']],
+      })
+    } catch (err) {
+      throw new Error('GET: Failed to get all users')
     }
   }
 }

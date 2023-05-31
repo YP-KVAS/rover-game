@@ -27,4 +27,7 @@ export class UserModel extends Model {
 
   @HasMany(() => CommentModel, 'user_id')
   commentModels: CommentModel[]
+
+  @Column({ type: DataType.INTEGER, field: 'score' })
+  score: number
 }

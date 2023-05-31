@@ -1,19 +1,22 @@
 import { FetchState } from './slices-types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
+  onGetLeaderboard,
   onGetAllLeaderboards,
   onGetLeaderboardByTeamName,
 } from '../thunks/leaderboard-thunk'
-import { LeaderboardItem } from '../../utils/types/leaderboard'
+import { LeaderboardItem, UserItem } from '../../utils/types/leaderboard'
 
 interface InitialState extends FetchState {
   leaderboardItems: LeaderboardItem[]
+  userItems: UserItem[]
 }
 
 const initialState: InitialState = {
   isLoading: false,
   errorMessage: null,
   leaderboardItems: [],
+  userItems: [],
 }
 
 const leaderboardSlice = createSlice({
@@ -21,6 +24,27 @@ const leaderboardSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
+    // onGetLeaderboard
+    builder
+      .addCase(onGetLeaderboard.fulfilled,
+        (state, action: PayloadAction<UserItem[]>) => {
+          state.isLoading = false
+          state.errorMessage = null
+          state.userItems = action.payload
+        }
+      )
+      .addCase(onGetLeaderboard.pending, state => {
+        state.isLoading = true
+        state.errorMessage = null
+        state.userItems = []
+      })
+      .addCase(onGetLeaderboard.rejected, (state, action) => {
+        state.isLoading = false
+        state.errorMessage = action.payload || null
+        state.userItems = []
+      })
+
+
     // onGetAllLeaderboards
     builder
       .addCase(

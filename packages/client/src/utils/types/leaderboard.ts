@@ -1,3 +1,9 @@
+export interface UserItem {
+  id: number
+  roleId: number
+  score: number
+}
+
 export interface LeaderboardRequest extends Record<string, unknown> {
   ratingFieldName: string
   cursor: number

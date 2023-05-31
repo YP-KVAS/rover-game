@@ -5,6 +5,9 @@ export const selectCurrentUser = (state: RootState) => state.user.user
 export const selectCurrentUserId = (state: RootState) =>
   state.user.user?.id || null
 
+export const selectCurrentUserScore = (state: RootState) =>
+  state.user.user?.score || null
+
 export const selectCurrentUserAvatar = (state: RootState) =>
   state.user.user?.avatar
 

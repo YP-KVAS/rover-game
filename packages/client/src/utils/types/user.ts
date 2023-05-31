@@ -24,6 +24,7 @@ export interface User extends UserSettings {
 
 export interface UserWithRole extends User {
   role: UserRolesEnum
+  score: number
 }
 
 export interface IUserPassword extends Record<string, unknown> {

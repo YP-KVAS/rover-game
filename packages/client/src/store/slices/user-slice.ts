@@ -50,9 +50,11 @@ const userSlice = createSlice({
         (state, action: PayloadAction<User>) => {
           state.changeSettings = defaultFetchState
           const role = state.user?.role
+          const score = state.user?.score
           state.user = {
             ...action.payload,
             role: role || UserRolesEnum.REGULAR,
+            score: score || 0,
           }
         }
       )
@@ -70,7 +72,8 @@ const userSlice = createSlice({
       .addCase(onAvatarChange.fulfilled, (state, action) => {
         state.changeAvatar = defaultFetchState
         const role = state.user?.role
-        state.user = { ...action.payload, role: role || UserRolesEnum.REGULAR }
+        const score = state.user?.score
+        state.user = { ...action.payload, role: role || UserRolesEnum.REGULAR, score: score || 0, }
       })
       .addCase(onAvatarChange.pending, state => {
         state.changeAvatar.isLoading = true

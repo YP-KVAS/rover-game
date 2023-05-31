@@ -11,6 +11,11 @@ export interface User {
   avatar: string
 }
 
-export interface UserWithRole extends User {
+export interface UserWithRoleAndScore extends User {
   role: RolesEnum
+  score: number
 }
+
+//export interface UserWithRole extends User {
+//  role: RolesEnum
+//}

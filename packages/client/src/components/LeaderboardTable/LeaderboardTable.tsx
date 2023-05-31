@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
-import { selectLeaderboardItems } from '../../store/selectors/leaderboard-selector'
-import { onGetAllLeaderboards } from '../../store/thunks/leaderboard-thunk'
+import { selectLeaderboardItems, selectUserItems } from '../../store/selectors/leaderboard-selector'
+import { onGetAllLeaderboards, onGetLeaderboard } from '../../store/thunks/leaderboard-thunk'
 import { LeaderboardRequest } from '../../utils/types/leaderboard'
 import { BASE_YA_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
 
@@ -10,17 +10,22 @@ import styles from './LeaderboardTable.module.scss'
 export const LeaderboardTable = () => {
   const dispatch = useAppDispatch()
   const leaderboardItems = useAppSelector(selectLeaderboardItems)
+  const userItems = useAppSelector(selectUserItems)
 
   useEffect(() => {
-    const request: LeaderboardRequest = {
+    /*const request: LeaderboardRequest = {
       ratingFieldName: 'score',
       cursor: 0,
       limit: 100,
     }
-    dispatch(onGetAllLeaderboards(request))
+    dispatch(onGetAllLeaderboards(request))*/
+    dispatch(onGetLeaderboard())
   }, [dispatch])
 
-  if (leaderboardItems.length === 0) {
+  //console.log("Length is " + leaderboardItems.length)
+
+  //if (leaderboardItems.length === 0) {
+  if (userItems.length === 0) {
     return (
       <div className={styles.leaderboard_table}>
         <p>Нет данных</p>
@@ -28,7 +33,26 @@ export const LeaderboardTable = () => {
     )
   }
 
-  const items = leaderboardItems.map((value, index) => {
+  const items = userItems.map((value, index) => {
+    const key = index + 1
+    const image = (
+      <img
+        height="45px"
+        alt="photo"
+        src={'./images/user/empty-avatar.webp'}
+      />
+    )
+    const name = value.id
+    const score = value.score
+
+    return (
+      <li key={key}>
+        {key} {image} {name} <p>{score.toLocaleString()}</p>
+      </li>
+    )
+  })
+
+  /* const items = leaderboardItems.map((value, index) => {
     const key = index + 1
     const image = (
       <img
@@ -56,7 +80,7 @@ export const LeaderboardTable = () => {
         {key} {image} {name} <p>{score.toLocaleString()}</p>
       </li>
     )
-  })
+  })*/
 
   return (
     <div className={styles.leaderboard_table}>

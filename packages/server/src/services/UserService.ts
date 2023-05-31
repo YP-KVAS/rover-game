@@ -3,7 +3,7 @@ import { ApiError, instanceOfApiError, RolesEnum } from '../utils/types/api'
 import { UserModel } from '../models/UserModel'
 import { IUserRepository, UserRepository } from '../repositories/UserRepository'
 import { RoleModel } from '../models/RoleModel'
-import type { User, UserWithRole } from '../utils/types/user'
+import type { User, UserWithRoleAndScore } from '../utils/types/user'
 import { getUser } from '../utils/yandex-api/user-api'
 
 export class UserService {
@@ -44,11 +44,17 @@ export class UserService {
     return user.role.name
   }
 
-  async findUserWithRole(
+  async findUserScore(id: number): Promise<number> {
+    const user = await this._getUser(id)
+    return user.score
+  }
+
+  async findUserWithRoleAndScore(
+  //async findUserWithRole(
     cookies?: string,
     user?: User,
     role?: RolesEnum
-  ): Promise<UserWithRole> {
+  ): Promise<UserWithRoleAndScore> {
     let yaUser: User | ApiError | undefined = user
     if (!user) {
       yaUser = await getUser(cookies)
@@ -59,7 +65,6 @@ export class UserService {
     }
 
     const userId = (yaUser as User).id
-
     let userRole: RolesEnum | null | undefined = role
     if (!userRole) {
       userRole = await this.findUserRole(userId)
@@ -67,6 +72,8 @@ export class UserService {
         throw new Error(`Unable to get role for user with id ${userId}`)
       }
     }
+
+    const score = await this.findUserScore(userId)
 
     const {
       id,
@@ -88,7 +95,31 @@ export class UserService {
       display_name,
       avatar,
       role: userRole,
+      score: score,
     }
+  }
+
+  async update(id: number, role: number, score: number): Promise<void> {
+    const userToUpdate = new UserModel()
+    userToUpdate.id = id
+    userToUpdate.roleId = role
+    userToUpdate.score = score
+
+    await this._userRepository.update(userToUpdate)
+  }
+
+  //async update2(id: number, role: number): Promise<void> {
+  //  const userToUpdate = new UserModel()
+  //  userToUpdate.id = id
+  //  userToUpdate.roleId = role
+
+  //  await this._userRepository.update(userToUpdate)
+  //}
+
+  async findAll(): Promise<UserModel[]> {
+    //const users = await this._userRepository.getAll()
+    //return users.map(user => getUserDTOFromModel(user))
+    return await this._userRepository.getAll()
   }
 }
 

@@ -10,7 +10,29 @@ class UserRouter extends BaseRouter {
   }
 
   routes(): void {
-    this.router.get('', [checkAuth()], userController.findUserById)
+    this.router.get(
+      '',
+      [
+        checkAuth()
+      ],
+      userController.findUserById
+    )
+
+    this.router.get(
+      '/all',
+      [
+        checkAuth()
+      ],
+      userController.findAll
+    )
+
+    this.router.patch(
+      `/:id`,
+      [
+        checkAuth(),
+      ],
+      userController.updateUser
+    )
   }
 }
 

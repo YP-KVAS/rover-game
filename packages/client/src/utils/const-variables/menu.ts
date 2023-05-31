@@ -15,6 +15,10 @@ export const MENU: MenuItem[] = [
     route: RoutesEnum.GAME,
   },
   {
+    label: 'Лидерборд',
+    route: RoutesEnum.LEADERBOARD,
+  },
+  {
     label: 'Форум',
     route: RoutesEnum.FORUM,
   },
