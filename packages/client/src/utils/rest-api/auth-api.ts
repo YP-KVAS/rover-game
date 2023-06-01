@@ -14,6 +14,7 @@ export async function getUser(): Promise<UserWithRole> {
   // Стало /user
   return await request(BASE_SERVER_URL, USER_API_URL, {
     method: FetchMethods.GET,
+    noCached: true,
   })
 }
 

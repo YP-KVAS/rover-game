@@ -10,6 +10,7 @@ export interface RequestInput {
   method?: FetchMethods
   headers?: Record<string, string>
   data?: Record<string, unknown> | FormData
+  noCached?: boolean
 }
 
 export function request<T>(
@@ -17,13 +18,18 @@ export function request<T>(
   endpoint: string,
   options: RequestInput
 ): Promise<T> {
-  const { method = FetchMethods.GET, headers = {}, data } = options
+  const { method = FetchMethods.GET, headers = {}, data, noCached } = options
 
   if (!('Content-Type' in headers) && !(data instanceof FormData)) {
     headers['Content-Type'] = 'application/json'
   }
 
-  const config: RequestInit = { method, headers, credentials: 'include' }
+  const config: RequestInit = {
+    method,
+    headers,
+    credentials: 'include',
+    cache: noCached ? 'no-cache' : 'default',
+  }
 
   if (method !== FetchMethods.GET && data) {
     config.body = data instanceof FormData ? data : JSON.stringify(data)

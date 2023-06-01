@@ -24,6 +24,7 @@ import { stringifyQuery } from '../stringify-query'
 export async function getForumCategories(): Promise<IForumCategory[]> {
   return await request(BASE_SERVER_URL, FORUM_CATEGORIES_API_URL, {
     method: FetchMethods.GET,
+    noCached: true,
   })
 }
 
@@ -68,6 +69,7 @@ export async function getForumTopics(
     )}`,
     {
       method: FetchMethods.GET,
+      noCached: true,
     }
   )
 }
@@ -114,6 +116,7 @@ export async function getForumComments(
     )}`,
     {
       method: FetchMethods.GET,
+      noCached: true,
     }
   )
 }

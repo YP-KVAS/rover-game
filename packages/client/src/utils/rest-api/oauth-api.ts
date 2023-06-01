@@ -15,6 +15,7 @@ export async function getServiceId(
     `${OAUTH_API_URL}${OAUTH_SERVICE_ID}?redirect_uri=${redirectUri}`,
     {
       method: FetchMethods.GET,
+      noCached: true,
     }
   )
 }
