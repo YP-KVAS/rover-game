@@ -1,0 +1,12 @@
+.title {
+  font-size: var(--font-lg);
+  text-align: center;
+}
+
+.themes_list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  padding: 15px;
+}

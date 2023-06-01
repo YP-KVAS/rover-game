@@ -3,6 +3,7 @@ import { Tab } from '../../components/Tabs/Tabs'
 import { UserData } from '../../components/UserData/UserData'
 import { UserAvatar } from '../../components/UserAvatar/UserAvatar'
 import { UserPassword } from '../../components/UserPassword/UserPassword'
+import { ColorTheme } from '../../components/ColorTheme/ColorTheme'
 
 export interface FormInput {
   label: string
@@ -119,6 +120,10 @@ export const USER_SETTINGS_TABS: Tab[] = [
   {
     label: 'Настройки',
     component: UserPassword,
+  },
+  {
+    label: 'Цветовая тема',
+    component: ColorTheme,
   },
 ]
 

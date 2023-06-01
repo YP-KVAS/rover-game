@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react'
+import { CSSProperties, MouseEventHandler } from 'react'
 import styles from './Button.module.scss'
 
 type ButtonProps = {
@@ -7,6 +7,7 @@ type ButtonProps = {
   children: string
   clickHandler?: MouseEventHandler | undefined
   isDisabled?: boolean
+  style?: CSSProperties
 }
 
 export const Button = ({
@@ -15,6 +16,7 @@ export const Button = ({
   children,
   clickHandler,
   isDisabled,
+  style,
 }: ButtonProps) => {
   const className = `${styles.btn} ${styles['btn_' + type]}`
 
@@ -23,7 +25,8 @@ export const Button = ({
       className={className}
       onClick={clickHandler}
       disabled={isDisabled}
-      type={htmlType}>
+      type={htmlType}
+      style={style}>
       {children}
     </button>
   )
