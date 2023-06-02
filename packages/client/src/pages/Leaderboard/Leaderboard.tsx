@@ -1,11 +1,14 @@
+import style from './Leaderboard.module.scss'
 import { LeaderboardUserScore } from '../../components/LeaderboardUserScore/LeaderboardUserScore'
 import { LeaderboardTable } from '../../components/LeaderboardTable/LeaderboardTable'
-import style from './Leaderboard.module.scss'
+import { Title } from '../../components/Title/Title'
+import RequireAuth from '../../hocs/requireAuth'
+import { EnumPages } from '../../utils/const-variables/pages'
 
-export const Leaderboard = () => {
+const Leaderboard = () => {
   return (
     <div className={style.leaderboard}>
-      <h2>Лучшие результаты</h2>
+      <Title text="Лучшие результаты" />
       <div className={style.container}>
         <LeaderboardTable />
         <LeaderboardUserScore />
@@ -13,3 +16,7 @@ export const Leaderboard = () => {
     </div>
   )
 }
+
+const LeaderboardWithAuth = RequireAuth(Leaderboard, EnumPages.LEADERBOARD)
+
+export { LeaderboardWithAuth as Leaderboard }

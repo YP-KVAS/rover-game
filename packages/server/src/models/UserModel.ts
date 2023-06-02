@@ -19,6 +19,9 @@ export class UserModel extends Model {
   @Column({ type: DataType.INTEGER, field: 'role_id' })
   roleId: number
 
+  @Column({ type: DataType.INTEGER, field: 'best_score' })
+  bestScore: number | null
+
   @BelongsTo(() => RoleModel, 'role_id')
   role: RoleModel
 

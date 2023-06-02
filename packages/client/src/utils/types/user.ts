@@ -30,3 +30,9 @@ export interface IUserPassword extends Record<string, unknown> {
   [FormInputNames.OLD_PASSWORD]: string
   [FormInputNames.NEW_PASSWORD]: string
 }
+
+export interface LeaderboardUser {
+  [FormInputNames.AVATAR]: string | null
+  [FormInputNames.DISPLAY_NAME]: string | null
+  score: number | null
+}

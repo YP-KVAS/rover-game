@@ -1,19 +1,16 @@
 import { FetchState } from './slices-types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {
-  onGetAllLeaderboards,
-  onGetLeaderboardByTeamName,
-} from '../thunks/leaderboard-thunk'
+import { onGetAllLeaderboards } from '../thunks/leaderboard-thunk'
 import { LeaderboardItem } from '../../utils/types/leaderboard'
 
 interface InitialState extends FetchState {
-  leaderboardItems: LeaderboardItem[]
+  leaderboardItems: LeaderboardItem[] | null
 }
 
 const initialState: InitialState = {
   isLoading: false,
   errorMessage: null,
-  leaderboardItems: [],
+  leaderboardItems: null,
 }
 
 const leaderboardSlice = createSlice({
@@ -28,39 +25,18 @@ const leaderboardSlice = createSlice({
         (state, action: PayloadAction<LeaderboardItem[]>) => {
           state.isLoading = false
           state.errorMessage = null
-          state.leaderboardItems = action.payload
+          state.leaderboardItems = (state.leaderboardItems || []).concat(
+            action.payload
+          )
         }
       )
       .addCase(onGetAllLeaderboards.pending, state => {
         state.isLoading = true
         state.errorMessage = null
-        state.leaderboardItems = []
       })
       .addCase(onGetAllLeaderboards.rejected, (state, action) => {
         state.isLoading = false
         state.errorMessage = action.payload || null
-        state.leaderboardItems = []
-      })
-
-    // onGetLeaderboardByTeamName
-    builder
-      .addCase(
-        onGetLeaderboardByTeamName.fulfilled,
-        (state, action: PayloadAction<LeaderboardItem[]>) => {
-          state.isLoading = false
-          state.errorMessage = null
-          state.leaderboardItems = action.payload
-        }
-      )
-      .addCase(onGetLeaderboardByTeamName.pending, state => {
-        state.isLoading = true
-        state.errorMessage = null
-        state.leaderboardItems = []
-      })
-      .addCase(onGetLeaderboardByTeamName.rejected, (state, action) => {
-        state.isLoading = false
-        state.errorMessage = action.payload || null
-        state.leaderboardItems = []
       })
   },
 })

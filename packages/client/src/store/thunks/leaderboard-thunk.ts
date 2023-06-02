@@ -3,10 +3,8 @@ import {
   LeaderboardRequest,
   LeaderboardItem,
 } from '../../utils/types/leaderboard'
-import {
-  getAllLeaderboards,
-  getLeaderboardByTeamName,
-} from '../../utils/rest-api/leaderboard-api'
+import { getAllLeaderboards } from '../../utils/rest-api/leaderboard-api'
+import { RootState } from '../store'
 
 export const onGetAllLeaderboards = createAsyncThunk<
   LeaderboardItem[],
@@ -14,7 +12,7 @@ export const onGetAllLeaderboards = createAsyncThunk<
   { rejectValue: string }
 >(
   'leaderboard/onGetAllLeaderboards',
-  async (data, { dispatch, rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
       return await getAllLeaderboards(data)
     } catch (err: unknown) {
@@ -22,22 +20,14 @@ export const onGetAllLeaderboards = createAsyncThunk<
         (err as Error).message || 'Unable to get all leaderboards'
       )
     }
-  }
-)
-
-export const onGetLeaderboardByTeamName = createAsyncThunk<
-  LeaderboardItem[],
-  LeaderboardRequest,
-  { rejectValue: string }
->(
-  'leaderboard/onGetLeaderboardByTeamName',
-  async (data, { dispatch, rejectWithValue }) => {
-    try {
-      return await getLeaderboardByTeamName(data)
-    } catch (err: unknown) {
-      return rejectWithValue(
-        (err as Error).message || 'Unable to get leaderboard'
-      )
-    }
+  },
+  {
+    condition: (request: LeaderboardRequest, { getState }) => {
+      const state = getState() as RootState
+      const leaderboardIsLoading = state.leaderboard.isLoading
+      if (leaderboardIsLoading) {
+        return false
+      }
+    },
   }
 )

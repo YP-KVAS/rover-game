@@ -14,7 +14,6 @@ export const AUTH_API_URL = '/auth'
 export const USER_API_URL = '/user'
 export const RESOURCES_API_URL = '/resources'
 export const LEADERBOARD_API_URL = '/leaderboard'
-export const TEAM_NAME = 'kvas'
 
 export const FORUM_CATEGORIES_API_URL = '/categories'
 export const FORUM_TOPICS_API_URL = '/topics'
@@ -22,6 +21,7 @@ export const FORUM_COMMENTS_API_URL = '/comments'
 
 export const TOPICS_LOAD_LIMIT = 15
 export const COMMENTS_LOAD_LIMIT = 8
+export const LEADERBOARD_LOAD_LIMIT = 15
 
 export enum AuthApiPaths {
   SIGN_UP = '/signup',

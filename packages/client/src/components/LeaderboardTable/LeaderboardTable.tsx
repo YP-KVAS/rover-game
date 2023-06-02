@@ -3,9 +3,14 @@ import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { selectLeaderboardItems } from '../../store/selectors/leaderboard-selector'
 import { onGetAllLeaderboards } from '../../store/thunks/leaderboard-thunk'
 import { LeaderboardRequest } from '../../utils/types/leaderboard'
-import { BASE_YA_URL, RESOURCES_API_URL } from '../../utils/const-variables/api'
+import {
+  BASE_YA_URL,
+  LEADERBOARD_LOAD_LIMIT,
+  RESOURCES_API_URL,
+} from '../../utils/const-variables/api'
 
 import styles from './LeaderboardTable.module.scss'
+import { LeaderboardItem } from './LeaderboardItem'
 
 export const LeaderboardTable = () => {
   const dispatch = useAppDispatch()
@@ -15,12 +20,12 @@ export const LeaderboardTable = () => {
     const request: LeaderboardRequest = {
       ratingFieldName: 'score',
       cursor: 0,
-      limit: 100,
+      limit: LEADERBOARD_LOAD_LIMIT,
     }
     dispatch(onGetAllLeaderboards(request))
   }, [dispatch])
 
-  if (leaderboardItems.length === 0) {
+  if (!leaderboardItems) {
     return (
       <div className={styles.leaderboard_table}>
         <p>Нет данных</p>
@@ -33,6 +38,7 @@ export const LeaderboardTable = () => {
     const image = (
       <img
         height="45px"
+        width="45px"
         alt="photo"
         src={
           value.data.avatar
@@ -52,15 +58,17 @@ export const LeaderboardTable = () => {
     const score = value.data.score
 
     return (
-      <li key={key}>
-        {key} {image} {name} <p>{score.toLocaleString()}</p>
-      </li>
+      <LeaderboardItem
+        key={index}
+        ordinal={index + 1}
+        user={{ avatar: value.data.avatar, score, display_name: name }}
+      />
     )
   })
 
   return (
     <div className={styles.leaderboard_table}>
-      <ul>{items}</ul>
+      <ul className={styles.list}>{items}</ul>
     </div>
   )
 }
