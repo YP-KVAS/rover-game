@@ -3,7 +3,7 @@ import { ApiError, instanceOfApiError, RolesEnum } from '../utils/types/api'
 import { UserModel } from '../models/UserModel'
 import { IUserRepository, UserRepository } from '../repositories/UserRepository'
 import { RoleModel } from '../models/RoleModel'
-import type { User, UserExtended } from '../utils/types/user'
+import type { UserScore, User, UserExtended } from '../utils/types/user'
 import { getUser } from '../utils/yandex-api/user-api'
 
 export class UserService {
@@ -91,6 +91,18 @@ export class UserService {
       role: role.name,
       best_score: bestScore,
     }
+  }
+
+  async updateScore(id: number, score: number): Promise<UserScore> {
+    const userToUpdate = await this._getUser(id)
+    if (userToUpdate.bestScore && userToUpdate.bestScore > score) {
+      return { id: userToUpdate.id, best_score: userToUpdate.bestScore }
+    }
+
+    userToUpdate.bestScore = score
+    const updatedUser = await this._userRepository.update(userToUpdate)
+
+    return { id: updatedUser.id, best_score: updatedUser.bestScore }
   }
 }
 

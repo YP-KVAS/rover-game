@@ -4,7 +4,7 @@ import { Op } from 'sequelize'
 
 export interface IUserRepository {
   save(user: UserModel): Promise<void>
-  update(user: UserModel): Promise<void>
+  update(user: UserModel): Promise<UserModel>
   delete(userId: number): Promise<void>
   getById(userId: number): Promise<UserModel | null>
   getAll(
@@ -25,7 +25,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async update(user: UserModel): Promise<void> {
+  async update(user: UserModel): Promise<UserModel> {
     try {
       const userToUpdate = await UserModel.findOne({
         where: {
@@ -37,8 +37,8 @@ export class UserRepository implements IUserRepository {
         throw new Error(`UPDATE: User with id ${user.id} was not found`)
       }
 
-      userToUpdate.roleId = user.roleId
-      await userToUpdate.save()
+      userToUpdate.bestScore = user.bestScore
+      return await userToUpdate.save()
     } catch (err) {
       throw new Error(`UPDATE: Failed to update user with id ${user.id}`)
     }

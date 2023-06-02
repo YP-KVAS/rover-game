@@ -16,34 +16,41 @@ class GameManager {
   private _immunity = false
   private _gameCompleted = false
 
-  private _changeLevelFoo?: React.Dispatch<React.SetStateAction<number>>
-  private _changeLevelProgressFoo?: React.Dispatch<
+  private _changeLevelHandler?: React.Dispatch<React.SetStateAction<number>>
+  private _changeLevelProgressHandler?: React.Dispatch<
     React.SetStateAction<LevelProgress>
   >
-  private _changeStatFoo?: React.Dispatch<React.SetStateAction<GameStatType>>
-  private _changeGameCompletedFoo?: React.Dispatch<
+  private _changeStatHandler?: React.Dispatch<
+    React.SetStateAction<GameStatType>
+  >
+  private _changeGameCompletedHandler?: React.Dispatch<
     React.SetStateAction<boolean>
   >
+  private _saveScoreHandler?: (score: number) => void
 
-  useChangeLevel(foo: React.Dispatch<React.SetStateAction<number>>) {
-    this._changeLevelFoo = foo
+  useChangeLevel(handler: React.Dispatch<React.SetStateAction<number>>) {
+    this._changeLevelHandler = handler
     this._timer = levels[this._level].timer
   }
 
   useChangeLevelProgress(
-    foo: React.Dispatch<React.SetStateAction<LevelProgress>>
+    handler: React.Dispatch<React.SetStateAction<LevelProgress>>
   ) {
-    this._changeLevelProgressFoo = foo
+    this._changeLevelProgressHandler = handler
   }
 
   useChangeGameCompletedState(
-    foo: React.Dispatch<React.SetStateAction<boolean>>
+    handler: React.Dispatch<React.SetStateAction<boolean>>
   ) {
-    this._changeGameCompletedFoo = foo
+    this._changeGameCompletedHandler = handler
   }
 
-  useStat(foo: React.Dispatch<React.SetStateAction<GameStatType>>) {
-    this._changeStatFoo = foo
+  useStat(handler: React.Dispatch<React.SetStateAction<GameStatType>>) {
+    this._changeStatHandler = handler
+  }
+
+  useSaveScoreCallback(callback: (score: number) => void) {
+    this._saveScoreHandler = (score: number) => callback(score)
   }
 
   startPlaying() {
@@ -68,12 +75,12 @@ class GameManager {
   }
 
   updateStat() {
-    if (!this._changeStatFoo) {
+    if (!this._changeStatHandler) {
       console.error('Function of changing statistics is not registered')
       return
     }
 
-    this._changeStatFoo({
+    this._changeStatHandler({
       level: this._level,
       points: this._totalPoints,
       hitPoints: this._hitPoints,
@@ -93,36 +100,45 @@ class GameManager {
     this._level = level
     this._timer = levels[this._level].timer
 
-    if (!this._changeLevelFoo) {
+    if (!this._changeLevelHandler) {
       console.error('Function of changing level is not registered')
       return
     }
 
-    this._changeLevelFoo(level)
+    this._changeLevelHandler(level)
   }
 
   updateLevelProgress(progress: LevelProgress) {
     this._levelProgress = progress
 
-    if (!this._changeLevelProgressFoo) {
+    if (!this._changeLevelProgressHandler) {
       console.error('Function of changing level progress is not registered')
       return
     }
 
-    this._changeLevelProgressFoo(progress)
+    this._changeLevelProgressHandler(progress)
   }
 
   updateGameCompletedState(isCompleted: boolean) {
     this._gameCompleted = isCompleted
 
-    if (!this._changeGameCompletedFoo) {
+    if (!this._changeGameCompletedHandler) {
       console.error(
         'Function of changing game completed state is not registered'
       )
       return
     }
 
-    this._changeGameCompletedFoo(isCompleted)
+    this._changeGameCompletedHandler(isCompleted)
+  }
+
+  saveScore() {
+    if (!this._saveScoreHandler) {
+      console.error('Function of saving score is not registered')
+      return
+    }
+
+    this._saveScoreHandler(this._totalPoints)
   }
 
   getStat(): GameStatType {
@@ -194,6 +210,7 @@ class GameManager {
       this._setNextLevel()
     }
 
+    this.saveScore()
     console.warn(`End level with ${this._totalPoints} points`)
   }
 
@@ -201,6 +218,7 @@ class GameManager {
     this.updateLevelProgress('failed')
     this.stopTimer()
 
+    this.saveScore()
     console.warn(`Game over with ${this._totalPoints} points`)
   }
 

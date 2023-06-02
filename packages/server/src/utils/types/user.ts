@@ -19,11 +19,14 @@ export interface RoverUser {
 
 export interface UserExtended extends User, RoverUser {}
 
-export interface LeaderboardUser {
+export interface UserScore {
   id: number
+  best_score: number | null
+}
+
+export interface LeaderboardUser extends UserScore {
   display_name: string | null
   avatar: string | null
-  best_score: number | null
 }
 
 export interface Leaderboard {

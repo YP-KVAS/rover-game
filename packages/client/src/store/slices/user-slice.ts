@@ -1,6 +1,6 @@
 import { FetchState } from './slices-types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User, UserExtended } from '../../utils/types/user'
+import { User, UserExtended, UserScore } from '../../utils/types/user'
 import {
   onAvatarChange,
   onPasswordChange,
@@ -8,6 +8,7 @@ import {
 } from '../thunks/user-thunk'
 import { onGetUser, onLogout } from '../thunks/auth-thunk'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
+import { onScoreUpdate } from '../thunks/leaderboard-thunk'
 
 interface InitialState {
   user: UserExtended | null
@@ -114,6 +115,16 @@ const userSlice = createSlice({
       .addCase(onLogout.fulfilled, _ => {
         return initialState
       })
+
+    // external leaderboard slice
+    builder.addCase(
+      onScoreUpdate.fulfilled,
+      (state, action: PayloadAction<UserScore>) => {
+        if (state.user) {
+          state.user.best_score = action.payload.best_score
+        }
+      }
+    )
   },
 })
 

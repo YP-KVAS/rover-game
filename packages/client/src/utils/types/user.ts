@@ -32,9 +32,12 @@ export interface IUserPassword extends Record<string, unknown> {
   [FormInputNames.NEW_PASSWORD]: string
 }
 
-export interface LeaderboardUser {
+export interface UserScore {
   id: number
+  best_score: number
+}
+
+export interface LeaderboardUser extends UserScore {
   [FormInputNames.AVATAR]: string | null
   [FormInputNames.DISPLAY_NAME]: string | null
-  best_score: number
 }

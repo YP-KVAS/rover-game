@@ -134,3 +134,12 @@ export const getLeaderboardUsersValidationSchema = Yup.object().shape({
     [ForumFieldsEnum.OFFSET]: offsetValidation,
   }),
 })
+
+export const updateUserScoreValidationSchema = Yup.object().shape({
+  body: Yup.object().shape({
+    score: Yup.number()
+      .positive()
+      .required()
+      .typeError('Некорректное значение score'),
+  }),
+})

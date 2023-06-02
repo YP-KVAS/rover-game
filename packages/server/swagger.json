@@ -1080,11 +1080,11 @@
         "description": "Update an existing user best score",
         "operationId": "updateScore",
         "requestBody": {
-          "description": "Update an existing comment message",
+          "description": "Update user best score",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BestScore"
+                "$ref": "#/components/schemas/Score"
               }
             }
           },
@@ -1096,7 +1096,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LeaderboardUser"
+                  "$ref": "#/components/schemas/UserScore"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
                 }
               }
             }
@@ -1215,6 +1225,18 @@
             "type": "string",
             "nullable": true,
             "example": "Petya Pupkin"
+          }
+        }
+      },
+      "Score": {
+        "required": [
+          "score"
+        ],
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": "number",
+            "example": 5000
           }
         }
       },
@@ -1495,6 +1517,16 @@
                 "example": "regular"
               }
             }
+          }
+        ]
+      },
+      "UserScore": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/BestScore"
           }
         ]
       },

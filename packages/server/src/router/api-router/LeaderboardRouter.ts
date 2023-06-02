@@ -2,7 +2,10 @@ import BaseRouter from '../base/BaseRouter'
 import { LeaderboardController } from '../../controllers/LeaderboardController'
 import { checkAuth } from '../../middlewares/auth-middleware'
 import { validateRequest } from '../../middlewares/validation-middleware'
-import { getLeaderboardUsersValidationSchema } from '../../utils/validation-schemas'
+import {
+  getLeaderboardUsersValidationSchema,
+  updateUserScoreValidationSchema,
+} from '../../utils/validation-schemas'
 
 const leaderboardController = new LeaderboardController()
 
@@ -16,6 +19,12 @@ class LeaderboardRouter extends BaseRouter {
       '',
       [validateRequest(getLeaderboardUsersValidationSchema), checkAuth()],
       leaderboardController.findAll
+    )
+
+    this.router.patch(
+      '',
+      [validateRequest(updateUserScoreValidationSchema), checkAuth()],
+      leaderboardController.updateScore
     )
   }
 }
