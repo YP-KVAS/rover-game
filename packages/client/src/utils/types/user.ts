@@ -22,8 +22,9 @@ export interface User extends UserSettings {
   [FormInputNames.AVATAR]: string | null
 }
 
-export interface UserWithRole extends User {
+export interface UserExtended extends User {
   role: UserRolesEnum
+  best_score: number | null
 }
 
 export interface IUserPassword extends Record<string, unknown> {
@@ -32,7 +33,8 @@ export interface IUserPassword extends Record<string, unknown> {
 }
 
 export interface LeaderboardUser {
+  id: number
   [FormInputNames.AVATAR]: string | null
   [FormInputNames.DISPLAY_NAME]: string | null
-  score: number | null
+  best_score: number
 }

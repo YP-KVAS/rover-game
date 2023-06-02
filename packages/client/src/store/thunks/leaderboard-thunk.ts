@@ -1,28 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import {
-  LeaderboardRequest,
-  LeaderboardItem,
-} from '../../utils/types/leaderboard'
-import { getAllLeaderboards } from '../../utils/rest-api/leaderboard-api'
+import { getLeaderboard } from '../../utils/rest-api/leaderboard-api'
 import { RootState } from '../store'
+import { BaseGetAllItemsQuery } from '../../utils/types/base-query'
+import { Leaderboard } from '../../utils/types/leaderboard'
 
-export const onGetAllLeaderboards = createAsyncThunk<
-  LeaderboardItem[],
-  LeaderboardRequest,
+export const onGetLeaderboard = createAsyncThunk<
+  Leaderboard,
+  BaseGetAllItemsQuery,
   { rejectValue: string }
 >(
   'leaderboard/onGetAllLeaderboards',
-  async (data, { rejectWithValue }) => {
+  async (query, { rejectWithValue }) => {
     try {
-      return await getAllLeaderboards(data)
+      return await getLeaderboard(query)
     } catch (err: unknown) {
       return rejectWithValue(
-        (err as Error).message || 'Unable to get all leaderboards'
+        (err as Error).message || 'Unable to get leaderboard items'
       )
     }
   },
   {
-    condition: (request: LeaderboardRequest, { getState }) => {
+    condition: (request: BaseGetAllItemsQuery, { getState }) => {
       const state = getState() as RootState
       const leaderboardIsLoading = state.leaderboard.isLoading
       if (leaderboardIsLoading) {

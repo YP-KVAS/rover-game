@@ -1,8 +1,8 @@
 import { IUserRepository } from '../repositories/UserRepository'
-import { UserWithRole } from '../../utils/types/user'
+import { UserExtended } from '../../utils/types/user'
 
 export interface IUserService {
-  getCurrentUser(): Promise<UserWithRole>
+  getCurrentUser(): Promise<UserExtended>
 }
 
 export class UserService implements IUserService {

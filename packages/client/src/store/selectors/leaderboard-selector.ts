@@ -1,10 +1,14 @@
 import { RootState } from '../store'
 
-export const selectLeaderboardItems = (state: RootState) =>
-  state.leaderboard.leaderboardItems
+export const selectLeaderboardUsers = (state: RootState) =>
+  state.leaderboard.leaderboardUsers
 
-export const selectLeaderboardItemsLength = (state: RootState) =>
-  state.leaderboard.leaderboardItems?.length || 0
+export const selectLeaderboardState = (state: RootState) => {
+  return {
+    isLoading: state.leaderboard.isLoading,
+    errorMessage: state.leaderboard.errorMessage,
+  }
+}
 
-export const selectLeaderboardIsLoading = (state: RootState) =>
-  state.leaderboard.isLoading
+export const selectLeaderboardUsersTotal = (state: RootState) =>
+  state.leaderboard.total

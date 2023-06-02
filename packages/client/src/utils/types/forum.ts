@@ -1,4 +1,5 @@
 import { FormInputNames } from './forms'
+import { BaseGetAllItemsQuery } from './base-query'
 
 export interface IForumCategory {
   id: number
@@ -20,9 +21,7 @@ export interface IForumTopic {
   userId: number
 }
 
-interface IGetForumItemsBaseQuery {
-  offset?: number
-  limit?: number
+interface IGetForumItemsBaseQuery extends BaseGetAllItemsQuery {
   search?: string
 }
 

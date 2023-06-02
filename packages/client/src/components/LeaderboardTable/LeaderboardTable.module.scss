@@ -2,21 +2,28 @@
 
 .leaderboard_table {
   background: var(--color-secondary);
-  border: 2px solid var(--color-text-on-dark);
   border-radius: 15px;
   font-size: var(--font-xl);
-  padding: 15px;
+  padding: 35px 25px;
   width: 75%;
+  height: 60vh;
+  position: relative;
+}
+
+.list_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
 }
 
 .list {
-  max-height: 60vh;
-  min-height: 60vh;
   overflow: auto;
   padding-right: 15px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  height: 100%;
 
   @include custom-scroll;
 }
@@ -26,7 +33,6 @@
   flex-direction: column;
   gap: 5px;
   min-width: 100%;
-  width: fit-content;
 }
 
 .list_item {
@@ -34,6 +40,12 @@
   flex-direction: row;
   align-items: center;
   gap: 15px;
+
+  &.accent {
+    * {
+      color: var(--color-accent);
+    }
+  }
 }
 
 .ordinal {
@@ -49,4 +61,11 @@
 
 .score {
   margin-left: auto;
+}
+
+.user_name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
 }

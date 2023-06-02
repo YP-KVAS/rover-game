@@ -20,12 +20,12 @@ export const checkAuth =
 
       // check role
       if (roles) {
-        const role = await userService.findUserRole((userOrErr as User).id)
-        if (!role || !Object.values(roles).includes(role)) {
+        const user = await userService.findRoverUser((userOrErr as User).id)
+        if (!user || !Object.values(roles).includes(user.role.name)) {
           return res.status(403).json({ reason: 'Forbidden' })
         }
 
-        res.locals.role = role
+        res.locals.roverUser = user
       }
 
       // next

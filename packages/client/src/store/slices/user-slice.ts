@@ -1,6 +1,6 @@
 import { FetchState } from './slices-types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User, UserWithRole } from '../../utils/types/user'
+import { User, UserExtended } from '../../utils/types/user'
 import {
   onAvatarChange,
   onPasswordChange,
@@ -10,7 +10,7 @@ import { onGetUser, onLogout } from '../thunks/auth-thunk'
 import { UserRolesEnum } from '../../utils/const-variables/user-roles'
 
 interface InitialState {
-  user: UserWithRole | null
+  user: UserExtended | null
   changeSettings: FetchState
   changeAvatar: FetchState
   changePassword: FetchState
@@ -50,9 +50,11 @@ const userSlice = createSlice({
         (state, action: PayloadAction<User>) => {
           state.changeSettings = defaultFetchState
           const role = state.user?.role
+          const best_score = state.user?.best_score || null
           state.user = {
             ...action.payload,
             role: role || UserRolesEnum.REGULAR,
+            best_score,
           }
         }
       )
@@ -70,7 +72,12 @@ const userSlice = createSlice({
       .addCase(onAvatarChange.fulfilled, (state, action) => {
         state.changeAvatar = defaultFetchState
         const role = state.user?.role
-        state.user = { ...action.payload, role: role || UserRolesEnum.REGULAR }
+        const best_score = state.user?.best_score || null
+        state.user = {
+          ...action.payload,
+          role: role || UserRolesEnum.REGULAR,
+          best_score,
+        }
       })
       .addCase(onAvatarChange.pending, state => {
         state.changeAvatar.isLoading = true
@@ -99,7 +106,7 @@ const userSlice = createSlice({
     builder
       .addCase(
         onGetUser.fulfilled,
-        (state, action: PayloadAction<UserWithRole>) => {
+        (state, action: PayloadAction<UserExtended>) => {
           state.user = action.payload
         }
       )

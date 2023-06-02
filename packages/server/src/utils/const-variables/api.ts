@@ -4,5 +4,6 @@ export const CATEGORIES_URL = '/categories'
 export const TOPICS_URL = '/topics'
 export const COMMENTS_URL = '/comments'
 export const USER_URL = '/user'
+export const LEADERBOARD_URL = '/leaderboard'
 
 export const INTERNAL_SERVER_ERROR = 'Internal Server Error'

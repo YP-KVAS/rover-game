@@ -11,6 +11,7 @@ import {
   API_VERSION,
   CATEGORIES_URL,
   COMMENTS_URL,
+  LEADERBOARD_URL,
   TOPICS_URL,
   USER_URL,
 } from './src/utils/const-variables/api'
@@ -18,6 +19,7 @@ import categoryRouter from './src/router/api-router/CategoryRouter'
 import userRouter from './src/router/api-router/UserRouter'
 import topicRouter from './src/router/api-router/TopicRouter'
 import commentRouter from './src/router/api-router/CommentRouter'
+import leaderboardRouter from './src/router/api-router/LeaderboardRouter'
 import * as path from 'path'
 import { YA_API_URL } from './src/utils/const-variables/api-yandex'
 import proxy from './src/middlewares/proxy-middleware'
@@ -42,6 +44,7 @@ async function startServer() {
   app.use(`${API_VERSION}${TOPICS_URL}`, topicRouter)
   app.use(`${API_VERSION}${COMMENTS_URL}`, commentRouter)
   app.use(`${API_VERSION}${USER_URL}`, userRouter)
+  app.use(`${API_VERSION}${LEADERBOARD_URL}`, leaderboardRouter)
   if (isDev()) {
     const swaggerUi = await import('swagger-ui-express')
     const swaggerDoc = await import('./swagger.json')

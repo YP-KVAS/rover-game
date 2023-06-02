@@ -12,7 +12,7 @@ import { RoleModel } from './RoleModel'
 import { TopicModel } from './TopicModel'
 import { CommentModel } from './CommentModel'
 
-@Table({ modelName: 'users', timestamps: false })
+@Table({ modelName: 'users' })
 export class UserModel extends Model {
   @AllowNull(false)
   @ForeignKey(() => RoleModel)

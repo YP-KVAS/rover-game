@@ -5,10 +5,10 @@ import { userService } from '../services/UserService'
 export class UserController {
   async findUser(req: Request, res: Response) {
     try {
-      const user = await userService.findUserWithRole(
+      const user = await userService.findUser(
         req.headers.cookie,
         res.locals.user,
-        res.locals.role
+        res.locals.roverUser
       )
 
       return res.status(200).json(user)

@@ -3,7 +3,7 @@ import { ApiError, instanceOfApiError, RolesEnum } from '../utils/types/api'
 import { UserModel } from '../models/UserModel'
 import { IUserRepository, UserRepository } from '../repositories/UserRepository'
 import { RoleModel } from '../models/RoleModel'
-import type { User, UserWithRole } from '../utils/types/user'
+import type { User, UserExtended } from '../utils/types/user'
 import { getUser } from '../utils/yandex-api/user-api'
 
 export class UserService {
@@ -39,16 +39,15 @@ export class UserService {
     return user
   }
 
-  async findUserRole(id: number): Promise<RolesEnum | null> {
-    const user = await this._getUser(id)
-    return user.role.name
+  async findRoverUser(id: number): Promise<UserModel | null> {
+    return await this._getUser(id)
   }
 
-  async findUserWithRole(
+  async findUser(
     cookies?: string,
     user?: User,
-    role?: RolesEnum
-  ): Promise<UserWithRole> {
+    roverUser?: UserModel
+  ): Promise<UserExtended> {
     let yaUser: User | ApiError | undefined = user
     if (!user) {
       yaUser = await getUser(cookies)
@@ -60,11 +59,11 @@ export class UserService {
 
     const userId = (yaUser as User).id
 
-    let userRole: RolesEnum | null | undefined = role
-    if (!userRole) {
-      userRole = await this.findUserRole(userId)
-      if (!userRole) {
-        throw new Error(`Unable to get role for user with id ${userId}`)
+    let roverDbUser: UserModel | null | undefined = roverUser
+    if (!roverDbUser) {
+      roverDbUser = await this.findRoverUser(userId)
+      if (!roverDbUser) {
+        throw new Error(`Unable to find user with id ${userId}`)
       }
     }
 
@@ -78,6 +77,8 @@ export class UserService {
       display_name,
       avatar,
     } = yaUser as User
+    const { role, bestScore } = roverDbUser
+
     return {
       id,
       login,
@@ -87,7 +88,8 @@ export class UserService {
       phone,
       display_name,
       avatar,
-      role: userRole,
+      role: role.name,
+      best_score: bestScore,
     }
   }
 }

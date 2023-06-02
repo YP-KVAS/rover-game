@@ -1,12 +1,12 @@
 import { getUser } from '../../utils/rest-api/auth-api'
-import { UserWithRole } from '../../utils/types/user'
+import { UserExtended } from '../../utils/types/user'
 
 export interface IUserRepository {
-  getCurrentUser(): Promise<UserWithRole>
+  getCurrentUser(): Promise<UserExtended>
 }
 
 export class UserRepository implements IUserRepository {
-  async getCurrentUser(): Promise<UserWithRole> {
+  async getCurrentUser(): Promise<UserExtended> {
     return await getUser()
   }
 }

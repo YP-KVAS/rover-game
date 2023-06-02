@@ -1,24 +1,28 @@
 import { FetchMethods, request } from './base-request'
 import {
   LEADERBOARD_API_URL,
-  LeaderboardApiPaths,
   BASE_YA_URL,
+  BASE_SERVER_URL,
+  LEADERBOARD_LOAD_LIMIT,
 } from '../const-variables/api'
-import {
-  LeaderboardItem,
-  LeaderboardRequest,
-  addUserToLeaderboardRequest,
-} from '../types/leaderboard'
+import { addUserToLeaderboardRequest, Leaderboard } from '../types/leaderboard'
+import { stringifyQuery } from '../stringify-query'
+import { BaseGetAllItemsQuery } from '../types/base-query'
 
-export async function getAllLeaderboards(
-  data: LeaderboardRequest
-): Promise<LeaderboardItem[]> {
-  return await request<LeaderboardItem[]>(
-    BASE_YA_URL,
-    `${LEADERBOARD_API_URL}${LeaderboardApiPaths.GET_ALL_LEADERBOARDS}`,
+export async function getLeaderboard(
+  query: BaseGetAllItemsQuery
+): Promise<Leaderboard> {
+  const { limit = LEADERBOARD_LOAD_LIMIT, offset = 0 } = query
+
+  return await request(
+    BASE_SERVER_URL,
+    `${LEADERBOARD_API_URL}${stringifyQuery({
+      limit,
+      offset,
+    })}`,
     {
-      method: FetchMethods.POST,
-      data,
+      method: FetchMethods.GET,
+      noCached: true,
     }
   )
 }

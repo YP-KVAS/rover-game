@@ -1,11 +1,19 @@
 import { UserModel } from '../models/UserModel'
 import { RoleModel } from '../models/RoleModel'
+import { Op } from 'sequelize'
 
 export interface IUserRepository {
   save(user: UserModel): Promise<void>
   update(user: UserModel): Promise<void>
   delete(userId: number): Promise<void>
   getById(userId: number): Promise<UserModel | null>
+  getAll(
+    limit?: number,
+    offset?: number,
+    orderCondition?: [string, string][],
+    whereCondition?: [string, unknown][]
+  ): Promise<UserModel[]>
+  countPlayers(): Promise<number>
 }
 
 export class UserRepository implements IUserRepository {
@@ -64,6 +72,38 @@ export class UserRepository implements IUserRepository {
       })
     } catch (err) {
       throw new Error(`GET: Failed to get user by id ${userId}`)
+    }
+  }
+
+  async getAll(
+    limit?: number,
+    offset?: number,
+    orderCondition?: [string, string][],
+    whereCondition?: [string, unknown][]
+  ): Promise<UserModel[]> {
+    const where = whereCondition && Object.fromEntries(whereCondition)
+
+    try {
+      return await UserModel.findAll({
+        offset,
+        limit,
+        order: orderCondition,
+        where,
+      })
+    } catch (err) {
+      throw new Error(`GET: Failed to get all users`)
+    }
+  }
+
+  async countPlayers(): Promise<number> {
+    try {
+      return await UserModel.count({
+        where: {
+          best_score: { [Op.ne]: null },
+        },
+      })
+    } catch (err) {
+      throw new Error(`GET: Failed to count players`)
     }
   }
 }

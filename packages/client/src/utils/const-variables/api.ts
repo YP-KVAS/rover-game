@@ -21,7 +21,7 @@ export const FORUM_COMMENTS_API_URL = '/comments'
 
 export const TOPICS_LOAD_LIMIT = 15
 export const COMMENTS_LOAD_LIMIT = 8
-export const LEADERBOARD_LOAD_LIMIT = 15
+export const LEADERBOARD_LOAD_LIMIT = 8
 
 export enum AuthApiPaths {
   SIGN_UP = '/signup',
@@ -35,8 +35,4 @@ export enum UserApiPaths {
   CHANGE_SETTINGS = '/profile',
   CHANGE_AVATAR = '/profile/avatar',
   CHANGE_PASSWORD = '/password',
-}
-
-export enum LeaderboardApiPaths {
-  GET_ALL_LEADERBOARDS = '/all',
 }

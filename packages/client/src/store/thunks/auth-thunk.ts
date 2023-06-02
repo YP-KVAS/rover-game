@@ -3,10 +3,10 @@ import { UserSignIn, UserSignUp } from '../../utils/types/user'
 import { logout, signIn, signUp } from '../../utils/rest-api/auth-api'
 import { IThunkService } from '../services/ThunkService'
 import { RootState } from '../store'
-import { UserWithRole } from '../../utils/types/user'
+import { UserExtended } from '../../utils/types/user'
 
 export const onGetUser = createAsyncThunk<
-  UserWithRole,
+  UserExtended,
   void,
   { rejectValue: string }
 >(
