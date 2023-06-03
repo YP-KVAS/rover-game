@@ -14,6 +14,8 @@ import { createStore } from './src/store/store'
 import { ForumService } from './src/store/services/ForumService'
 import { IForumRepository } from './src/store/repositories/ForumRepository'
 import { PayloadAction } from '@reduxjs/toolkit'
+import { ILeaderboardRepository } from './src/store/repositories/LeaderboardRepository'
+import { LeaderboardService } from './src/store/services/LeaderboadService'
 
 const findRoute = (pathname: string, routes: IRoute[]) => {
   for (let i = 0; i < routes.length; i++) {
@@ -32,11 +34,13 @@ const findRoute = (pathname: string, routes: IRoute[]) => {
 export async function render(
   url: string,
   userRepository: IUserRepository,
-  forumRepository: IForumRepository
+  forumRepository: IForumRepository,
+  leaderboardRepository: ILeaderboardRepository
 ) {
   const service = new ThunkService(
     new UserService(userRepository),
-    new ForumService(forumRepository)
+    new ForumService(forumRepository),
+    new LeaderboardService(leaderboardRepository)
   )
   const store = createStore(service)
 

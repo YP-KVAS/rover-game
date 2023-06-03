@@ -1,4 +1,4 @@
-interface QueryClause {
+export interface QueryClause {
   offset?: number
   limit?: number
 }
