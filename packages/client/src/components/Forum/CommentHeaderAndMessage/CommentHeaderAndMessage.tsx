@@ -10,7 +10,7 @@ interface CommentHeaderAndMessageProps {
   avatarPath?: string | null
   displayName?: string | null
   htmlMessage?: string | null
-  messageDate: string
+  messageDate: number
 }
 
 export const CommentHeaderAndMessage: FC<CommentHeaderAndMessageProps> = ({

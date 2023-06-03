@@ -6,6 +6,7 @@ interface QueryClause {
 export interface ForumTopicsQuery extends QueryClause {
   categoryId: number
   search?: string
+  updatedAt?: number
 }
 
 export interface ForumCommentsQuery extends QueryClause {

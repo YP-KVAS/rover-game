@@ -25,10 +25,15 @@ export class TopicService {
   async findAll(
     id: number,
     limit?: number,
-    offset?: number,
+    updatedAt?: number,
     search?: string
   ): Promise<TopicDTO[]> {
-    const topics = await this._topicRepository.getAll(id, limit, offset, search)
+    const topics = await this._topicRepository.getAll(
+      id,
+      limit,
+      updatedAt,
+      search
+    )
     return topics.map(topic => getTopicDTOFromModel(topic))
   }
 

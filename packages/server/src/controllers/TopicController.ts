@@ -7,14 +7,19 @@ export class TopicController {
   async findAll(req: Request, res: Response) {
     try {
       const categoryId = parseInt(req.params['id'])
-      const { limit, offset } = getQueryLimitAndOffset(req)
+      const { limit } = getQueryLimitAndOffset(req)
       const search =
         typeof req.query['search'] === 'string' ? req.query['search'] : ''
+      const updatedAt =
+        typeof req.query['updatedAt'] === 'string' &&
+        req.query['updatedAt'].length > 0
+          ? parseInt(req.query['updatedAt'])
+          : undefined
 
       const topics = await topicService.findAll(
         categoryId,
         limit,
-        offset,
+        updatedAt,
         search
       )
       return res.status(200).json(topics)
