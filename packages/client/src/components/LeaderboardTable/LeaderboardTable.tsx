@@ -51,23 +51,25 @@ export const LeaderboardTable: FC = () => {
         <Loader />
       ) : errorMessage ? (
         <strong>{errorMessage}</strong>
-      ) : !leaderboardUsers || leaderboardUsers.length === 0 ? (
+      ) : totalPlayers === 0 ? (
         <p style={{ textAlign: 'center' }}>Нет данных</p>
       ) : (
-        <div className={styles.list_wrapper}>
-          <ul className={styles.list}>
-            {leaderboardUsers.map((user, idx) => (
-              <LeaderboardItem
-                key={user.id}
-                ordinal={offset + idx + 1}
-                user={user}
-              />
-            ))}
-          </ul>
-          {totalPages > 1 && (
-            <PageLinks currentPage={currentPage} maxPage={totalPages} />
-          )}
-        </div>
+        !isNaN(offset) && (
+          <div className={styles.list_wrapper}>
+            <ul className={styles.list}>
+              {leaderboardUsers?.map((user, idx) => (
+                <LeaderboardItem
+                  key={user.id}
+                  ordinal={offset + idx + 1}
+                  user={user}
+                />
+              ))}
+            </ul>
+            {totalPages > 1 && (
+              <PageLinks currentPage={currentPage} maxPage={totalPages} />
+            )}
+          </div>
+        )
       )}
     </div>
   )
