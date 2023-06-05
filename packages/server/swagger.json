@@ -386,9 +386,9 @@
             }
           },
           {
-            "name": "offset",
+            "name": "updatedAt",
             "in": "query",
-            "description": "number of items to skip before returning them",
+            "description": "updatedAt timestamp of last received item",
             "required": false,
             "schema": {
               "type": "integer",
@@ -1296,8 +1296,8 @@
         "type": "object",
         "properties": {
           "createdAt": {
-            "type": "string",
-            "example": "2023-04-24T09:46:59.905Z"
+            "type": "number",
+            "example": 1685793868260
           }
         }
       },
@@ -1308,8 +1308,8 @@
         "type": "object",
         "properties": {
           "updatedAt": {
-            "type": "string",
-            "example": "2023-04-24T09:46:59.905Z"
+            "type": "number",
+            "example": 1685793868260
           }
         }
       },
