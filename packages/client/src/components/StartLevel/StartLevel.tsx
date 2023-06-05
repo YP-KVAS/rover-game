@@ -1,14 +1,21 @@
 import styles from './StartLevel.module.scss'
-import { FC, useState } from 'react'
+import { FC, useContext, useState } from 'react'
 import { Timer } from '../Timer/Timer'
 import { GameControlTitle } from '../GameField/GameControlTitle/GameControlTitle'
 import gameManager from '../../game-engine/GameManager'
+import { SoundContext } from '../../contexts/SoundContext'
+import useSound from 'use-sound'
+import start from '../../../public/sounds/start.mp3'
 
 export const StartLevel: FC = () => {
+  const { soundOn } = useContext(SoundContext)
+  const [startSound] = useSound(start)
+
   const [isStarted, setStartAnimation] = useState(false)
   const [isCalled, setCallbackCalling] = useState(false)
   const startHandler = () => {
     setStartAnimation(true)
+    soundOn && startSound()
   }
 
   const timerCallback = () => {

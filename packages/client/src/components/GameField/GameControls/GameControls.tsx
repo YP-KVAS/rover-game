@@ -1,5 +1,5 @@
 import styles from './GameControls.module.scss'
-import React, { FC, RefObject, useEffect, useState } from 'react'
+import React, { FC, RefObject, useContext, useEffect, useState } from 'react'
 import gameManager from '../../../game-engine/GameManager'
 import { LevelProgress } from '../../../utils/types/game'
 import { StartLevel } from '../../StartLevel/StartLevel'
@@ -7,6 +7,9 @@ import { GameControlTitle } from '../GameControlTitle/GameControlTitle'
 import controlService from '../../../game-engine/services/ControlService'
 import { useAppDispatch } from '../../../hooks/useStore'
 import { onScoreUpdate } from '../../../store/thunks/leaderboard-thunk'
+import { SoundContext } from '../../../contexts/SoundContext'
+import useSound from 'use-sound'
+import gameOver from '../../../../public/sounds/gameOver.mp3'
 
 interface GameActionsProps {
   changeIsPlayingState: (isPlaying: boolean) => void
@@ -24,6 +27,9 @@ export const GameControls: FC<GameActionsProps> = ({
     gameManager.levelProgress
   )
 
+  const { soundOn } = useContext(SoundContext)
+  const [gameOverSound] = useSound(gameOver)
+
   const retry = () => gameManager.restartGame()
 
   useEffect(() => {
@@ -40,6 +46,9 @@ export const GameControls: FC<GameActionsProps> = ({
       if (gameFieldRef.current) {
         controlService.addListeners(gameFieldRef.current)
       }
+    } else if (levelProgress === 'failed') {
+      soundOn && gameOverSound()
+      controlService.removeListeners()
     } else {
       controlService.removeListeners()
     }

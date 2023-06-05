@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useEffect, useRef, useState } from 'react'
+import { FC, RefObject, useEffect, useRef, useState } from 'react'
 import styles from './GamePage.module.scss'
 import { GameField } from '../../components/GameField/GameField'
 import { Button } from '../../components/Button/Button'
@@ -8,6 +8,10 @@ import { EnumPages } from '../../utils/const-variables/pages'
 import { GameCompleted } from '../../components/GameField/GameCompleted/GameCompleted'
 import { GameImages } from '../../game-engine/GameImages'
 import { Loader } from '../../components/Loader/Loader'
+import { SoundContext } from '../../contexts/SoundContext'
+import useSound from 'use-sound'
+import gameComplete from '../../../public/sounds/complete.mp3'
+import { LS_SOUND } from '../../utils/const-variables/sound'
 
 const GamePage: FC = () => {
   const gamePageRef: RefObject<HTMLDivElement> = useRef(null)
@@ -34,6 +38,30 @@ const GamePage: FC = () => {
     }
   }, [])
 
+  const getSoundState = (): boolean => {
+    const lsSoundState = localStorage.getItem(LS_SOUND)
+
+    return lsSoundState === null ? true : lsSoundState === 'on' ? true : false
+  }
+
+  const [currentSoundState, setSoundState] = useState<boolean>(
+    typeof window === 'undefined' ? true : getSoundState()
+  )
+
+  useEffect(
+    () => localStorage.setItem(LS_SOUND, currentSoundState ? 'on' : 'off'),
+    [currentSoundState]
+  )
+
+  const toggleSound = () => {
+    setSoundState(prevState => !prevState)
+  }
+  const [gameCompleteSound] = useSound(gameComplete)
+
+  if (gameCompleted && currentSoundState) {
+    gameCompleteSound()
+  }
+
   const setFullScreen = () => {
     gamePageRef.current
       ?.requestFullscreen()
@@ -42,19 +70,23 @@ const GamePage: FC = () => {
       .catch(() => console.warn('Fullscreen is not supported'))
   }
 
-  return !gameEnabled ? (
-    <Loader />
-  ) : gameCompleted ? (
-    <GameCompleted />
-  ) : (
-    <div className={styles.game}>
-      <div ref={gamePageRef}>
-        <GameField level={level} gameFieldRef={gameFieldRef} />
-      </div>
-      <Button clickHandler={setFullScreen}>
-        Перейти в полноэкранный режим
-      </Button>
-    </div>
+  return (
+    <SoundContext.Provider value={{ soundOn: currentSoundState, toggleSound }}>
+      {!gameEnabled ? (
+        <Loader />
+      ) : gameCompleted ? (
+        <GameCompleted />
+      ) : (
+        <div className={styles.game}>
+          <div ref={gamePageRef}>
+            <GameField level={level} gameFieldRef={gameFieldRef} />
+          </div>
+          <Button clickHandler={setFullScreen}>
+            Перейти в полноэкранный режим
+          </Button>
+        </div>
+      )}
+    </SoundContext.Provider>
   )
 }
 
