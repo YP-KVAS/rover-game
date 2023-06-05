@@ -50,7 +50,7 @@ export const LeaderboardTable: FC = () => {
       {isLoading ? (
         <Loader />
       ) : errorMessage ? (
-        <strong>{errorMessage}</strong>
+        <span className={styles.error}>{errorMessage}</span>
       ) : totalPlayers === 0 ? (
         <p style={{ textAlign: 'center' }}>Нет данных</p>
       ) : (

@@ -27,8 +27,8 @@ const leaderboardSlice = createSlice({
       .addCase(onGetLeaderboard.fulfilled, (state, action) => {
         state.isLoading = false
         state.errorMessage = null
-        state.leaderboardUsers = action.payload.players
-        state.total = action.payload.total
+        state.leaderboardUsers = action.payload.players || null
+        state.total = action.payload.total || 0
       })
       .addCase(onGetLeaderboard.pending, state => {
         state.leaderboardUsers = null
