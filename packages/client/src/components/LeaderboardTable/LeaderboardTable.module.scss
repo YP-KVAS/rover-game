@@ -8,6 +8,8 @@
   width: 75%;
   height: 60vh;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .list_wrapper {
@@ -68,4 +70,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 300px;
+}
+
+.error {
+  color: var(--color-accent);
+  width: 100%;
+  text-align: center;
 }

@@ -51,7 +51,7 @@ export const LeaderboardTable: FC = () => {
         <Loader />
       ) : errorMessage ? (
         <strong>{errorMessage}</strong>
-      ) : totalPlayers === 0 ? (
+      ) : !leaderboardUsers || leaderboardUsers.length === 0 ? (
         <p style={{ textAlign: 'center' }}>Нет данных</p>
       ) : (
         !isNaN(offset) && (
