@@ -1,43 +1,49 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
-  LeaderboardRequest,
-  LeaderboardItem,
-} from '../../utils/types/leaderboard'
-import {
-  getAllLeaderboards,
-  getLeaderboardByTeamName,
+  getLeaderboard,
+  updateScore,
 } from '../../utils/rest-api/leaderboard-api'
+import { RootState } from '../store'
+import { BaseGetAllItemsQuery } from '../../utils/types/base-query'
+import { Leaderboard } from '../../utils/types/leaderboard'
+import { UserScore } from '../../utils/types/user'
 
-export const onGetAllLeaderboards = createAsyncThunk<
-  LeaderboardItem[],
-  LeaderboardRequest,
+export const onGetLeaderboard = createAsyncThunk<
+  Leaderboard,
+  BaseGetAllItemsQuery,
   { rejectValue: string }
 >(
-  'leaderboard/onGetAllLeaderboards',
-  async (data, { dispatch, rejectWithValue }) => {
+  'leaderboard/onGetLeaderboard',
+  async (query, { rejectWithValue }) => {
     try {
-      return await getAllLeaderboards(data)
+      return await getLeaderboard(query)
     } catch (err: unknown) {
       return rejectWithValue(
-        (err as Error).message || 'Unable to get all leaderboards'
+        (err as Error).message || 'Unable to get leaderboard items'
       )
     }
+  },
+  {
+    condition: (request: BaseGetAllItemsQuery, { getState }) => {
+      const state = getState() as RootState
+      const leaderboardIsLoading = state.leaderboard.isLoading
+      if (leaderboardIsLoading) {
+        return false
+      }
+    },
   }
 )
 
-export const onGetLeaderboardByTeamName = createAsyncThunk<
-  LeaderboardItem[],
-  LeaderboardRequest,
+export const onScoreUpdate = createAsyncThunk<
+  UserScore,
+  number,
   { rejectValue: string }
->(
-  'leaderboard/onGetLeaderboardByTeamName',
-  async (data, { dispatch, rejectWithValue }) => {
-    try {
-      return await getLeaderboardByTeamName(data)
-    } catch (err: unknown) {
-      return rejectWithValue(
-        (err as Error).message || 'Unable to get leaderboard'
-      )
-    }
+>('leaderboard/onScoreUpdate', async (score, { rejectWithValue }) => {
+  try {
+    return await updateScore(score)
+  } catch (err: unknown) {
+    return rejectWithValue(
+      (err as Error).message || 'Unable to update user score'
+    )
   }
-)
+})

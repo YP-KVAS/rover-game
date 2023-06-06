@@ -126,3 +126,20 @@ export const updateCommentValidationSchema = Yup.object()
   .concat(idParamsValidationSchema)
 
 export const deleteCommentValidationSchema = idParamsValidationSchema
+
+// leaderboard
+export const getLeaderboardUsersValidationSchema = Yup.object().shape({
+  query: Yup.object().shape({
+    [ForumFieldsEnum.LIMIT]: limitValidation,
+    [ForumFieldsEnum.OFFSET]: offsetValidation,
+  }),
+})
+
+export const updateUserScoreValidationSchema = Yup.object().shape({
+  body: Yup.object().shape({
+    score: Yup.number()
+      .positive()
+      .required()
+      .typeError('Некорректное значение score'),
+  }),
+})

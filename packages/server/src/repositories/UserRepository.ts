@@ -1,11 +1,19 @@
 import { UserModel } from '../models/UserModel'
 import { RoleModel } from '../models/RoleModel'
+import { Op } from 'sequelize'
 
 export interface IUserRepository {
   save(user: UserModel): Promise<void>
-  update(user: UserModel): Promise<void>
+  update(user: UserModel): Promise<UserModel>
   delete(userId: number): Promise<void>
   getById(userId: number): Promise<UserModel | null>
+  getAll(
+    limit?: number,
+    offset?: number,
+    orderCondition?: [string, string][],
+    whereCondition?: [string, unknown][]
+  ): Promise<UserModel[]>
+  countPlayers(): Promise<number>
 }
 
 export class UserRepository implements IUserRepository {
@@ -17,7 +25,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async update(user: UserModel): Promise<void> {
+  async update(user: UserModel): Promise<UserModel> {
     try {
       const userToUpdate = await UserModel.findOne({
         where: {
@@ -29,8 +37,8 @@ export class UserRepository implements IUserRepository {
         throw new Error(`UPDATE: User with id ${user.id} was not found`)
       }
 
-      userToUpdate.roleId = user.roleId
-      await userToUpdate.save()
+      userToUpdate.bestScore = user.bestScore
+      return await userToUpdate.save()
     } catch (err) {
       throw new Error(`UPDATE: Failed to update user with id ${user.id}`)
     }
@@ -64,6 +72,38 @@ export class UserRepository implements IUserRepository {
       })
     } catch (err) {
       throw new Error(`GET: Failed to get user by id ${userId}`)
+    }
+  }
+
+  async getAll(
+    limit?: number,
+    offset?: number,
+    orderCondition?: [string, string][],
+    whereCondition?: [string, unknown][]
+  ): Promise<UserModel[]> {
+    const where = whereCondition && Object.fromEntries(whereCondition)
+
+    try {
+      return await UserModel.findAll({
+        offset,
+        limit,
+        order: orderCondition,
+        where,
+      })
+    } catch (err) {
+      throw new Error(`GET: Failed to get all users`)
+    }
+  }
+
+  async countPlayers(): Promise<number> {
+    try {
+      return await UserModel.count({
+        where: {
+          best_score: { [Op.ne]: null },
+        },
+      })
+    } catch (err) {
+      throw new Error(`GET: Failed to count players`)
     }
   }
 }

@@ -5,6 +5,8 @@ import { LevelProgress } from '../../../utils/types/game'
 import { StartLevel } from '../../StartLevel/StartLevel'
 import { GameControlTitle } from '../GameControlTitle/GameControlTitle'
 import controlService from '../../../game-engine/services/ControlService'
+import { useAppDispatch } from '../../../hooks/useStore'
+import { onScoreUpdate } from '../../../store/thunks/leaderboard-thunk'
 
 interface GameActionsProps {
   changeIsPlayingState: (isPlaying: boolean) => void
@@ -15,6 +17,9 @@ export const GameControls: FC<GameActionsProps> = ({
   changeIsPlayingState,
   gameFieldRef,
 }) => {
+  const dispatch = useAppDispatch()
+  const saveScore = (score: number) => dispatch(onScoreUpdate(score))
+
   const [levelProgress, setLevelProgress] = useState<LevelProgress>(
     gameManager.levelProgress
   )
@@ -23,6 +28,7 @@ export const GameControls: FC<GameActionsProps> = ({
 
   useEffect(() => {
     gameManager.useChangeLevelProgress(setLevelProgress)
+    gameManager.useSaveScoreCallback(saveScore)
   }, [])
 
   useEffect(() => {

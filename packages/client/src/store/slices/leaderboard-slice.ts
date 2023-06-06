@@ -1,68 +1,47 @@
 import { FetchState } from './slices-types'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {
-  onGetAllLeaderboards,
-  onGetLeaderboardByTeamName,
-} from '../thunks/leaderboard-thunk'
-import { LeaderboardItem } from '../../utils/types/leaderboard'
+import { createSlice } from '@reduxjs/toolkit'
+import { onGetLeaderboard } from '../thunks/leaderboard-thunk'
+import { LeaderboardUser } from '../../utils/types/user'
 
 interface InitialState extends FetchState {
-  leaderboardItems: LeaderboardItem[]
+  leaderboardUsers: LeaderboardUser[] | null
+  total: number
 }
 
 const initialState: InitialState = {
   isLoading: false,
   errorMessage: null,
-  leaderboardItems: [],
+  leaderboardUsers: null,
+  total: 0,
 }
 
 const leaderboardSlice = createSlice({
   name: 'leaderboard',
   initialState,
-  reducers: {},
+  reducers: {
+    clearLeaderboard: _ => initialState,
+  },
   extraReducers: builder => {
     // onGetAllLeaderboards
     builder
-      .addCase(
-        onGetAllLeaderboards.fulfilled,
-        (state, action: PayloadAction<LeaderboardItem[]>) => {
-          state.isLoading = false
-          state.errorMessage = null
-          state.leaderboardItems = action.payload
-        }
-      )
-      .addCase(onGetAllLeaderboards.pending, state => {
+      .addCase(onGetLeaderboard.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.errorMessage = null
+        state.leaderboardUsers = action.payload.players || null
+        state.total = action.payload.total || 0
+      })
+      .addCase(onGetLeaderboard.pending, state => {
+        state.leaderboardUsers = null
+        state.total = 0
         state.isLoading = true
         state.errorMessage = null
-        state.leaderboardItems = []
       })
-      .addCase(onGetAllLeaderboards.rejected, (state, action) => {
+      .addCase(onGetLeaderboard.rejected, (state, action) => {
         state.isLoading = false
         state.errorMessage = action.payload || null
-        state.leaderboardItems = []
-      })
-
-    // onGetLeaderboardByTeamName
-    builder
-      .addCase(
-        onGetLeaderboardByTeamName.fulfilled,
-        (state, action: PayloadAction<LeaderboardItem[]>) => {
-          state.isLoading = false
-          state.errorMessage = null
-          state.leaderboardItems = action.payload
-        }
-      )
-      .addCase(onGetLeaderboardByTeamName.pending, state => {
-        state.isLoading = true
-        state.errorMessage = null
-        state.leaderboardItems = []
-      })
-      .addCase(onGetLeaderboardByTeamName.rejected, (state, action) => {
-        state.isLoading = false
-        state.errorMessage = action.payload || null
-        state.leaderboardItems = []
       })
   },
 })
 
 export const leaderboardReducer = leaderboardSlice.reducer
+export const { clearLeaderboard } = leaderboardSlice.actions

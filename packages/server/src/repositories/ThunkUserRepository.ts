@@ -10,6 +10,6 @@ export class ThunkUserRepository implements IThunkUserRepository {
   constructor(private _cookie?: string) {}
 
   async getCurrentUser() {
-    return await userService.findUserWithRole(this._cookie)
+    return await userService.findUser(this._cookie)
   }
 }

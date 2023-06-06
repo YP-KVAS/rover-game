@@ -7,11 +7,9 @@ import {
   USER_API_URL,
 } from '../const-variables/api'
 import { UserSignIn, UserSignUp } from '../types/user'
-import { UserWithRole } from '../types/user'
+import { UserExtended } from '../types/user'
 
-export async function getUser(): Promise<UserWithRole> {
-  // Почему тут изменился путь? Было: `${AUTH_API_URL}${AuthApiPaths.USER}` = /auth/user
-  // Стало /user
+export async function getUser(): Promise<UserExtended> {
   return await request(BASE_SERVER_URL, USER_API_URL, {
     method: FetchMethods.GET,
     noCached: true,

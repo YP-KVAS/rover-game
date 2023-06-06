@@ -26,6 +26,10 @@
     {
       "name": "comments",
       "description": "Comments operations"
+    },
+    {
+      "name": "leaderboard",
+      "description": "Leaderboard operations"
     }
   ],
   "paths": {
@@ -994,6 +998,141 @@
           }
         }
       }
+    },
+    "/leaderboard": {
+      "get": {
+        "tags": [
+          "leaderboard"
+        ],
+        "summary": "Get leaderboard users",
+        "description": "all leaderboard users",
+        "operationId": "allLeaderboardTopics",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of items returned by the query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "number of items to skip before returning them",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Leaderboard"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "leaderboard"
+        ],
+        "summary": "Update user best score",
+        "description": "Update an existing user best score",
+        "operationId": "updateScore",
+        "requestBody": {
+          "description": "Update user best score",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Score"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserScore"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1071,7 +1210,46 @@
         "properties": {
           "avatar": {
             "type": "string",
+            "nullable": true,
             "example": "/path/to/avatar.jpg"
+          }
+        }
+      },
+      "DisplayName": {
+        "required": [
+          "display_name"
+        ],
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "nullable": true,
+            "example": "Petya Pupkin"
+          }
+        }
+      },
+      "Score": {
+        "required": [
+          "score"
+        ],
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": "number",
+            "example": 5000
+          }
+        }
+      },
+      "BestScore": {
+        "required": [
+          "best_score"
+        ],
+        "type": "object",
+        "properties": {
+          "best_score": {
+            "type": "number",
+            "nullable": true,
+            "example": 10000
           }
         }
       },
@@ -1132,6 +1310,19 @@
           "updatedAt": {
             "type": "string",
             "example": "2023-04-24T09:46:59.905Z"
+          }
+        }
+      },
+      "Total": {
+        "required": [
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "example": 200
           }
         }
       },
@@ -1290,6 +1481,12 @@
             "$ref": "#/components/schemas/Avatar"
           },
           {
+            "$ref": "#/components/schemas/DisplayName"
+          },
+          {
+            "$ref": "#/components/schemas/BestScore"
+          },
+          {
             "required": [
               "user"
             ],
@@ -1302,10 +1499,6 @@
               "second_name": {
                 "type": "string",
                 "example": "Pupkin"
-              },
-              "display_name": {
-                "type": "string",
-                "example": "Petya Pupkin"
               },
               "login": {
                 "type": "string",
@@ -1326,6 +1519,51 @@
             }
           }
         ]
+      },
+      "UserScore": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/BestScore"
+          }
+        ]
+      },
+      "LeaderboardUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/DisplayName"
+          },
+          {
+            "$ref": "#/components/schemas/Avatar"
+          },
+          {
+            "$ref": "#/components/schemas/BestScore"
+          }
+        ]
+      },
+      "Leaderboard": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Total"
+          }
+        ],
+        "required": [
+          "players"
+        ],
+        "type": "object",
+        "properties": {
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeaderboardUser"
+            }
+          }
+        }
       },
       "GetComments": {
         "required": [
