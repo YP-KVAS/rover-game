@@ -10,6 +10,8 @@ import { UserRepository } from './store/repositories/UserRepository'
 import { createStore } from './store/store'
 import { ForumService } from './store/services/ForumService'
 import { ForumRepository } from './store/repositories/ForumRepository'
+import { LeaderboardService } from './store/services/LeaderboadService'
+import { LeaderboardRepository } from './store/repositories/LeaderboardRepository'
 
 const startServiceWorker = () => {
   if ('serviceWorker' in navigator) {
@@ -33,7 +35,8 @@ startServiceWorker()
 
 const service = new ThunkService(
   new UserService(new UserRepository()),
-  new ForumService(new ForumRepository())
+  new ForumService(new ForumRepository()),
+  new LeaderboardService(new LeaderboardRepository())
 )
 
 const preloadedState = window.__PRELOADED_STATE__

@@ -20,7 +20,11 @@ import {
   onGetForumComments,
   onGetForumTopics,
 } from '../store/thunks/forum-thunk'
-import { COMMENTS_LOAD_LIMIT } from '../utils/const-variables/api'
+import {
+  COMMENTS_LOAD_LIMIT,
+  LEADERBOARD_LOAD_LIMIT,
+} from '../utils/const-variables/api'
+import { onGetLeaderboard } from '../store/thunks/leaderboard-thunk'
 
 export interface IRoute {
   path: RoutesEnum | string
@@ -144,8 +148,24 @@ export const routes: IRoute[] = [
       {
         path: RoutesEnum.LEADERBOARD,
         element: <Leaderboard />,
-        loader: (dispatch: AppDispatch) => {
-          return [dispatch(onGetUser())]
+        loader: (
+          dispatch: AppDispatch,
+          pathname: string,
+          searchParams: Record<string, unknown>
+        ) => {
+          const page = searchParams[PAGE_QUERY]
+          let intPage = parseInt(page as string)
+          if (isNaN(intPage)) {
+            intPage = 1
+          }
+          const offset = (intPage - 1) * LEADERBOARD_LOAD_LIMIT
+
+          return [
+            dispatch(onGetUser()),
+            dispatch(
+              onGetLeaderboard({ limit: LEADERBOARD_LOAD_LIMIT, offset })
+            ),
+          ]
         },
       },
       {

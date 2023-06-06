@@ -3,8 +3,8 @@ import type { CommentModel } from '../../models/CommentModel'
 import type { CategoryModel } from '../../models/CategoryModel'
 
 interface Timestamp {
-  createdAt: string
-  updatedAt: string
+  createdAt: number
+  updatedAt: number
 }
 
 export interface CategoryDTO extends Timestamp {
@@ -19,8 +19,8 @@ export const getCategoryDTOFromModel = (model: CategoryModel): CategoryDTO => {
     id,
     name,
     topicCount,
-    createdAt: createdAt.toString(),
-    updatedAt: updatedAt.toString(),
+    createdAt: createdAt.getTime(),
+    updatedAt: updatedAt.getTime(),
   }
 }
 
@@ -38,8 +38,8 @@ export const getTopicDTOFromModel = (model: TopicModel): TopicDTO => {
     name,
     categoryId,
     userId,
-    createdAt: createdAt.toString(),
-    updatedAt: updatedAt.toString(),
+    createdAt: createdAt.getTime(),
+    updatedAt: updatedAt.getTime(),
   }
 }
 
@@ -81,8 +81,8 @@ export const getCommentDTOFromModel = (
     parentCommentId,
     topicId,
     userId,
-    createdAt: createdAt.toString(),
-    updatedAt: updatedAt.toString(),
+    createdAt: createdAt.getTime(),
+    updatedAt: updatedAt.getTime(),
     replyCount,
   }
 }

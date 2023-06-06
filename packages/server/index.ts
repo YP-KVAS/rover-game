@@ -32,6 +32,7 @@ import {
 } from './src/utils/start-server-helper'
 import { ThunkUserRepository } from './src/repositories/ThunkUserRepository'
 import { ThunkForumRepository } from './src/repositories/ThunkForumRepository'
+import { ThunkLeaderboardRepository } from './src/repositories/ThunkLeaderboardRepository'
 import serialize from 'serialize-javascript'
 
 async function startServer() {
@@ -83,7 +84,8 @@ async function startServer() {
       const [initialState, appHtml] = await render(
         url,
         new ThunkUserRepository(req.headers.cookie),
-        new ThunkForumRepository(req.headers.cookie)
+        new ThunkForumRepository(req.headers.cookie),
+        new ThunkLeaderboardRepository(req.headers.cookie)
       )
 
       const preloadedState = `<script>window.__PRELOADED_STATE__=${serialize(

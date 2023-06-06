@@ -17,6 +17,7 @@ export const ForumTopic: FC<IForumTopic & { index: number }> = ({
   id,
   name,
   createdAt,
+  updatedAt,
   categoryId,
   index,
 }) => {
@@ -53,7 +54,7 @@ export const ForumTopic: FC<IForumTopic & { index: number }> = ({
       dispatch(
         onGetForumTopics({
           categoryId,
-          offset: index + 1,
+          updatedAt,
           search: searchQuery || '',
         })
       )

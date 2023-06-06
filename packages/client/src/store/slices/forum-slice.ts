@@ -278,7 +278,7 @@ const forumSlice = createSlice({
         const id = action.meta.arg.categoryId
         state.topicInfo.topics[id].isLoading = false
         state.topicInfo.topics[id].errorMessage = null
-        state.topicInfo.topics[id].topicItems = !action.meta.arg.offset
+        state.topicInfo.topics[id].topicItems = !action.meta.arg.updatedAt
           ? action.payload
           : (state.topicInfo.topics[id].topicItems || []).concat(action.payload)
       })

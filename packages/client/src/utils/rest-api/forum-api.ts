@@ -58,14 +58,14 @@ export async function getForumTopics(
 ): Promise<IForumTopic[]> {
   const {
     categoryId,
-    offset = 0,
+    updatedAt,
     limit = TOPICS_LOAD_LIMIT,
     search = '',
   } = topicsQuery
   return await request(
     BASE_SERVER_URL,
     `${FORUM_CATEGORIES_API_URL}/${categoryId}${FORUM_TOPICS_API_URL}${stringifyQuery(
-      { limit, offset, search }
+      { limit, updatedAt, search }
     )}`,
     {
       method: FetchMethods.GET,

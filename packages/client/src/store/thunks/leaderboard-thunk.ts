@@ -1,12 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import {
-  getLeaderboard,
-  updateScore,
-} from '../../utils/rest-api/leaderboard-api'
+import { updateScore } from '../../utils/rest-api/leaderboard-api'
 import { RootState } from '../store'
 import { BaseGetAllItemsQuery } from '../../utils/types/base-query'
 import { Leaderboard } from '../../utils/types/leaderboard'
 import { UserScore } from '../../utils/types/user'
+import { IThunkService } from '../services/ThunkService'
 
 export const onGetLeaderboard = createAsyncThunk<
   Leaderboard,
@@ -14,11 +12,12 @@ export const onGetLeaderboard = createAsyncThunk<
   { rejectValue: string }
 >(
   'leaderboard/onGetLeaderboard',
-  async (query, { rejectWithValue }) => {
+  async (query, thunkAPI) => {
     try {
-      return await getLeaderboard(query)
+      const service = thunkAPI.extra as IThunkService
+      return await service.leaderboardService.getLeaderboard(query)
     } catch (err: unknown) {
-      return rejectWithValue(
+      return thunkAPI.rejectWithValue(
         (err as Error).message || 'Unable to get leaderboard items'
       )
     }

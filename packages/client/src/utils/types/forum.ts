@@ -17,7 +17,8 @@ export interface IForumTopic {
   id: number
   name: string
   categoryId: number
-  createdAt: string
+  createdAt: number
+  updatedAt: number
   userId: number
 }
 
@@ -27,6 +28,7 @@ interface IGetForumItemsBaseQuery extends BaseGetAllItemsQuery {
 
 export interface IGetForumTopicsQuery extends IGetForumItemsBaseQuery {
   categoryId: number
+  updatedAt?: number
 }
 
 export interface IGetForumCommentsQuery extends IGetForumItemsBaseQuery {
@@ -48,7 +50,7 @@ export interface IAddForumCommentQuery {
 
 export interface IForumComment extends IAddForumCommentQuery {
   id: number
-  createdAt: string
+  createdAt: number
   replyCount: number
 }
 

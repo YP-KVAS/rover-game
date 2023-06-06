@@ -1,6 +1,7 @@
 import { TopicModel } from '../models/TopicModel'
 import type { Transaction } from 'sequelize'
 import { sequelize } from '../../db'
+import { Op } from 'sequelize'
 
 export interface ITopicRepository {
   save(
@@ -12,7 +13,7 @@ export interface ITopicRepository {
   getAll(
     categoryId: number,
     limit?: number,
-    offset?: number,
+    updatedAt?: number,
     search?: string
   ): Promise<TopicModel[]>
   getById(topicId: number): Promise<TopicModel | null>
@@ -40,21 +41,24 @@ export class TopicRepository implements ITopicRepository {
   async getAll(
     categoryId: number,
     limit?: number,
-    offset?: number,
-    search = ''
+    updatedAt?: number,
+    search?: string
   ): Promise<TopicModel[]> {
     try {
+      const whereCondition: Record<string, unknown> = { categoryId }
+      if (updatedAt) {
+        whereCondition.updatedAt = { [Op.lt]: updatedAt }
+      }
+      if (search) {
+        whereCondition.name = sequelize.where(
+          sequelize.fn('LOWER', sequelize.col('name')),
+          'LIKE',
+          `%${search.toLowerCase()}%`
+        )
+      }
       return await TopicModel.findAll({
-        where: {
-          categoryId: categoryId,
-          name: sequelize.where(
-            sequelize.fn('LOWER', sequelize.col('name')),
-            'LIKE',
-            `%${search.toLowerCase()}%`
-          ),
-        },
+        where: whereCondition,
         order: [['updatedAt', 'DESC']],
-        offset,
         limit,
       })
     } catch (err) {

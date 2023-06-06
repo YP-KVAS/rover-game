@@ -50,8 +50,8 @@ export const LeaderboardTable: FC = () => {
       {isLoading ? (
         <Loader />
       ) : errorMessage ? (
-        <span className={styles.error}>{errorMessage}</span>
-      ) : totalPlayers === 0 ? (
+        <strong>{errorMessage}</strong>
+      ) : !leaderboardUsers || leaderboardUsers.length === 0 ? (
         <p style={{ textAlign: 'center' }}>Нет данных</p>
       ) : (
         !isNaN(offset) && (

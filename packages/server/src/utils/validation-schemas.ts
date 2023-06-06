@@ -58,10 +58,13 @@ export const getTopicsValidationSchema = Yup.object()
   .shape({
     query: Yup.object().shape({
       [ForumFieldsEnum.LIMIT]: limitValidation,
-      [ForumFieldsEnum.OFFSET]: offsetValidation,
       [ForumFieldsEnum.SEARCH]: Yup.string()
         .optional()
         .typeError('Некорректное условие поиска'),
+      updatedAt: Yup.number()
+        .positive()
+        .optional()
+        .typeError('Некорректное значение updatedAt'),
     }),
   })
   .concat(idParamsValidationSchema)

@@ -32,8 +32,8 @@ export class ThunkForumRepository implements IThunkForumRepository {
     const userOrErr = await this.thunkUserRepository.getCurrentUser()
 
     if (!instanceOfApiError(userOrErr)) {
-      const { categoryId, limit, offset, search } = topicsQuery
-      return await topicService.findAll(categoryId, limit, offset, search)
+      const { categoryId, limit, updatedAt, search } = topicsQuery
+      return await topicService.findAll(categoryId, limit, updatedAt, search)
     }
     return []
   }
