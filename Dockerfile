@@ -9,11 +9,10 @@ FROM base as builder
 
 COPY package.json yarn.lock
 RUN yarn install --frozen-lockfile
-RUN yarn install --g lerna
 
 COPY . .
 
-RUN yarn lerna bootstrap
+RUN yarn bootstrap_docker
 RUN yarn build
 
 FROM node:$NODE_VERSION-buster-slim as production
