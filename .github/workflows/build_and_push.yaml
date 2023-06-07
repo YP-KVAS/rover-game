@@ -3,7 +3,9 @@ name: Push to GitHub Container Registry
 on:
   push:
     branches:
-      - sprint_9-ya_cloud
+      - sprint_9-github_workflow_action
+      - dev
+      - main
 
 jobs:
   build-and-push:
