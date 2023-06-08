@@ -20,7 +20,7 @@ const checkResponse = (res: Response): Promise<User | ApiError> => {
 
 export const getUser = async (cookies?: string): Promise<User | ApiError> => {
   const res = await fetch(
-    `${process.env.BASE_URL}${YA_API_URL}${AUTH_API_URL}${AuthApiPaths.USER}`,
+    `${process.env.VITE_BASE_URL}${YA_API_URL}${AUTH_API_URL}${AuthApiPaths.USER}`,
     {
       credentials: 'include',
       headers: {
@@ -36,7 +36,7 @@ export const getUserById = async (
   cookies?: string
 ): Promise<User | ApiError> => {
   const res = await fetch(
-    `${process.env.BASE_URL}${YA_API_URL}${USER_API_URL}/${id}`,
+    `${process.env.VITE_BASE_URL}${YA_API_URL}${USER_API_URL}/${id}`,
     {
       credentials: 'include',
       headers: {

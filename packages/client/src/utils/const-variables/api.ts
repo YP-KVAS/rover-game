@@ -1,7 +1,7 @@
 import * as process from 'process'
 
-// const BASE_URL = process.env?.VITE_BASE_URL || 'http://localhost:3000'
-const BASE_URL = 'http://158.160.3.219:5000'
+const BASE_URL = process.env?.VITE_BASE_URL || 'http://localhost:5000'
+
 export const BASE_YA_URL = `${BASE_URL}/ya-api`
 export const BASE_SERVER_URL = `${BASE_URL}/api/v1`
 
