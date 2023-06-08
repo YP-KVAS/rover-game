@@ -42,6 +42,11 @@ const STATIC_ASSETS = [
   '/images/user/empty-avatar.webp',
   '/images/hp.png',
   '/images/icons-sprite.svg',
+  '/sounds/gameOver.mp3',
+  '/sounds/complete.mp3',
+  '/sounds/crash.mp3',
+  '/sounds/scoreIncrease.mp3',
+  '/sounds/start.mp3',
 ]
 
 const addResourcesToCache = async resources => {

@@ -5,11 +5,10 @@ import { GameControlTitle } from '../GameField/GameControlTitle/GameControlTitle
 import gameManager from '../../game-engine/GameManager'
 import { SoundContext } from '../../contexts/SoundContext'
 import useSound from 'use-sound'
-import start from '../../../public/sounds/start.mp3'
 
 export const StartLevel: FC = () => {
   const { soundOn } = useContext(SoundContext)
-  const [startSound] = useSound(start)
+  const [startSound] = useSound('./sounds/start.mp3')
 
   const [isStarted, setStartAnimation] = useState(false)
   const [isCalled, setCallbackCalling] = useState(false)

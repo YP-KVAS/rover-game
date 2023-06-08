@@ -9,7 +9,6 @@ import { useAppDispatch } from '../../../hooks/useStore'
 import { onScoreUpdate } from '../../../store/thunks/leaderboard-thunk'
 import { SoundContext } from '../../../contexts/SoundContext'
 import useSound from 'use-sound'
-import gameOver from '../../../../public/sounds/gameOver.mp3'
 
 interface GameActionsProps {
   changeIsPlayingState: (isPlaying: boolean) => void
@@ -28,7 +27,7 @@ export const GameControls: FC<GameActionsProps> = ({
   )
 
   const { soundOn } = useContext(SoundContext)
-  const [gameOverSound] = useSound(gameOver)
+  const [gameOverSound] = useSound('./sounds/gameOver.mp3')
 
   const retry = () => gameManager.restartGame()
 

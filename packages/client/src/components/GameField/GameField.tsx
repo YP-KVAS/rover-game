@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useEffect, useState } from 'react'
+import { FC, RefObject, useEffect, useState, memo } from 'react'
 import styles from './GameField.module.scss'
 import { levels } from '../../game-engine/level-information'
 import { Canvas } from '../Canvas/Canvas'
@@ -14,7 +14,7 @@ interface GameFieldProps {
   gameFieldRef: RefObject<HTMLDivElement>
 }
 
-export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
+const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
   const [isPlaying, setIsPlaying] = useState(false)
 
   const changeIsPlayingState = (isPlaying: boolean) => {
@@ -116,3 +116,6 @@ export const GameField: FC<GameFieldProps> = ({ level, gameFieldRef }) => {
     </div>
   )
 }
+
+const MemoGameField = memo(GameField)
+export { MemoGameField as GameField }

@@ -5,16 +5,14 @@ import { GameStatType } from '../../../utils/types/game'
 import { timerToString } from '../utils/foo'
 import { SoundContext } from '../../../contexts/SoundContext'
 import useSound from 'use-sound'
-import scoreIncrease from '../../../../public/sounds/scoreIncrease.mp3'
-import crash from '../../../../public/sounds/crash.mp3'
 import { initialHitPoints } from '../../../utils/const-variables/game'
 
 export function GameStat() {
   const [stat, setStat] = useState<GameStatType>(gameManager.getStat())
   const { soundOn, toggleSound } = useContext(SoundContext)
 
-  const [scoreIncreaseSound] = useSound(scoreIncrease)
-  const [crashSound] = useSound(crash)
+  const [scoreIncreaseSound] = useSound('./sounds/scoreIncrease.mp3')
+  const [crashSound] = useSound('./sounds/crash.mp3')
 
   useEffect(() => {
     gameManager.useStat(setStat)

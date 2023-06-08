@@ -10,7 +10,6 @@ import { GameImages } from '../../game-engine/GameImages'
 import { Loader } from '../../components/Loader/Loader'
 import { SoundContext } from '../../contexts/SoundContext'
 import useSound from 'use-sound'
-import gameComplete from '../../../public/sounds/complete.mp3'
 import { LS_SOUND } from '../../utils/const-variables/sound'
 
 const GamePage: FC = () => {
@@ -55,8 +54,9 @@ const GamePage: FC = () => {
 
   const toggleSound = () => {
     setSoundState(prevState => !prevState)
+    gameFieldRef.current?.focus()
   }
-  const [gameCompleteSound] = useSound(gameComplete)
+  const [gameCompleteSound] = useSound('./sounds/complete.mp3')
 
   if (gameCompleted && currentSoundState) {
     gameCompleteSound()
