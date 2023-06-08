@@ -7,6 +7,7 @@ import {
 } from '../const-variables/api-yandex'
 import type { ApiError } from '../types/api'
 import type { User } from '../types/user'
+import { BASE_URL } from 'client/src/utils/const-variables/api'
 
 const checkResponse = (res: Response): Promise<User | ApiError> => {
   const data = res.json()
@@ -20,7 +21,7 @@ const checkResponse = (res: Response): Promise<User | ApiError> => {
 
 export const getUser = async (cookies?: string): Promise<User | ApiError> => {
   const res = await fetch(
-    `${process.env.VITE_BASE_URL}${YA_API_URL}${AUTH_API_URL}${AuthApiPaths.USER}`,
+    `${BASE_URL}${YA_API_URL}${AUTH_API_URL}${AuthApiPaths.USER}`,
     {
       credentials: 'include',
       headers: {
@@ -35,15 +36,12 @@ export const getUserById = async (
   id: number,
   cookies?: string
 ): Promise<User | ApiError> => {
-  const res = await fetch(
-    `${process.env.VITE_BASE_URL}${YA_API_URL}${USER_API_URL}/${id}`,
-    {
-      credentials: 'include',
-      headers: {
-        cookie: cookies || '',
-      },
-    }
-  )
+  const res = await fetch(`${BASE_URL}${YA_API_URL}${USER_API_URL}/${id}`, {
+    credentials: 'include',
+    headers: {
+      cookie: cookies || '',
+    },
+  })
 
   return checkResponse(res)
 }
