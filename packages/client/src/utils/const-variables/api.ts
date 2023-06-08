@@ -1,5 +1,4 @@
 const BASE_URL = import.meta.env?.VITE_BASE_URL || 'http://localhost:5000'
-console.log('import.meta', import.meta.env)
 export const BASE_YA_URL = `${BASE_URL}/ya-api`
 export const BASE_SERVER_URL = `${BASE_URL}/api/v1`
 
