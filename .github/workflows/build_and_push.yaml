@@ -4,11 +4,12 @@ on:
   push:
     branches:
       - sprint_9-github_workflow_action
+      - sprint_9_nginx
       - dev
       - main
 
 env:
-  VITE_BASE_URL: http://158.160.3.219:5000
+  VITE_BASE_URL: http://158.160.13.64:5000
 
 jobs:
   build-and-push:
