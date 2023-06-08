@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - sprint_9-github_workflow_action
+      - sprint_9_nginx
       - dev
       - main
+
+env:
+  VITE_BASE_URL: http://158.160.3.219:5000
 
 jobs:
   build-and-push:
@@ -30,8 +34,6 @@ jobs:
 
       - name: Build and push server image
         uses: docker/build-push-action@v2
-        env:
-          VITE_BASE_URL: http://158.160.3.219:5000
         with:
           context: .
           file: Dockerfile
