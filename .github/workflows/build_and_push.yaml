@@ -5,6 +5,7 @@ on:
     branches:
       - sprint_9-github_workflow_action
       - sprint_9_nginx
+      - sprint_9_ssl
       - dev
       - main
 
