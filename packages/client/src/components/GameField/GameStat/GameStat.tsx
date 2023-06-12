@@ -1,15 +1,30 @@
 import styles from './GameStat.module.scss'
 import gameManager from '../../../game-engine/GameManager'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { GameStatType } from '../../../utils/types/game'
 import { timerToString } from '../utils/foo'
+import { SoundContext } from '../../../contexts/SoundContext'
+import useSound from 'use-sound'
+import { initialHitPoints } from '../../../utils/const-variables/game'
 
 export function GameStat() {
   const [stat, setStat] = useState<GameStatType>(gameManager.getStat())
+  const { soundOn, toggleSound } = useContext(SoundContext)
+
+  const [scoreIncreaseSound] = useSound('./sounds/scoreIncrease.mp3')
+  const [crashSound] = useSound('./sounds/crash.mp3')
 
   useEffect(() => {
     gameManager.useStat(setStat)
   }, [])
+
+  useEffect(() => {
+    stat.points && soundOn && scoreIncreaseSound()
+  }, [stat.points])
+
+  useEffect(() => {
+    stat.hitPoints < initialHitPoints && soundOn && crashSound()
+  }, [stat.hitPoints])
 
   return (
     <div className={styles.body}>
@@ -28,6 +43,16 @@ export function GameStat() {
       <span className={styles.stat_block}>
         <b>{stat.points.toLocaleString()}</b> очков
       </span>
+
+      {soundOn ? (
+        <svg className={styles.sound_icon} onClick={() => toggleSound()}>
+          <use xlinkHref="./images/icons-sprite.svg#soundon"></use>
+        </svg>
+      ) : (
+        <svg className={styles.sound_icon} onClick={() => toggleSound()}>
+          <use xlinkHref="./images/icons-sprite.svg#soundoff"></use>
+        </svg>
+      )}
     </div>
   )
 }

@@ -26,6 +26,7 @@
     "react-router-dom": "^6.9.0",
     "sanitize-html": "^2.10.0",
     "sass": "^1.60.0",
+    "use-sound": "^4.0.1",
     "yup": "^1.0.2"
   },
   "devDependencies": {
