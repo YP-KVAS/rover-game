@@ -4,12 +4,14 @@ import { RoutesEnum } from '../../utils/const-variables/routes'
 import { AnimatedFrame } from '../../components/AnimatedFrame/AnimatedFrame'
 import { OAUTH_REDIRECT_URI } from '../../utils/const-variables/api'
 import { useEffect } from 'react'
-import { useAppDispatch } from '../../hooks/useStore'
+import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { signInOAuth } from '../../utils/rest-api/oauth-api'
 import { onGetUser } from '../../store/thunks/auth-thunk'
+import { selectUserIsLoggedIn } from '../../store/selectors/auth-selector'
 
 export function Main() {
   const dispatch = useAppDispatch()
+  const isLoggedIn = useAppSelector(selectUserIsLoggedIn)
 
   useEffect(() => {
     const oauthCode: string | null = new URLSearchParams(
@@ -40,9 +42,11 @@ export function Main() {
           Играть
         </Link>
 
-        <Link to={RoutesEnum.LOGIN} className={styles.link}>
-          Вход
-        </Link>
+        {!isLoggedIn && (
+          <Link to={RoutesEnum.LOGIN} className={styles.link}>
+            Вход
+          </Link>
+        )}
       </div>
 
       <p className={styles.disclaimer}>
