@@ -37,3 +37,5 @@ export enum UserApiPaths {
   CHANGE_AVATAR = '/profile/avatar',
   CHANGE_PASSWORD = '/password',
 }
+
+export const USER_IN_SYSTEM_ERR = 'User already in system'

@@ -4,6 +4,7 @@ import { logout, signIn, signUp } from '../../utils/rest-api/auth-api'
 import { IThunkService } from '../services/ThunkService'
 import { RootState } from '../store'
 import { UserExtended } from '../../utils/types/user'
+import { USER_IN_SYSTEM_ERR } from '../../utils/const-variables/api'
 
 export const onGetUser = createAsyncThunk<
   UserExtended,
@@ -52,7 +53,7 @@ export const onSignIn = createAsyncThunk<
   try {
     return await signIn(data)
   } catch (err: unknown) {
-    if ((err as Error).message === 'User already in system') {
+    if ((err as Error).message === USER_IN_SYSTEM_ERR) {
       await dispatch(onLogout())
       return await signIn(data)
     }
