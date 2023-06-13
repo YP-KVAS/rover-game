@@ -2,7 +2,7 @@ import styles from './MainPage.module.scss'
 import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { AnimatedFrame } from '../../components/AnimatedFrame/AnimatedFrame'
-import { OAUTH_REDIRECT_URI } from '../../utils/const-variables/api'
+import { BASE_URL, OAUTH_REDIRECT_URI } from '../../utils/const-variables/api'
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { signInOAuth } from '../../utils/rest-api/oauth-api'
@@ -20,7 +20,7 @@ export function Main() {
 
     if (oauthCode) {
       // Меняем url страницы на чистый, без code
-      window.history.replaceState({}, '', OAUTH_REDIRECT_URI)
+      window.history.replaceState({}, '', BASE_URL)
 
       signInOAuth({ code: oauthCode, redirect_uri: OAUTH_REDIRECT_URI }).then(
         () => dispatch(onGetUser())
