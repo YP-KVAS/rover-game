@@ -3,8 +3,6 @@ name: Push to GitHub Container Registry
 on:
   push:
     branches:
-      - sprint_9-github_workflow_action
-      - sprint_9_nginx
       - dev
       - main
 
