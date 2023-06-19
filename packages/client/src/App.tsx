@@ -1,7 +1,12 @@
 import styles from './App.module.css'
 import { useEffect, useMemo, useState } from 'react'
-import { Theme, ThemeContext } from './contexts/ThemeContext'
-import { LS_THEME, ThemeColors, THEMES } from './utils/const-variables/theme'
+import { ThemeContext } from './contexts/ThemeContext'
+import {
+  LS_THEME,
+  Theme,
+  ThemeColors,
+  THEMES,
+} from './utils/const-variables/theme'
 import { Route, Routes } from 'react-router-dom'
 import { IRoute, routes } from './router'
 
@@ -16,7 +21,7 @@ function App() {
   }
 
   const [currentThemeName, setCurrentThemeName] = useState<Theme>(
-    typeof window === 'undefined' ? 'light' : getDefaultTheme()
+    typeof window === 'undefined' ? Theme.LIGHT : getDefaultTheme()
   )
 
   useEffect(() => {
@@ -30,8 +35,7 @@ function App() {
     localStorage.setItem(LS_THEME, currentThemeName)
   }, [currentThemeName])
 
-  const changeTheme = () =>
-    setCurrentThemeName(prevState => (prevState === 'dark' ? 'light' : 'dark'))
+  const changeTheme = (theme: Theme) => setCurrentThemeName(() => theme)
 
   const appRoutes = useMemo(() => {
     return mapRoutesRecursive(routes)
