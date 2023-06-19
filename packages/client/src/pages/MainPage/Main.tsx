@@ -2,14 +2,20 @@ import styles from './MainPage.module.scss'
 import { Link } from 'react-router-dom'
 import { RoutesEnum } from '../../utils/const-variables/routes'
 import { AnimatedFrame } from '../../components/AnimatedFrame/AnimatedFrame'
-import { OAUTH_REDIRECT_URI } from '../../utils/const-variables/api'
+import {
+  BASE_URL,
+  OAUTH_REDIRECT_URI,
+  USER_IN_SYSTEM_ERR,
+} from '../../utils/const-variables/api'
 import { useEffect } from 'react'
-import { useAppDispatch } from '../../hooks/useStore'
+import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
 import { signInOAuth } from '../../utils/rest-api/oauth-api'
-import { onGetUser } from '../../store/thunks/auth-thunk'
+import { onGetUser, onLogout } from '../../store/thunks/auth-thunk'
+import { selectUserIsLoggedIn } from '../../store/selectors/auth-selector'
 
 export function Main() {
   const dispatch = useAppDispatch()
+  const isLoggedIn = useAppSelector(selectUserIsLoggedIn)
 
   useEffect(() => {
     const oauthCode: string | null = new URLSearchParams(
@@ -18,11 +24,20 @@ export function Main() {
 
     if (oauthCode) {
       // Меняем url страницы на чистый, без code
-      window.history.replaceState({}, '', OAUTH_REDIRECT_URI)
+      window.history.replaceState({}, '', BASE_URL)
 
-      signInOAuth({ code: oauthCode, redirect_uri: OAUTH_REDIRECT_URI }).then(
-        () => dispatch(onGetUser())
-      )
+      signInOAuth({ code: oauthCode, redirect_uri: OAUTH_REDIRECT_URI })
+        .then(() => dispatch(onGetUser()))
+        .catch((err: unknown) => {
+          if ((err as Error).message === USER_IN_SYSTEM_ERR) {
+            dispatch(onLogout()).then(() =>
+              signInOAuth({
+                code: oauthCode,
+                redirect_uri: OAUTH_REDIRECT_URI,
+              }).then(() => dispatch(onGetUser()))
+            )
+          }
+        })
     }
   }, [])
 
@@ -40,9 +55,11 @@ export function Main() {
           Играть
         </Link>
 
-        <Link to={RoutesEnum.LOGIN} className={styles.link}>
-          Вход
-        </Link>
+        {!isLoggedIn && (
+          <Link to={RoutesEnum.LOGIN} className={styles.link}>
+            Вход
+          </Link>
+        )}
       </div>
 
       <p className={styles.disclaimer}>

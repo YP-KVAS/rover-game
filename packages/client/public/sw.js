@@ -2,7 +2,7 @@ const CACHE_NAME = 'roverCache-v1'
 
 const STATIC_ASSETS = [
   '/error.html',
-  '/vite.svg',
+  '/favicon.ico',
   '/images/background/grass-2.png',
   '/images/background/grass.png',
   '/images/background/ground.png',

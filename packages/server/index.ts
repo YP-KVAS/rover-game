@@ -67,6 +67,10 @@ async function startServer() {
     app.use('/images', express.static(path.resolve(distPath, 'images')))
     app.use('/sounds', express.static(path.resolve(distPath, 'sounds')))
     app.use('/sw.js', express.static(path.resolve(distPath, 'sw.js')))
+    app.use(
+      '/favicon.ico',
+      express.static(path.resolve(distPath, 'favicon.ico'))
+    )
   }
 
   app.use('*', async (req, res, next) => {

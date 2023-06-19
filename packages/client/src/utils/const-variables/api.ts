@@ -1,10 +1,11 @@
-import * as process from 'process'
+export const BASE_URL =
+  import.meta.env?.VITE_BASE_URL || 'http://localhost:5000'
 
-const BASE_URL = process.env?.VITE_BASE_URL || 'http://localhost:5000'
 export const BASE_YA_URL = `${BASE_URL}/ya-api`
 export const BASE_SERVER_URL = `${BASE_URL}/api/v1`
 
-export const OAUTH_REDIRECT_URI = BASE_URL
+export const OAUTH_REDIRECT_URI =
+  import.meta.env?.VITE_IP_URL || 'http://localhost:5000'
 export const YA_OAUTH_URL =
   'https://oauth.yandex.ru/authorize?response_type=code'
 export const OAUTH_API_URL = '/oauth/yandex'
@@ -36,3 +37,5 @@ export enum UserApiPaths {
   CHANGE_AVATAR = '/profile/avatar',
   CHANGE_PASSWORD = '/password',
 }
+
+export const USER_IN_SYSTEM_ERR = 'User already in system'

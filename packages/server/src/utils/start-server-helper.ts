@@ -25,11 +25,13 @@ export async function getViteDevServer(srcPath: string) {
 export const corsOptions = {
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-  origin: [
-    `http://127.0.0.1:${clientPort}`,
-    `http://localhost:${clientPort}`,
-    `http://127.0.0.1:${serverPort}`,
-    `http://localhost:${serverPort}`,
-    BASE_YA_URL,
-  ],
+  origin: isDev()
+    ? [
+        `http://127.0.0.1:${clientPort}`,
+        `http://localhost:${clientPort}`,
+        `http://127.0.0.1:${serverPort}`,
+        `http://localhost:${serverPort}`,
+        BASE_YA_URL,
+      ]
+    : process.env.CORS_ORIGINS?.split(' '),
 }
