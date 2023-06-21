@@ -1,24 +1,35 @@
 import { FetchMethods, request } from './base-request'
-import { LEADERBOARD_API_URL, TEAM_NAME, LeaderboardApiPaths } from '../const-variables/api'
-import { LeaderboardItem, LeaderboardRequest, addUserToLeaderboardRequest } from '../types/leaderboard'
+import {
+  LEADERBOARD_API_URL,
+  BASE_SERVER_URL,
+  LEADERBOARD_LOAD_LIMIT,
+} from '../const-variables/api'
+import { Leaderboard } from '../types/leaderboard'
+import { stringifyQuery } from '../stringify-query'
+import { BaseGetAllItemsQuery } from '../types/base-query'
+import { UserScore } from '../types/user'
 
-export async function getAllLeaderboards(data: LeaderboardRequest): Promise<Array<LeaderboardItem>> {
-  return await request<Array<LeaderboardItem>>(`${LEADERBOARD_API_URL}${LeaderboardApiPaths.GET_ALL_LEADERBOARDS}`, {
-    method: FetchMethods.POST,
-    data
-  })
+export async function getLeaderboard(
+  query: BaseGetAllItemsQuery
+): Promise<Leaderboard> {
+  const { limit = LEADERBOARD_LOAD_LIMIT, offset = 0 } = query
+
+  return await request(
+    BASE_SERVER_URL,
+    `${LEADERBOARD_API_URL}${stringifyQuery({
+      limit,
+      offset,
+    })}`,
+    {
+      method: FetchMethods.GET,
+      noCached: true,
+    }
+  )
 }
 
-export async function getLeaderboardByTeamName(data: LeaderboardRequest, teamName: string = TEAM_NAME): Promise<Array<LeaderboardItem>> {
-  return await request<Array<LeaderboardItem>>(`${LEADERBOARD_API_URL}/${teamName}`, {
-    method: FetchMethods.POST,
-    data
-  })
-}
-
-export async function addUserToLeaderboard(data: addUserToLeaderboardRequest): Promise<void> {
-  return await request(`${LEADERBOARD_API_URL}`, {
-    method: FetchMethods.POST,
-    data
+export async function updateScore(score: number): Promise<UserScore> {
+  return await request(BASE_SERVER_URL, `${LEADERBOARD_API_URL}`, {
+    method: FetchMethods.PATCH,
+    data: { score },
   })
 }

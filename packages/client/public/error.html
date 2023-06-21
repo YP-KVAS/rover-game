@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rover Game Error</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        color: black;
+        font-size: 100%;
+        list-style: none;
+        text-decoration: none;
+      }
+
+      @font-face {
+        font-family: Play;
+        src: local('Play'),
+          url('$fonts/Play-Regular.ttf') format('truetype');
+      }
+
+      @font-face {
+        font-family: Play;
+        font-weight: 900;
+        src: local('Play'), url('$fonts/Play-Bold.ttf') format('truetype');
+      }
+
+      html {
+        --color-primary: #c850c0;
+        --color-secondary: #4158d0;
+        --color-accent: #ffcc70;
+        --color-disabled: #8585a8;
+        --color-text-on-light: #000;
+        --color-text-on-dark: #fff;
+        --color-text-error: #ffcc70;
+        --color-gradient-start: var(--color-secondary);
+        --color-gradient-middle: var(--color-primary);
+        --color-gradient-end: var(--color-accent);
+        --bg-gradient: linear-gradient(
+          43deg,
+          var(--color-gradient-start) 0%,
+          var(--color-gradient-middle) 46%,
+          var(--color-gradient-end) 100%
+        );
+        --shadow-sm: rgb(0 0 0 / 10%) 0px 1px 3px 0px,
+          rgb(0 0 0 / 6%) 0px 1px 2px 0px;
+        --shadow: rgb(0 0 0 / 10%) 0px 4px 6px -1px,
+          rgb(0 0 0 / 6%) 0px 2px 4px -1px;
+        --shadow-lg: rgb(0 0 0 / 10%) 0px 10px 15px -3px,
+          rgb(0 0 0 / 5%) 0px 4px 6px -2px;
+        --font-xs: 12px;
+        --font-sm: 14px;
+        --font-base: 16px;
+        --font-lg: 18px;
+        --font-xl: 24px;
+        --font-2xl: 40px;
+        --font-3xl: 60px;
+
+        font-family: Play, sans-serif;
+
+        min-height: 100vh;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+        height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .title {
+        color: var(--color-text-on-dark);
+        font-size: var(--font-xl);
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="title">Извините, ровер сломался и не может развозить посылки</h1>
+  </body>
+</html>

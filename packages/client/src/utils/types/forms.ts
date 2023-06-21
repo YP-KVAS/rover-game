@@ -10,6 +10,9 @@ export enum FormInputNames {
   REPEAT_PASSWORD = 'rePassword',
   DISPLAY_NAME = 'display_name',
   AVATAR = 'avatar',
+  FORUM_CATEGORY_TITLE = 'categoryName',
+  FORUM_TOPIC_TITLE = 'topicName',
+  FORUM_MESSAGE = 'message',
 }
 
 export type InputType = 'text' | 'email' | 'password' | 'tel' | 'file'

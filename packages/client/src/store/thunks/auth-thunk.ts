@@ -1,15 +1,35 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { User, UserSignIn, UserSignUp } from '../../utils/types/user'
-import { getUser, logout, signIn, signUp } from '../../utils/rest-api/auth-api'
+import { UserSignIn, UserSignUp } from '../../utils/types/user'
+import { logout, signIn, signUp } from '../../utils/rest-api/auth-api'
+import { IThunkService } from '../services/ThunkService'
+import { RootState } from '../store'
+import { UserExtended } from '../../utils/types/user'
+import { USER_IN_SYSTEM_ERR } from '../../utils/const-variables/api'
 
-export const onGetUser = createAsyncThunk<User, void, { rejectValue: string }>(
+export const onGetUser = createAsyncThunk<
+  UserExtended,
+  void,
+  { rejectValue: string }
+>(
   'auth/onGetUser',
-  async (_, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
-      return await getUser()
+      const service = thunkAPI.extra as IThunkService
+      return await service.userService.getCurrentUser()
     } catch (err: unknown) {
-      return rejectWithValue((err as Error).message || 'Unable to get user')
+      return thunkAPI.rejectWithValue(
+        (err as Error).message || 'Unable to get user'
+      )
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState() as RootState
+      const userIsLoading = state.auth.isLoading
+      if (userIsLoading) {
+        return false
+      }
+    },
   }
 )
 
@@ -33,7 +53,7 @@ export const onSignIn = createAsyncThunk<
   try {
     return await signIn(data)
   } catch (err: unknown) {
-    if ((err as Error).message === 'User already in system') {
+    if ((err as Error).message === USER_IN_SYSTEM_ERR) {
       await dispatch(onLogout())
       return await signIn(data)
     }

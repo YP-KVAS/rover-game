@@ -6,23 +6,19 @@
     &::before {
       display: inline-block;
       content: '3';
-      animation: count 5s steps(5, end) forwards, beat 1s 0.1s 5 linear;
+      animation: count 4s steps(4, end) forwards, beat 1s 0.1s 4 linear;
 
       @keyframes count {
         0% {
           content: '3';
         }
 
-        25% {
+        33% {
           content: '2';
         }
 
-        50% {
+        66% {
           content: '1';
-        }
-
-        75% {
-          content: '0';
         }
 
         100% {

@@ -1,0 +1,1638 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Swagger",
+    "description": "KVAS Forum API",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "user",
+      "description": "User operations"
+    },
+    {
+      "name": "categories",
+      "description": "Categories operations"
+    },
+    {
+      "name": "topics",
+      "description": "Topics operations"
+    },
+    {
+      "name": "comments",
+      "description": "Comments operations"
+    },
+    {
+      "name": "leaderboard",
+      "description": "Leaderboard operations"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get current user",
+        "description": "Get user",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Get all categories",
+        "description": "Get all categories",
+        "operationId": "allCategories",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Add a new category (admin)",
+        "description": "Add a new category",
+        "operationId": "addCategory",
+        "requestBody": {
+          "description": "Create a new category",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldName"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "put": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Update an existing category name (admin)",
+        "description": "Update an existing category by Id",
+        "operationId": "updateCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Category id to update",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existing category name",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldName"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldName"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Deletes a category (admin)",
+        "description": "Delete a category",
+        "operationId": "deleteCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Category id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}/topics": {
+      "get": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Get all category topics",
+        "description": "all category topics",
+        "operationId": "allCategoryTopics",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Category id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of items returned by the query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "updatedAt",
+            "in": "query",
+            "description": "updatedAt timestamp of last received item",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "substring, part of the topic name used for search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Topic"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "Add a new topic to category",
+        "description": "Add a new topic to category",
+        "operationId": "addTopic",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Category id to which topic should be added",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Create a new topic",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTopic"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Topic"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/topics/{id}": {
+      "patch": {
+        "tags": [
+          "topics"
+        ],
+        "summary": "Update an existing topic name or corresponding categoryId",
+        "description": "Update an existing topic by Id",
+        "operationId": "updateTopic",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Topic id to update",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existing topic name and/or categoryId",
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/FieldName"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CategoryId"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Topic"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "topics"
+        ],
+        "summary": "Deletes a topic",
+        "description": "Delete a topic",
+        "operationId": "deleteTopic",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Topic id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/topics/{id}/comments": {
+      "get": {
+        "tags": [
+          "topics"
+        ],
+        "summary": "Get all topic comments",
+        "description": "Get all topic comments",
+        "operationId": "getComments",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Topic id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of items returned by the query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "number of items to skip before returning them",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "parentCommentId",
+            "in": "query",
+            "description": "parentCommentId or null for top level comments",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetComments"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "topics"
+        ],
+        "summary": "Add a new comment to topic",
+        "description": "Add a comment to topic",
+        "operationId": "addComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Topic id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Create a new comment message",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddComment"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comments/{id}": {
+      "patch": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Update an existing comment",
+        "description": "Update an existing comment by Id",
+        "operationId": "updateComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Comment id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update an existing comment message",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Message"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Deletes a comment",
+        "description": "Delete a comment",
+        "operationId": "deleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Comment id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forbidden"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leaderboard": {
+      "get": {
+        "tags": [
+          "leaderboard"
+        ],
+        "summary": "Get leaderboard users",
+        "description": "all leaderboard users",
+        "operationId": "allLeaderboardTopics",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "max number of items returned by the query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "number of items to skip before returning them",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Leaderboard"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "leaderboard"
+        ],
+        "summary": "Update user best score",
+        "description": "Update an existing user best score",
+        "operationId": "updateScore",
+        "requestBody": {
+          "description": "Update user best score",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Score"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserScore"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ID": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 100
+          }
+        }
+      },
+      "UserId": {
+        "required": [
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 17059
+          }
+        }
+      },
+      "CategoryId": {
+        "required": [
+          "categoryId"
+        ],
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 2
+          }
+        }
+      },
+      "TopicId": {
+        "required": [
+          "topicId"
+        ],
+        "type": "object",
+        "properties": {
+          "topicId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 22
+          }
+        }
+      },
+      "ParentCommentId": {
+        "required": [
+          "parentCommentId"
+        ],
+        "type": "object",
+        "properties": {
+          "parentCommentId": {
+            "type": "integer",
+            "format": "int64",
+            "example": 19055
+          }
+        }
+      },
+      "Avatar": {
+        "required": [
+          "avatar"
+        ],
+        "type": "object",
+        "properties": {
+          "avatar": {
+            "type": "string",
+            "nullable": true,
+            "example": "/path/to/avatar.jpg"
+          }
+        }
+      },
+      "DisplayName": {
+        "required": [
+          "display_name"
+        ],
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "nullable": true,
+            "example": "Petya Pupkin"
+          }
+        }
+      },
+      "Score": {
+        "required": [
+          "score"
+        ],
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": "number",
+            "example": 5000
+          }
+        }
+      },
+      "BestScore": {
+        "required": [
+          "best_score"
+        ],
+        "type": "object",
+        "properties": {
+          "best_score": {
+            "type": "number",
+            "nullable": true,
+            "example": 10000
+          }
+        }
+      },
+      "UserName": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "UserName"
+          }
+        }
+      },
+      "FieldName": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "some-name"
+          }
+        }
+      },
+      "Message": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "comment message"
+          }
+        }
+      },
+      "CreatedAt": {
+        "required": [
+          "createdAt"
+        ],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "number",
+            "example": 1685793868260
+          }
+        }
+      },
+      "UpdatedAt": {
+        "required": [
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "updatedAt": {
+            "type": "number",
+            "example": 1685793868260
+          }
+        }
+      },
+      "Total": {
+        "required": [
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "example": 200
+          }
+        }
+      },
+      "Category": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/FieldName"
+          },
+          {
+            "$ref": "#/components/schemas/CreatedAt"
+          },
+          {
+            "$ref": "#/components/schemas/UpdatedAt"
+          },
+          {
+            "required": [
+              "topicCount"
+            ],
+            "type": "object",
+            "properties": {
+              "topicCount": {
+                "type": "integer",
+                "format": "int64",
+                "example": 18
+              }
+            }
+          }
+        ]
+      },
+      "AddTopic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FieldName"
+          },
+          {
+            "$ref": "#/components/schemas/UserId"
+          },
+          {
+            "$ref": "#/components/schemas/Message"
+          }
+        ]
+      },
+      "Topic": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/FieldName"
+          },
+          {
+            "$ref": "#/components/schemas/UserId"
+          },
+          {
+            "$ref": "#/components/schemas/CategoryId"
+          },
+          {
+            "$ref": "#/components/schemas/CreatedAt"
+          },
+          {
+            "$ref": "#/components/schemas/UpdatedAt"
+          }
+        ]
+      },
+      "AddComment": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "$ref": "#/components/schemas/UserId"
+          },
+          {
+            "$ref": "#/components/schemas/TopicId"
+          },
+          {
+            "$ref": "#/components/schemas/ParentCommentId"
+          }
+        ]
+      },
+      "Comment": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "$ref": "#/components/schemas/UserId"
+          },
+          {
+            "$ref": "#/components/schemas/TopicId"
+          },
+          {
+            "$ref": "#/components/schemas/ParentCommentId"
+          },
+          {
+            "$ref": "#/components/schemas/CreatedAt"
+          },
+          {
+            "$ref": "#/components/schemas/UpdatedAt"
+          },
+          {
+            "required": [
+              "replyCount"
+            ],
+            "type": "object",
+            "properties": {
+              "replyCount": {
+                "type": "integer",
+                "format": "int64",
+                "example": 55
+              }
+            }
+          }
+        ]
+      },
+      "Author": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserName"
+          },
+          {
+            "$ref": "#/components/schemas/Avatar"
+          }
+        ]
+      },
+      "CommentWithAuthor": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Comment"
+          },
+          {
+            "required": [
+              "author"
+            ],
+            "type": "object",
+            "properties": {
+              "author": {
+                "$ref": "#/components/schemas/Author"
+              }
+            }
+          }
+        ]
+      },
+      "User": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/Avatar"
+          },
+          {
+            "$ref": "#/components/schemas/DisplayName"
+          },
+          {
+            "$ref": "#/components/schemas/BestScore"
+          },
+          {
+            "required": [
+              "user"
+            ],
+            "type": "object",
+            "properties": {
+              "first_name": {
+                "type": "string",
+                "example": "Petya"
+              },
+              "second_name": {
+                "type": "string",
+                "example": "Pupkin"
+              },
+              "login": {
+                "type": "string",
+                "example": "userLogin"
+              },
+              "email": {
+                "type": "string",
+                "example": "my@email.com"
+              },
+              "phone": {
+                "type": "string",
+                "example": 89223332211
+              },
+              "role": {
+                "type": "string",
+                "example": "regular"
+              }
+            }
+          }
+        ]
+      },
+      "UserScore": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/BestScore"
+          }
+        ]
+      },
+      "LeaderboardUser": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ID"
+          },
+          {
+            "$ref": "#/components/schemas/DisplayName"
+          },
+          {
+            "$ref": "#/components/schemas/Avatar"
+          },
+          {
+            "$ref": "#/components/schemas/BestScore"
+          }
+        ]
+      },
+      "Leaderboard": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Total"
+          }
+        ],
+        "required": [
+          "players"
+        ],
+        "type": "object",
+        "properties": {
+          "players": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LeaderboardUser"
+            }
+          }
+        }
+      },
+      "GetComments": {
+        "required": [
+          "comments",
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentWithAuthor"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "example": 125
+          }
+        }
+      },
+      "BadRequest": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "Invalid Param"
+          }
+        }
+      },
+      "Unauthorized": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "Forbidden": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "Forbidden"
+          }
+        }
+      },
+      "ServerError": {
+        "required": [
+          "reason"
+        ],
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "example": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}

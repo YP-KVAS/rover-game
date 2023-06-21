@@ -1,0 +1,32 @@
+.body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat_block {
+  width: 150px;
+  font-size: var(--font-xl);
+  color: var(--color-secondary);
+  padding: 10px 0;
+
+  &:last-child {
+    text-align: end;
+  }
+}
+
+.hit_points {
+  display: flex;
+  justify-content: flex-start;
+
+  & .image {
+    width: 40px;
+    height: 40px;
+    margin: 0 5px;
+  }
+}
+
+.sound_icon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}

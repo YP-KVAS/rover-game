@@ -1,0 +1,21 @@
+.links {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 25px;
+  padding-top: 10px;
+
+  & a {
+    font-size: var(--font-xl);
+
+    &:hover {
+      color: var(--color-accent)
+    }
+  }
+}
+
+.active {
+  color: var(--color-accent) !important;
+  cursor: default;
+}
