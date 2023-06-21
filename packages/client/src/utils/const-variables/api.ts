@@ -4,8 +4,7 @@ export const BASE_URL =
 export const BASE_YA_URL = `${BASE_URL}/ya-api`
 export const BASE_SERVER_URL = `${BASE_URL}/api/v1`
 
-export const OAUTH_REDIRECT_URI =
-  import.meta.env?.VITE_IP_URL || 'http://localhost:5000'
+export const OAUTH_REDIRECT_URI = BASE_URL
 export const YA_OAUTH_URL =
   'https://oauth.yandex.ru/authorize?response_type=code'
 export const OAUTH_API_URL = '/oauth/yandex'
